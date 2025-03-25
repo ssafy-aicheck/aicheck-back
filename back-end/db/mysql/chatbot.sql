@@ -1,5 +1,4 @@
-USE
-chatbot;
+USE chatbot;
 
 CREATE TABLE `prompts`
 (

@@ -1,5 +1,4 @@
-USE
-batch;
+USE batch;
 
 CREATE TABLE `schedule`
 (

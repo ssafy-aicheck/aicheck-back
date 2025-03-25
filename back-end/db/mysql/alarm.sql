@@ -1,5 +1,4 @@
-USE
-alarm;
+USE alarm;
 
 CREATE TABLE `fcm_tokens`
 (

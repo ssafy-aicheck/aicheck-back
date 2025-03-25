@@ -1,5 +1,4 @@
-USE
-business;
+USE business;
 
 CREATE TABLE `members`
 (
