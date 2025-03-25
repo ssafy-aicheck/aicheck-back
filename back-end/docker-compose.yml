@@ -1,4 +1,24 @@
 services:
+  aicheck-mysql:
+    image: mysql:8.0
+    container_name: aicheck-mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: "1234"
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./db/mysql:/docker-entrypoint-initdb.d
+      - mysql_data:/var/lib/mysql
+    command: --skip-character-set-client-handshake
+    networks:
+      - aicheck-network
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
   discovery:
     container_name: discovery
     build:
@@ -33,8 +53,10 @@ services:
       retries: 5
 
 
-#volumes:
-#
+volumes:
+  mysql_data:
+  mongo_data:
+
 networks:
   aicheck-network:
     driver: bridge
