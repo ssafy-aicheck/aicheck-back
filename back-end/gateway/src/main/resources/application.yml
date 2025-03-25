@@ -49,3 +49,9 @@ spring:
             - Path=/chatbot/**
           filters:
             - RewritePath=/chatbot/(?<segment>/.*)?, /$\{segment}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: refresh, health, beans, busrefresh
