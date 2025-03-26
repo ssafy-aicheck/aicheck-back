@@ -1,4 +1,4 @@
-package com.aicheck.business.domain.auth.application.client;
+package com.aicheck.business.domain.auth.infrastructure.client;
 
 import com.aicheck.business.domain.auth.dto.BankMemberFeignResponse;
 import org.springframework.cloud.openfeign.FeignClient;
