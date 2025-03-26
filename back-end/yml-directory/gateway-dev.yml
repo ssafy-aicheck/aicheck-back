@@ -49,3 +49,16 @@ spring:
             - Path=/chatbot/**
           filters:
             - RewritePath=/chatbot/(?<segment>/.*)?, /$\{segment}
+
+springdoc:
+  swagger-ui:
+    use-root-path: true
+    urls[0]:
+      name: aicheck
+      url: http://aicheck
+    urls[1]:
+      name: alarm
+      url: http://alarm
+    urls[2]:
+      name: chatbot
+      url: http://chatbot
