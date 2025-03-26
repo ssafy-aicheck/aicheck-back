@@ -2,7 +2,7 @@ spring:
   cloud:
     config:
       uri: http://config:8888
-      name: management, mysql, rabbitmq, discovery, chatbot
+      name: management, mysql, rabbitmq, discovery, swagger, chatbot
       profile: ${SPRING_PROFILES_ACTIVE}
       username: ${CONFIG_SPRING_SECURITY_USER_NAME}
       password: ${CONFIG_SPRING_SECURITY_USER_PASSWORD}
