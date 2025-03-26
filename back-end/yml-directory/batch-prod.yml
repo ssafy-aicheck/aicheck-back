@@ -1,0 +1,18 @@
+server:
+  port: 0
+
+spring:
+  application:
+    name: batch
+
+  datasource:
+    url: jdbc:mysql://aicheck-mysql:3306/batch?serverTimezone=UTC&characterEncoding=UTF-8
+
+  jpa:
+    database: mysql
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+    show-sql: true
