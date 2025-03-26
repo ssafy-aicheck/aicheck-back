@@ -5,6 +5,8 @@ services:
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
+      MYSQL_USERNAME: "${MYSQL_USERNAME}"
+      MYSQL_PASSWORD: "${MYSQL_USERNAME}"
     ports:
       - "3307:3306"
     volumes:
@@ -113,6 +115,10 @@ services:
       - "8080:8080"
     networks:
       - aicheck-network
+    environment:
+      SPRING_PROFILES_ACTIVE: "${SPRING_PROFILES_ACTIVE}"
+      CONFIG_SPRING_SECURITY_USER_NAME: "${CONFIG_SPRING_SECURITY_USER_NAME}"
+      CONFIG_SPRING_SECURITY_USER_PASSWORD: "${CONFIG_SPRING_SECURITY_USER_PASSWORD}"
     depends_on:
       config:
         condition: service_healthy
@@ -133,6 +139,8 @@ services:
       - aicheck-network
     environment:
       SPRING_PROFILES_ACTIVE: "${SPRING_PROFILES_ACTIVE}"
+      CONFIG_SPRING_SECURITY_USER_NAME: "${CONFIG_SPRING_SECURITY_USER_NAME}"
+      CONFIG_SPRING_SECURITY_USER_PASSWORD: "${CONFIG_SPRING_SECURITY_USER_PASSWORD}"
     depends_on:
       config:
         condition: service_healthy
@@ -150,6 +158,8 @@ services:
       - aicheck-network
     environment:
       SPRING_PROFILES_ACTIVE: "${SPRING_PROFILES_ACTIVE}"
+      CONFIG_SPRING_SECURITY_USER_NAME: "${CONFIG_SPRING_SECURITY_USER_NAME}"
+      CONFIG_SPRING_SECURITY_USER_PASSWORD: "${CONFIG_SPRING_SECURITY_USER_PASSWORD}"
     depends_on:
       config:
         condition: service_healthy
@@ -167,6 +177,8 @@ services:
       - aicheck-network
     environment:
       SPRING_PROFILES_ACTIVE: "${SPRING_PROFILES_ACTIVE}"
+      CONFIG_SPRING_SECURITY_USER_NAME: "${CONFIG_SPRING_SECURITY_USER_NAME}"
+      CONFIG_SPRING_SECURITY_USER_PASSWORD: "${CONFIG_SPRING_SECURITY_USER_PASSWORD}"
     depends_on:
       config:
         condition: service_healthy
@@ -184,6 +196,8 @@ services:
       - aicheck-network
     environment:
       SPRING_PROFILES_ACTIVE: "${SPRING_PROFILES_ACTIVE}"
+      CONFIG_SPRING_SECURITY_USER_NAME: "${CONFIG_SPRING_SECURITY_USER_NAME}"
+      CONFIG_SPRING_SECURITY_USER_PASSWORD: "${CONFIG_SPRING_SECURITY_USER_PASSWORD}"
     depends_on:
       config:
         condition: service_healthy
@@ -201,6 +215,8 @@ services:
       - aicheck-network
     environment:
       SPRING_PROFILES_ACTIVE: "${SPRING_PROFILES_ACTIVE}"
+      CONFIG_SPRING_SECURITY_USER_NAME: "${CONFIG_SPRING_SECURITY_USER_NAME}"
+      CONFIG_SPRING_SECURITY_USER_PASSWORD: "${CONFIG_SPRING_SECURITY_USER_PASSWORD}"
     depends_on:
       config:
         condition: service_healthy

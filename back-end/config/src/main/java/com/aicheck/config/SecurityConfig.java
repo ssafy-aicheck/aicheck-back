@@ -15,6 +15,7 @@ public class SecurityConfig {
 			.csrf(csrf -> csrf.disable())
 			.cors(Customizer.withDefaults()) // CORS 활성화
 			.authorizeHttpRequests(auth -> auth
+				.requestMatchers("/actuator/health", "/actuator/info").permitAll()
 				.requestMatchers("/actuator/**").hasRole("ADMIN")
 				.requestMatchers("/encrypt", "/decrypt").authenticated()
 				.anyRequest().authenticated()
