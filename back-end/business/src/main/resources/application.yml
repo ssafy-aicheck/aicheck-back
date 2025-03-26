@@ -13,8 +13,8 @@ spring:
     property-naming-strategy: SNAKE_CASE
 
   jpa:
-    hibernate:
-      ddl-auto: update
+    #    hibernate:
+    #      ddl-auto: update
     show-sql: true
     database-platform: org.hibernate.dialect.MySQLDialect
 
@@ -32,3 +32,6 @@ management:
     web:
       exposure:
         include: refresh, health, beans, busrefresh
+
+jwt:
+  secretKey: asdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfa

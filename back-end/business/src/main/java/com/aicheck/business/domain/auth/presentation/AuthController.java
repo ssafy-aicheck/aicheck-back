@@ -1,6 +1,8 @@
 package com.aicheck.business.domain.auth.presentation;
 
 import com.aicheck.business.domain.auth.application.service.AuthService;
+import com.aicheck.business.domain.auth.dto.SignInRequest;
+import com.aicheck.business.domain.auth.dto.SignInResponse;
 import com.aicheck.business.domain.auth.dto.SignupRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -19,9 +21,15 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/signup")
-    public ResponseEntity<?> signup(@RequestBody @Valid SignupRequest request) {
-        authService.signup(request);
+    public ResponseEntity<Void> signup(@RequestBody @Valid SignupRequest request) {
+        authService.signUp(request);
         return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @PostMapping("/signin")
+    public ResponseEntity<SignInResponse> signIn(@RequestBody @Valid SignInRequest request) {
+        SignInResponse signInResponse = authService.signIn(request);
+        return new ResponseEntity<>(signInResponse, HttpStatus.OK);
     }
 
 }

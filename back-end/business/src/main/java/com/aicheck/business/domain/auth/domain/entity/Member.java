@@ -1,4 +1,4 @@
-package com.aicheck.business.domain.auth.entity;
+package com.aicheck.business.domain.auth.domain.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

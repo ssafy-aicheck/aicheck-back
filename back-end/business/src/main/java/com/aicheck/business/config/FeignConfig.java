@@ -1,4 +1,4 @@
-package com.aicheck.business.domain.auth.application.client;
+package com.aicheck.business.config;
 
 import com.aicheck.business.global.feign.FeignErrorDecoder;
 import feign.RequestInterceptor;
