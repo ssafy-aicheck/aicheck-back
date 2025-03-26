@@ -129,6 +129,7 @@ services:
       CONFIG_SPRING_SECURITY_USER_PASSWORD: ${CONFIG_SPRING_SECURITY_USER_PASSWORD}
       RABBITMQ_USERNAME: ${RABBITMQ_USERNAME}
       RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD}
+      TOKEN_SECRET: ${TOKEN_SECRET}
     depends_on:
       config:
         condition: service_healthy
@@ -182,6 +183,7 @@ services:
       RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD}
       MYSQL_USERNAME: ${MYSQL_USERNAME}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      TOKEN_SECRET: ${TOKEN_SECRET}
     depends_on:
       config:
         condition: service_healthy
