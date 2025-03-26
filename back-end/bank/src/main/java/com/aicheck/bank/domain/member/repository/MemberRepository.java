@@ -1,6 +1,6 @@
-package com.aicheck.bank.member.repository;
+package com.aicheck.bank.domain.member.repository;
 
-import com.aicheck.bank.member.entity.Member;
+import com.aicheck.bank.domain.member.entity.Member;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

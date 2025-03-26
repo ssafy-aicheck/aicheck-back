@@ -7,7 +7,7 @@ import com.aicheck.business.domain.auth.entity.Member;
 import com.aicheck.business.domain.auth.entity.MemberType;
 import com.aicheck.business.domain.auth.exception.BusinessException;
 import com.aicheck.business.domain.auth.repository.MemberRepository;
-import com.aicheck.business.global.BusinessErrorCodes;
+import com.aicheck.business.global.error.BusinessErrorCodes;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
@@ -25,10 +25,6 @@ public class AuthServiceImpl implements AuthService {
     public void signup(SignupRequest request) {
         BankMemberFeignResponse response = bankMemberClient.findBankMemberByEmail(request.getEmail());
 
-        if (response == null) {
-            throw new BusinessException(BusinessErrorCodes.BANK_MEMBER_NOT_FOUND);
-        }
-
         Member member = Member.builder()
                 .email(request.getEmail())
                 .password(request.getPassword())
@@ -36,7 +32,7 @@ public class AuthServiceImpl implements AuthService {
                 .bankMemberId(response.getId())
                 .name(response.getName())
                 .birth(response.getBirth())
-                .type(request.isParent() ? MemberType.PARENT : MemberType.CHILD)
+                .type(request.getIsParent() ? MemberType.PARENT : MemberType.CHILD)
                 .build();
 
         try {

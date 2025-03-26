@@ -1,4 +1,4 @@
-package com.aicheck.business.global;
+package com.aicheck.business.global.error;
 
 import org.springframework.http.HttpStatus;
 

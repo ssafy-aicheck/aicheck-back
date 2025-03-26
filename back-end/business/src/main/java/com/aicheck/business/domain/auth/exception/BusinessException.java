@@ -1,6 +1,6 @@
 package com.aicheck.business.domain.auth.exception;
 
-import com.aicheck.business.global.ErrorCode;
+import com.aicheck.business.global.error.ErrorCode;
 import lombok.Getter;
 
 @Getter

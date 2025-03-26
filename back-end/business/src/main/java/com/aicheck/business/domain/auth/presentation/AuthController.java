@@ -1,7 +1,8 @@
-package com.aicheck.business.domain.auth.api;
+package com.aicheck.business.domain.auth.presentation;
 
 import com.aicheck.business.domain.auth.application.service.AuthService;
 import com.aicheck.business.domain.auth.dto.SignupRequest;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,9 +19,9 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/signup")
-    public ResponseEntity<?> signup(@RequestBody SignupRequest request) {
+    public ResponseEntity<?> signup(@RequestBody @Valid SignupRequest request) {
         authService.signup(request);
-        return new ResponseEntity<>(null, HttpStatus.CREATED);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
 }
