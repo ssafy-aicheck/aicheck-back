@@ -43,8 +43,8 @@ spring:
           filters:
             - RewritePath=/aicheck/(?<segment>/.*)?, /$\{segment}
 
-        - id: chat
-          uri: lb://CHAT
+        - id: chatbot
+          uri: lb://CHATBOT
           predicates:
             - Path=/chatbot/**
           filters:
