@@ -3,7 +3,7 @@ server:
 
 spring:
   application:
-    name: chat
+    name: chatbot
 
   datasource:
     url: jdbc:mysql://aicheck-mysql:3306/chatbot?serverTimezone=UTC&characterEncoding=UTF-8

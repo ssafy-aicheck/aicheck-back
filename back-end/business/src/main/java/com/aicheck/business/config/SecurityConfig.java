@@ -7,6 +7,7 @@ import com.aicheck.business.domain.auth.filter.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -30,6 +31,7 @@ public class SecurityConfig {
                                 "/swagger-ui/**",           // Swagger UI 자원
                                 "/swagger-ui.html"          // Swagger 진입점
                                 ).permitAll();
+                            auth.requestMatchers(HttpMethod.OPTIONS).permitAll();
                             auth.anyRequest().authenticated();
                         }
                 ).addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
