@@ -1,0 +1,57 @@
+server:
+  port: 8080
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://discovery:8761/eureka/
+
+spring:
+  application:
+    name: gateway
+
+  cloud:
+    gateway:
+      routes:
+        - id: alarm
+          uri: lb://ALARM
+          predicates:
+            - Path=/alarm/**
+          filters:
+            - RewritePath=/alarm/(?<segment>/.*)?, /$\{segment}
+
+        - id: bank
+          uri: lb://BANK
+          predicates:
+            - Path=/bank/**
+          filters:
+            - RewritePath=/bank/(?<segment>/.*)?, /$\{segment}
+
+        - id: batch
+          uri: lb://BATCH
+          predicates:
+            - Path=/batch/**
+          filters:
+            - RewritePath=/batch/(?<segment>/.*)?, /$\{segment}
+
+        - id: business
+          uri: lb://BUSINESS
+          predicates:
+            - Path=/aicheck/**
+          filters:
+            - RewritePath=/aicheck/(?<segment>/.*)?, /$\{segment}
+
+        - id: chat
+          uri: lb://CHAT
+          predicates:
+            - Path=/chatbot/**
+          filters:
+            - RewritePath=/chatbot/(?<segment>/.*)?, /$\{segment}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: refresh, health, beans, busrefresh
