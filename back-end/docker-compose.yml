@@ -1,4 +1,35 @@
 services:
+  business:
+    container_name: business
+    build:
+      context: ./business
+      dockerfile: Dockerfile
+    depends_on:
+      discovery:
+        condition: service_healthy
+      aicheck-mysql:
+        condition: service_healthy
+    networks:
+      - aicheck-network
+    environment:
+      SPRING_PROFILES_ACTIVE: default
+
+  bank:
+    container_name: bank
+    build:
+      context: ./bank
+      dockerfile: Dockerfile
+    depends_on:
+      discovery:
+        condition: service_healthy
+      aicheck-mysql:
+        condition: service_healthy
+    networks:
+      - aicheck-network
+    environment:
+      SPRING_PROFILES_ACTIVE: default
+      DB_HOST: aicheck-mysql
+
   aicheck-mysql:
     image: mysql:8.0
     container_name: aicheck-mysql
@@ -6,7 +37,7 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: "1234"
     ports:
-      - "3306:3306"
+      - "3307:3306"
     volumes:
       - ./db/mysql:/docker-entrypoint-initdb.d
       - mysql_data:/var/lib/mysql
