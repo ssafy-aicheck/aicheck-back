@@ -83,6 +83,7 @@ services:
       MYSQL_USERNAME: ${MYSQL_USERNAME}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
       DEFAULT_LABEL_BRANCH: ${DEFAULT_LABEL_BRANCH}
+      TOKEN_SECRET: ${TOKEN_SECRET}
     networks:
       - aicheck-network
     depends_on:

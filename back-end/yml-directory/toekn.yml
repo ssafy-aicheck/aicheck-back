@@ -1,2 +1,0 @@
-jwt:
-  secretKey: ${TOKEN_SECRET}
