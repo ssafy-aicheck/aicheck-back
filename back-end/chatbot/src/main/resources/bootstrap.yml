@@ -1,0 +1,6 @@
+spring:
+  cloud:
+    config:
+      uri: http://config:8888
+      name: management, mysql, rabbitmq, discovery, chatbot
+      profile: ${SPRING_PROFILES_ACTIVE}
