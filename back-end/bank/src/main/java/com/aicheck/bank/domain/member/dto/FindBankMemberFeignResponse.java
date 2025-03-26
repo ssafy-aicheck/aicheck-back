@@ -1,6 +1,6 @@
-package com.aicheck.bank.member.dto;
+package com.aicheck.bank.domain.member.dto;
 
-import com.aicheck.bank.member.entity.Member;
+import com.aicheck.bank.domain.member.entity.Member;
 import java.time.LocalDate;
 import lombok.Builder;
 import lombok.Getter;
