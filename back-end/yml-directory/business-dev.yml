@@ -7,6 +7,7 @@ spring:
 
   datasource:
     url: jdbc:mysql://aicheck-mysql:3306/business?serverTimezone=UTC&characterEncoding=UTF-8
+
   jackson:
     property-naming-strategy: SNAKE_CASE
 
@@ -18,3 +19,11 @@ spring:
 
 jwt:
   secretKey: ${TOKEN_SECRET}
+
+springdoc:
+  api-docs:
+    version: openapi_3_1
+    enabled: true
+  enable-spring-security: true
+  default-consumes-media-type: application/json
+  default-produces-media-type: application/json
