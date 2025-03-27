@@ -2,11 +2,15 @@ package com.aicheck.bank.domain.account.presentation;
 
 import com.aicheck.bank.domain.account.application.AccountService;
 import com.aicheck.bank.domain.account.dto.FindAccountsFeignResponse;
+import com.aicheck.bank.domain.account.dto.VerifyAccountFeignRequest;
+import com.aicheck.bank.domain.account.dto.VerifyAccountFeignResponse;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -20,13 +24,13 @@ public class AccountController {
     @GetMapping("/{memberId}")
     public ResponseEntity<List<FindAccountsFeignResponse>> getMyAccounts(@PathVariable Long memberId) {
         List<FindAccountsFeignResponse> accounts = accountService.findMyAccountsByMemberId(memberId);
-        for (FindAccountsFeignResponse account : accounts) {
-            System.out.println("@@@@@@@@");
-            System.out.println("account = " + account.getAccountId());
-            System.out.println("account = " + account.getAccountNo());
-            System.out.println("account = " + account.getAccountName());
-        }
         return ResponseEntity.ok(accounts);
+    }
+
+    @PostMapping("/verify")
+    public ResponseEntity<VerifyAccountFeignResponse> verifyAccount(@RequestBody VerifyAccountFeignRequest request) {
+        VerifyAccountFeignResponse response = accountService.verifyAccount(request);
+        return ResponseEntity.ok(response);
     }
 
 }
