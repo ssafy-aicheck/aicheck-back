@@ -35,27 +35,26 @@ public class AuthServiceImpl implements AuthService {
     public void signUp(SignupRequest request) {
         BankMemberFeignResponse response = bankClient.findBankMemberByEmail(request.getEmail());
         Member member = Member.builder()
-                .email(request.getEmail())
-                .password(passwordEncoder.encode(request.getPassword()))
-                .managerId(response.getId())
-                .bankMemberId(response.getId())
-                .name(response.getName())
-                .birth(response.getBirth())
-                .type(request.getIsParent() ? MemberType.PARENT : MemberType.CHILD)
-                .build();
+            .email(request.getEmail())
+            .password(passwordEncoder.encode(request.getPassword()))
+            .managerId(response.getId())
+            .bankMemberId(response.getId())
+            .name(response.getName())
+            .birth(response.getBirth())
+            .type(request.getIsParent() ? MemberType.PARENT : MemberType.CHILD)
+            .build();
 
         try {
             memberRepository.save(member);
         } catch (DataIntegrityViolationException e) {
             throw new BusinessException(BusinessErrorCodes.DUPLICATED_SIGNUP);
         }
-
     }
 
     @Override
     public SignInResponse signIn(SignInRequest request) {
         Member member = memberRepository.findMemberByEmail(request.getEmail())
-                .orElseThrow(() -> new BusinessException(BusinessErrorCodes.BUSINESS_MEMBER_NOT_FOUND));
+            .orElseThrow(() -> new BusinessException(BusinessErrorCodes.BUSINESS_MEMBER_NOT_FOUND));
 
         if (!passwordEncoder.matches(request.getPassword(), member.getPassword())) {
             throw new BusinessException(BusinessErrorCodes.INVALID_PASSWORD);
@@ -66,17 +65,16 @@ public class AuthServiceImpl implements AuthService {
         String refreshToken = jwtProvider.generateRefreshToken(authentication);
 
         return SignInResponse.builder()
-                .accessToken(accessToken)
-                .refreshToken(refreshToken)
-                .isParent(member.getType().equals(MemberType.PARENT))
-                .accountConnected(member.getAccountNo() != null)
-                .build();
+            .accessToken(accessToken)
+            .refreshToken(refreshToken)
+            .isParent(member.getType().equals(MemberType.PARENT))
+            .accountConnected(member.getAccountNo() != null)
+            .build();
     }
 
     private Authentication authenticate(Member member) {
         User user = new User(String.valueOf(member.getId()), "",
-                Collections.singletonList(new SimpleGrantedAuthority(member.getType().name())));
+            Collections.singletonList(new SimpleGrantedAuthority(member.getType().name())));
         return new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
     }
-
 }
