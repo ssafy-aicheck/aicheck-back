@@ -43,9 +43,20 @@ spring:
           filters:
             - RewritePath=/aicheck/(?<segment>/.*)?, /$\{segment}
 
-        - id: chat
-          uri: lb://CHAT
+        - id: chatbot
+          uri: lb://CHATBOT
           predicates:
             - Path=/chatbot/**
           filters:
             - RewritePath=/chatbot/(?<segment>/.*)?, /$\{segment}
+
+springdoc:
+  swagger-ui:
+    use-root-path: true
+    urls:
+      - name: aicheck
+        url: /aicheck/v3/api-docs
+      - name: alarm
+        url: /alarm/v3/api-docs
+      - name: chatbot
+        url: /chatbot/v3/api-docs

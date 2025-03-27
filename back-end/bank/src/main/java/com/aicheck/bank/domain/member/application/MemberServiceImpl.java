@@ -15,8 +15,10 @@ public class MemberServiceImpl implements MemberService {
     private final MemberRepository memberRepository;
 
     public FindBankMemberFeignResponse findBankMemberByEmail(String email) {
+        System.out.println("@@@@@@@@@@@@@@@@@@");
         Member member = memberRepository.findMemberByEmail(email)
                 .orElseThrow(() -> new BankException(BankErrorCodes.BANK_MEMBER_NOT_FOUND));
+        System.out.println("member = " + member.getEmail());
         return FindBankMemberFeignResponse.from(member);
     }
 

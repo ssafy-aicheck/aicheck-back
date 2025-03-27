@@ -83,6 +83,7 @@ services:
       MYSQL_USERNAME: ${MYSQL_USERNAME}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
       DEFAULT_LABEL_BRANCH: ${DEFAULT_LABEL_BRANCH}
+      TOKEN_SECRET: ${TOKEN_SECRET}
     networks:
       - aicheck-network
     depends_on:
@@ -129,6 +130,7 @@ services:
       CONFIG_SPRING_SECURITY_USER_PASSWORD: ${CONFIG_SPRING_SECURITY_USER_PASSWORD}
       RABBITMQ_USERNAME: ${RABBITMQ_USERNAME}
       RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD}
+      TOKEN_SECRET: ${TOKEN_SECRET}
     depends_on:
       config:
         condition: service_healthy
@@ -182,6 +184,7 @@ services:
       RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD}
       MYSQL_USERNAME: ${MYSQL_USERNAME}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      TOKEN_SECRET: ${TOKEN_SECRET}
     depends_on:
       config:
         condition: service_healthy
