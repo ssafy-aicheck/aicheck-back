@@ -71,5 +71,9 @@ public class Member {
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
 
+    public void registerAccount(String accountNo) {
+        this.accountNo = accountNo;
+    }
+
 }
 

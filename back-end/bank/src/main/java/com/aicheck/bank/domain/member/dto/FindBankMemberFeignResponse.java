@@ -2,8 +2,10 @@ package com.aicheck.bank.domain.member.dto;
 
 import com.aicheck.bank.domain.member.entity.Member;
 import java.time.LocalDate;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 @Builder
