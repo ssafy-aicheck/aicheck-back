@@ -3,6 +3,7 @@ package com.aicheck.business.global.feign;
 import com.aicheck.business.domain.auth.exception.BusinessException;
 import com.aicheck.business.global.error.ErrorCode;
 import com.aicheck.business.global.error.GlobalErrorCodes;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import feign.Response;
 import feign.codec.ErrorDecoder;
@@ -54,6 +55,7 @@ public class FeignErrorDecoder implements ErrorDecoder {
     public static class FeignErrorResponse {
         private String code;
         private String message;
+        @JsonProperty("server_date_time")
         private String serverDateTime;
     }
 }
