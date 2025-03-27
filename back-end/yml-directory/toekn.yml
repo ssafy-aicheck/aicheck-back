@@ -1,0 +1,4 @@
+token:
+  access_expiration_time: 3600000
+  refresh_expiration_time: 2592000000
+  secret: ${TOKEN_SECRET}

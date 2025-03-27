@@ -1,0 +1,35 @@
+server:
+  port: 8888
+
+spring:
+  application:
+    name: config
+
+  security:
+    user:
+      name: ${CONFIG_SPRING_SECURITY_USER_NAME}
+      password: ${CONFIG_SPRING_SECURITY_USER_PASSWORD}
+      roles: ADMIN
+
+  rabbitmq:
+    host: rabbitmq
+    port: 5672
+    username: ${RABBITMQ_USERNAME}
+    password: ${RABBITMQ_PASSWORD}
+
+  cloud:
+    config:
+      uri: http://config:8888
+      server:
+        git:
+          uri: https://lab.ssafy.com/s12-fintech-finance-sub1/S12P21A603.git
+          username: ${GITLAB_USERNAME}
+          password: ${GITLAB_PASSWORD}
+          default-label: ${DEFAULT_LABEL_BRANCH}
+          searchPaths: back-end/yml-directory
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: refresh, health, beans, busrefresh

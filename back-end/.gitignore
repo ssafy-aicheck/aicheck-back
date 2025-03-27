@@ -229,6 +229,8 @@ gradle-app.setting
 # Java heap dump
 *.hprof
 
-.env
 gradlew
 gradlew.bat
+gradle
+
+.env
