@@ -26,13 +26,8 @@ public class SecurityConfig {
             throws Exception {
         http.csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests((auth) -> {
-                            auth.requestMatchers("/auth/**",
-                                "/v3/api-docs/**",          // OpenAPI 문서 경로
-                                "/swagger-ui/**",           // Swagger UI 자원
-                                "/swagger-ui.html"          // Swagger 진입점
-                                ).permitAll();
+                            auth.requestMatchers("/**").permitAll();
                             auth.requestMatchers(HttpMethod.OPTIONS).permitAll();
-                            auth.anyRequest().authenticated();
                         }
                 ).addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(new AuthExceptionHandlerFilter(), JwtAuthenticationFilter.class);
