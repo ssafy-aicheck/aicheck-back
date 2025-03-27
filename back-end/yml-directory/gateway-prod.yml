@@ -49,3 +49,6 @@ spring:
             - Path=/chatbot/**
           filters:
             - RewritePath=/chatbot/(?<segment>/.*)?, /$\{segment}
+
+jwt:
+  secretKey: ${TOKEN_SECRET}

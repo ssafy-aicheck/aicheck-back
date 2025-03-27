@@ -2,18 +2,19 @@ USE business;
 
 CREATE TABLE `members`
 (
-    `id`          INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    `manager_id`  INT UNSIGNED NOT NULL,
-    `account_no`  VARCHAR(20)           DEFAULT NULL,
-    `email`       VARCHAR(255) NOT NULL,
-    `password`    CHAR(60)     NOT NULL,
-    `name`        VARCHAR(20)  NOT NULL,
-    `birth`       DATE         NOT NULL,
-    `profile_url` VARCHAR(255) NULL,
-    `type`        ENUM('PARENT', 'CHILD') NOT NULL,
-    `created_at`  DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    `modified_at` DATETIME NULL DEFAULT NULL,
-    `deleted_at`  DATETIME NULL DEFAULT NULL,
+    `id`             INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `manager_id`     INT UNSIGNED NOT NULL,
+    `bank_member_id` INT UNSIGNED NOT NULL,
+    `account_no`     VARCHAR(20)           DEFAULT NULL,
+    `email`          VARCHAR(255) NOT NULL,
+    `password`       CHAR(60)     NOT NULL,
+    `name`           VARCHAR(20)  NOT NULL,
+    `birth`          DATE         NOT NULL,
+    `profile_url`    VARCHAR(255) NULL,
+    `type`           ENUM('PARENT', 'CHILD') NOT NULL,
+    `created_at`     DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `modified_at`    DATETIME NULL DEFAULT NULL,
+    `deleted_at`     DATETIME NULL DEFAULT NULL,
     UNIQUE KEY (account_no),
     UNIQUE KEY (email)
 );

@@ -1,16 +1,26 @@
 package com.aicheck.gateway.config;
 
+import static org.springframework.http.HttpMethod.*;
+
 import java.util.List;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
+import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.web.server.SecurityWebFilterChain;
+import org.springframework.security.web.server.util.matcher.OrServerWebExchangeMatcher;
+import org.springframework.security.web.server.util.matcher.ServerWebExchangeMatchers;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.reactive.CorsWebFilter;
 import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
+
+import com.aicheck.gateway.common.exception.handler.CustomAccessDeniedHandler;
+import com.aicheck.gateway.common.exception.handler.CustomAuthenticationEntryPoint;
+import com.aicheck.gateway.security.filter.JwtAuthenticationFilter;
+import com.aicheck.gateway.security.jwt.JwtProvider;
 
 import lombok.RequiredArgsConstructor;
 
@@ -19,12 +29,109 @@ import lombok.RequiredArgsConstructor;
 @EnableWebFluxSecurity
 public class SecurityConfig {
 
+	private final JwtProvider jwtProvider;
+
+	private static final String[] PUBLIC_PATHS = {
+		"/aicheck/auth/signup",
+		"/aicheck/auth/signin",
+		"/aicheck/auth/email",
+		"/aicheck/auth/email/check",
+	};
+
 	@Bean
 	@Order(1)
-	public SecurityWebFilterChain publicSecurityWebFilterChain(ServerHttpSecurity http) {
+	public SecurityWebFilterChain publicChain(ServerHttpSecurity http) {
 		http
-			.csrf(csrf -> csrf.disable())
+			.securityMatcher(new OrServerWebExchangeMatcher(
+				ServerWebExchangeMatchers.pathMatchers(PUBLIC_PATHS)
+			))
+			.csrf(ServerHttpSecurity.CsrfSpec::disable)
 			.authorizeExchange(exchange -> exchange.anyExchange().permitAll());
+		return http.build();
+	}
+
+	@Bean
+	@Order(2)
+	public SecurityWebFilterChain securedChain(ServerHttpSecurity http) {
+		http
+			.csrf(ServerHttpSecurity.CsrfSpec::disable)
+			.authorizeExchange(exchange -> exchange
+
+				// actuator 관련
+				.pathMatchers("/actuator/**").permitAll()
+
+				// swagger 관련
+				.pathMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
+
+				// 인증 관련
+				.pathMatchers(POST, "/aicheck/auth/reissue").authenticated()
+
+				// 회원
+				.pathMatchers(GET, "/aicheck/members/children/profiles").hasRole(Role.PARENT)
+				.pathMatchers(GET, "/aicheck/members/details").authenticated()
+				.pathMatchers(PATCH, "/aicheck/members/details").authenticated()
+
+				// 계좌
+				.pathMatchers(GET, "/aicheck/accounts").authenticated()
+				.pathMatchers(POST, "/aicheck/accounts").authenticated()
+				.pathMatchers(GET, "/aicheck/accounts/my").authenticated()
+				.pathMatchers(POST, "/aicheck/accounts/check").authenticated()
+				.pathMatchers(GET, "/aicheck/accounts/children").hasRole(Role.PARENT)
+				.pathMatchers(GET, "/aicheck/accounts/description-ratio").authenticated()
+
+				// 정기 송금
+				.pathMatchers(GET, "/aicheck/schedule").hasRole(Role.PARENT)
+				.pathMatchers(POST, "/aicheck/schedule").hasRole(Role.PARENT)
+				.pathMatchers(PATCH, "/aicheck/schedule").hasRole(Role.PARENT)
+				.pathMatchers(DELETE, "/aicheck/schedule/{id}").hasRole(Role.PARENT)
+				.pathMatchers(GET, "/aicheck/schedule/check").hasRole(Role.CHILD)
+
+				// 송금
+				.pathMatchers(GET, "/aicheck/transfer/{accountNo}").authenticated()
+				.pathMatchers(POST, "/aicheck/transfer").authenticated()
+
+				// 리포트
+				.pathMatchers(GET, "/aicheck/reports/**").authenticated()
+
+				// 용돈 요청
+				.pathMatchers(GET, "/aicheck/allowance").authenticated()
+				.pathMatchers(POST, "/aicheck/allowance").hasRole(Role.PARENT)
+				.pathMatchers(GET, "/aicheck/allowance/details").authenticated()
+				.pathMatchers(POST, "/aicheck/allowance/increase").hasRole(Role.CHILD)
+				.pathMatchers(POST, "/aicheck/allowance/increase/{id}").hasRole(Role.PARENT)
+				.pathMatchers(GET, "/aicheck/allowance/increase/details").authenticated()
+				.pathMatchers(GET, "/aicheck/allowance/summary").hasRole(Role.CHILD)
+
+				// 채팅
+				.pathMatchers(POST, "/chatbot/send").hasRole(Role.CHILD)
+				.pathMatchers(PATCH, "/chatbot/prompt").hasRole(Role.PARENT)
+				.pathMatchers(GET, "/chatbot/prompt").hasRole(Role.PARENT)
+
+				// 피싱
+				.pathMatchers(GET, "/aicheck/phishings").authenticated()
+				.pathMatchers(GET, "/aicheck/phishings/family").authenticated()
+
+				// 알림
+				.pathMatchers(GET, "/alarm").authenticated()
+				.pathMatchers(PATCH, "/alarm").authenticated()
+				.pathMatchers(DELETE, "/alarm").authenticated()
+
+				// 카테고리
+				.pathMatchers(GET, "/aicheck/category/**").authenticated()
+
+				// 금전출납부
+				.pathMatchers(GET, "/aicheck/transaction-records/**").authenticated()
+				.pathMatchers(GET, "/aicheck/transaction-records/child/**").hasRole(Role.PARENT)
+				.pathMatchers(PATCH, "/aicheck/transaction-records").authenticated()
+				.pathMatchers(POST, "/aicheck/transaction-records/dutch-pays").authenticated()
+				.pathMatchers(POST, "/aicheck/transaction-records/score").hasRole(Role.PARENT)
+
+				.anyExchange().denyAll())
+			.exceptionHandling(exceptionHandling -> exceptionHandling
+				.authenticationEntryPoint(new CustomAuthenticationEntryPoint())
+				.accessDeniedHandler(new CustomAccessDeniedHandler())
+			)
+			.addFilterBefore(new JwtAuthenticationFilter(jwtProvider), SecurityWebFiltersOrder.AUTHENTICATION);
 		return http.build();
 	}
 
@@ -35,11 +142,15 @@ public class SecurityConfig {
 		config.setAllowedOriginPatterns(List.of("*"));
 		config.setAllowedHeaders(List.of("*"));
 		config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-		config.setExposedHeaders(List.of("Authorization", "X-Chunsun-Authorization", "X-User-ID"));
+		config.setExposedHeaders(List.of("Authorization", "X-User-ID", "X-User-Role"));
 
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 		source.registerCorsConfiguration("/**", config);
-
 		return new CorsWebFilter(source);
+	}
+
+	private static class Role{
+		static final String PARENT = "PARENT";
+		static final String CHILD = "CHILD";
 	}
 }

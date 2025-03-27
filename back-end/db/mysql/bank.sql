@@ -15,14 +15,15 @@ CREATE TABLE `members`
 
 CREATE TABLE `accounts`
 (
-    `id`          INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    `member_id`   INT UNSIGNED NOT NULL,
-    `account_no`  VARCHAR(20) NOT NULL,
-    `password`    CHAR(60)    NOT NULL,
-    `balance`     BIGINT UNSIGNED NOT NULL DEFAULT 0,
-    `created_at`  DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    `modified_at` DATETIME NULL DEFAULT NULL,
-    `deleted_at`  DATETIME NULL DEFAULT NULL,
+    `id`           INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `member_id`    INT UNSIGNED NOT NULL,
+    `account_no`   VARCHAR(20) NOT NULL,
+    `account_name` VARCHAR(60) NOT NULL,
+    `password`     CHAR(60)    NOT NULL,
+    `balance`      BIGINT UNSIGNED NOT NULL DEFAULT 0,
+    `created_at`   DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `modified_at`  DATETIME NULL DEFAULT NULL,
+    `deleted_at`   DATETIME NULL DEFAULT NULL,
     UNIQUE KEY (account_no)
 );
 
