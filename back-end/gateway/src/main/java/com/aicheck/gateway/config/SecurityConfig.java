@@ -1,5 +1,7 @@
 package com.aicheck.gateway.config;
 
+import static org.springframework.http.HttpMethod.*;
+
 import java.util.List;
 
 import org.springframework.context.annotation.Bean;
@@ -20,7 +22,6 @@ import com.aicheck.gateway.common.exception.GatewayException;
 import com.aicheck.gateway.security.filter.JwtAuthenticationFilter;
 import com.aicheck.gateway.security.jwt.JwtProvider;
 
-import jakarta.ws.rs.HttpMethod;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
 
@@ -32,7 +33,8 @@ public class SecurityConfig {
 	private final JwtProvider jwtProvider;
 
 	private static final String[] PUBLIC_PATHS = {
-		"aicheck/auth/signup", "aicheck/auth/email", "aicheck/auth/email/check", "aicheck/auth/login" };
+		"/aicheck/auth/signup", "/aicheck/auth/email", "/aicheck/auth/email/check", "/aicheck/auth/login"
+	};
 
 	@Bean
 	@Order(1)
@@ -52,73 +54,73 @@ public class SecurityConfig {
 		http
 			.csrf(csrf -> csrf.disable())
 			.authorizeExchange(exchange -> exchange
-				.pathMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html")
-				.permitAll()
-				//
-				// .pathMatchers(HttpMethod.POST, "/member-service/students",
-				// 	"/member-service/teachers")
-				// .hasRole(Role.GUEST)
-				//
-				// .pathMatchers(HttpMethod.GET,
-				// 	"/member-service/teachers/details/*")
-				// .hasAnyRole(Role.STUDENT, Role.ADMIN)
-				//
-				// .pathMatchers("/coupon-service/coupons/admin")
-				// .hasAnyRole(Role.ADMIN)
-				//
-				// .pathMatchers(HttpMethod.GET, "/member-service/students/details/*")
-				// .hasAnyRole(Role.TEACHER, Role.ADMIN)
-				//
-				// .pathMatchers("/member-service/members/ranking", "/member-service/members/*",
-				// 	"/member-service/category/*", "/member-service/category", "/member-service/categories")
-				// .hasAnyRole(Role.ALL)
-				//
-				// .pathMatchers(HttpMethod.GET, "/member-service/teachers/class/*")
-				// .hasAnyRole(Role.ALL)
-				//
-				// .pathMatchers(HttpMethod.GET, "/member-service/students",
-				// 	"/member-service/members/delete/*",
-				// 	"/member-service/members/exist/*")
-				// .hasRole(Role.ADMIN)
-				//
-				// .pathMatchers(HttpMethod.GET, "/member-service/members/*/search")
-				// .hasAnyRole(Role.USER)
-				//
-				// .pathMatchers("/member-service/s3/*")
-				// .hasRole(Role.ADMIN)
-				//
-				// .pathMatchers("/member-service/students/**", "/member-service/like")
-				// .hasAnyRole(Role.STUDENT, Role.ADMIN)
-				//
-				// .pathMatchers("/member-service/teachers/**")
-				// .hasAnyRole(Role.TEACHER, Role.ADMIN)
-				//
-				// .pathMatchers(HttpMethod.POST, "/class-service/class-requests")
-				// .hasAnyRole(Role.USER)
-				//
-				// .pathMatchers(HttpMethod.POST, "/class-service/class-requests/response", "/class-service/class/status/*")
-				// .hasAnyRole(Role.TEACHER, Role.ADMIN)
-				//
-				// .pathMatchers("/notification-service/coupons/send/all")
-				// .hasAnyRole(Role.ADMIN)
-				//
-				// .pathMatchers(HttpMethod.POST, "/coupon-service/coupons")
-				// .hasAnyRole(Role.STUDENT, Role.ADMIN)
-				//
-				// .pathMatchers("/rank-service/**")
-				// .hasRole(Role.ADMIN)
-				//
-				// .pathMatchers("/class-service/**")
-				// .hasAnyRole(Role.USER)
-				//
-				// .pathMatchers("/coupon-service/**")
-				// .hasAnyRole(Role.USER)
-				//
-				// .pathMatchers("/payment-service/**")
-				// .hasAnyRole(Role.STUDENT, Role.ADMIN)
 
-				.anyExchange()
-				.permitAll())
+				// swagger 관련
+				.pathMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
+
+				// 인증 관련
+				.pathMatchers(POST, "/aicheck/auth/reissue").authenticated()
+
+				// 회원
+				.pathMatchers(GET, "/aicheck/members/children/profiles").hasRole(Role.PARENT)
+				.pathMatchers(GET, "/aicheck/members/details").authenticated()
+				.pathMatchers(PATCH, "/aicheck/members/details").authenticated()
+
+				// 계좌
+				.pathMatchers(GET, "/aicheck/accounts").authenticated()
+				.pathMatchers(POST, "/aicheck/accounts").authenticated()
+				.pathMatchers(GET, "/aicheck/accounts/my").authenticated()
+				.pathMatchers(POST, "/aicheck/accounts/check").authenticated()
+				.pathMatchers(GET, "/aicheck/accounts/children").hasRole(Role.PARENT)
+				.pathMatchers(GET, "/aicheck/accounts/description-ratio").authenticated()
+
+				// 정기 송금
+				.pathMatchers(GET, "/aicheck/schedule").hasRole(Role.PARENT)
+				.pathMatchers(POST, "/aicheck/schedule").hasRole(Role.PARENT)
+				.pathMatchers(PATCH, "/aicheck/schedule").hasRole(Role.PARENT)
+				.pathMatchers(DELETE, "/aicheck/schedule/{id}").hasRole(Role.PARENT)
+				.pathMatchers(GET, "/aicheck/schedule/check").hasRole(Role.CHILD)
+
+				// 송금
+				.pathMatchers(GET, "/aicheck/transfer/{accountNo}").authenticated()
+				.pathMatchers(POST, "/aicheck/transfer").authenticated()
+
+				// 리포트
+				.pathMatchers(GET, "/aicheck/reports/**").authenticated()
+
+				// 용돈 요청
+				.pathMatchers(GET, "/aicheck/allowance").authenticated()
+				.pathMatchers(POST, "/aicheck/allowance").hasRole(Role.PARENT)
+				.pathMatchers(GET, "/aicheck/allowance/details").authenticated()
+				.pathMatchers(POST, "/aicheck/allowance/increase").hasRole(Role.CHILD)
+				.pathMatchers(POST, "/aicheck/allowance/increase/{id}").hasRole(Role.PARENT)
+				.pathMatchers(GET, "/aicheck/allowance/increase/details").authenticated()
+				.pathMatchers(GET, "/aicheck/allowance/summary").hasRole(Role.CHILD)
+
+				// 채팅
+				.pathMatchers(POST, "/chatbot/send").hasRole(Role.CHILD)
+				.pathMatchers(PATCH, "/chatbot/prompt").hasRole(Role.PARENT)
+				.pathMatchers(GET, "/chatbot/prompt").hasRole(Role.PARENT)
+
+				// 피싱
+				.pathMatchers(GET, "/aicheck/phishings").authenticated()
+				.pathMatchers(GET, "/aicheck/phishings/family").authenticated()
+
+				// 알림
+				.pathMatchers(GET, "/alarm").authenticated()
+				.pathMatchers(PATCH, "/alarm").authenticated()
+				.pathMatchers(DELETE, "/alarm").authenticated()
+
+				// 카테고리
+				.pathMatchers(GET, "/aicheck/category/**").authenticated()
+
+				// 금전출납부
+				.pathMatchers(GET, "/aicheck/transaction-records/**").authenticated()
+				.pathMatchers(PATCH, "/aicheck/transaction-records").authenticated()
+				.pathMatchers(POST, "/aicheck/transaction-records/dutch-pays").authenticated()
+				.pathMatchers(POST, "/aicheck/transaction-records/score").hasRole(Role.PARENT)
+
+				.anyExchange().denyAll())
 			.exceptionHandling(exceptionHandling -> exceptionHandling
 				.authenticationEntryPoint((exchange, ex) ->
 					Mono.error(new GatewayException(GlobalErrorCodes.INVALID_LOGIN_TOKEN)))
@@ -144,7 +146,8 @@ public class SecurityConfig {
 		return new CorsWebFilter(source);
 	}
 
-	private enum Role{
-		PARENT, CHILD
+	private static class Role{
+		static final String PARENT = "PARENT";
+		static final String CHILD = "CHILD";
 	}
 }

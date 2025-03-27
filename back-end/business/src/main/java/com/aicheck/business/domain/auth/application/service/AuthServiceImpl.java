@@ -73,8 +73,11 @@ public class AuthServiceImpl implements AuthService {
     }
 
     private Authentication authenticate(Member member) {
-        User user = new User(String.valueOf(member.getId()), "",
-            Collections.singletonList(new SimpleGrantedAuthority(member.getType().name())));
+        User user = new User(
+            String.valueOf(member.getId()),
+            "",
+            Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + member.getType().name()))
+        );
         return new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
     }
 }
