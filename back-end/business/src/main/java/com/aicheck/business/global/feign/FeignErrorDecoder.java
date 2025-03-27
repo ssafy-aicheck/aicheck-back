@@ -3,7 +3,6 @@ package com.aicheck.business.global.feign;
 import com.aicheck.business.domain.auth.exception.BusinessException;
 import com.aicheck.business.global.error.ErrorCode;
 import com.aicheck.business.global.error.GlobalErrorCodes;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import feign.Response;
 import feign.codec.ErrorDecoder;
@@ -19,16 +18,15 @@ public class FeignErrorDecoder implements ErrorDecoder {
     @Override
     public Exception decode(String methodKey, Response response) {
         try {
-            FeignErrorResponse errorResponse = objectMapper.readValue(
-                    response.body().asInputStream(),
-                    FeignErrorResponse.class
-            );
+            String body = new String(response.body().asInputStream().readAllBytes());
 
-            // JSON 응답에서 ErrorCode 생성
+            FeignErrorResponse errorResponse = objectMapper.readValue(body, FeignErrorResponse.class);
+
             ErrorCode errorCode = createErrorCode(errorResponse, response.status());
-
             return new BusinessException(errorCode);
+
         } catch (IOException e) {
+            log.error("[FeignErrorDecoder] JSON 파싱 실패", e);
             return new BusinessException(GlobalErrorCodes.INVALID_JSON_DATA);
         }
     }
@@ -56,7 +54,6 @@ public class FeignErrorDecoder implements ErrorDecoder {
     public static class FeignErrorResponse {
         private String code;
         private String message;
-        @JsonProperty("server_date_time")
         private String serverDateTime;
     }
 }

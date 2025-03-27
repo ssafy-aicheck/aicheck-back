@@ -1,5 +1,6 @@
 package com.aicheck.business.domain.auth.application.service;
 
+import com.aicheck.business.domain.account.infrastructure.client.BankClient;
 import com.aicheck.business.domain.auth.domain.entity.Member;
 import com.aicheck.business.domain.auth.domain.entity.MemberType;
 import com.aicheck.business.domain.auth.domain.repository.MemberRepository;
@@ -8,7 +9,6 @@ import com.aicheck.business.domain.auth.dto.SignInRequest;
 import com.aicheck.business.domain.auth.dto.SignInResponse;
 import com.aicheck.business.domain.auth.dto.SignupRequest;
 import com.aicheck.business.domain.auth.exception.BusinessException;
-import com.aicheck.business.domain.auth.infrastructure.client.BankMemberClient;
 import com.aicheck.business.global.error.BusinessErrorCodes;
 import java.util.Collections;
 import lombok.RequiredArgsConstructor;
@@ -28,13 +28,12 @@ public class AuthServiceImpl implements AuthService {
 
     private final MemberRepository memberRepository;
     private final JwtProvider jwtProvider;
-    private final BankMemberClient bankMemberClient;
+    private final BankClient bankClient;
     private final PasswordEncoder passwordEncoder;
 
     @Transactional
     public void signUp(SignupRequest request) {
-        BankMemberFeignResponse response = bankMemberClient.findBankMemberByEmail(request.getEmail());
-
+        BankMemberFeignResponse response = bankClient.findBankMemberByEmail(request.getEmail());
         Member member = Member.builder()
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
