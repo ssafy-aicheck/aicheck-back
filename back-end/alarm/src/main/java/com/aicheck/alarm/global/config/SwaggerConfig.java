@@ -1,4 +1,4 @@
-package com.aicheck.alarm.config;
+package com.aicheck.alarm.global.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
