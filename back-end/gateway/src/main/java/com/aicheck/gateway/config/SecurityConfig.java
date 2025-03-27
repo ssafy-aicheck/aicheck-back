@@ -19,6 +19,8 @@ import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
 
 import com.aicheck.gateway.common.error.GlobalErrorCodes;
 import com.aicheck.gateway.common.exception.GatewayException;
+import com.aicheck.gateway.common.exception.handler.CustomAccessDeniedHandler;
+import com.aicheck.gateway.common.exception.handler.CustomAuthenticationEntryPoint;
 import com.aicheck.gateway.security.filter.JwtAuthenticationFilter;
 import com.aicheck.gateway.security.jwt.JwtProvider;
 
@@ -33,30 +35,39 @@ public class SecurityConfig {
 	private final JwtProvider jwtProvider;
 
 	private static final String[] PUBLIC_PATHS = {
-		"/aicheck/auth/signup", "/aicheck/auth/email", "/aicheck/auth/email/check", "/aicheck/auth/login"
+		"/aicheck/auth/signup",
+		"/aicheck/auth/signin",
+		"/aicheck/auth/email",
+		"/aicheck/auth/email/check",
 	};
 
 	@Bean
 	@Order(1)
-	public SecurityWebFilterChain publicSecurityWebFilterChain(ServerHttpSecurity http) {
+	public SecurityWebFilterChain publicChain(ServerHttpSecurity http) {
 		http
 			.securityMatcher(new OrServerWebExchangeMatcher(
 				ServerWebExchangeMatchers.pathMatchers(PUBLIC_PATHS)
 			))
-			.csrf(csrf -> csrf.disable())
+			.csrf(ServerHttpSecurity.CsrfSpec::disable)
 			.authorizeExchange(exchange -> exchange.anyExchange().permitAll());
 		return http.build();
 	}
 
 	@Bean
 	@Order(2)
-	public SecurityWebFilterChain securedSecurityWebFilterChain(ServerHttpSecurity http) {
+	public SecurityWebFilterChain securedChain(ServerHttpSecurity http) {
 		http
-			.csrf(csrf -> csrf.disable())
+			.csrf(ServerHttpSecurity.CsrfSpec::disable)
 			.authorizeExchange(exchange -> exchange
+
+				// actuator 관련
+				.pathMatchers("/actuator/**").permitAll()
 
 				// swagger 관련
 				.pathMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
+
+				// 로그인 및 회원가입
+				.pathMatchers(PUBLIC_PATHS).permitAll()
 
 				// 인증 관련
 				.pathMatchers(POST, "/aicheck/auth/reissue").authenticated()
@@ -116,19 +127,17 @@ public class SecurityConfig {
 
 				// 금전출납부
 				.pathMatchers(GET, "/aicheck/transaction-records/**").authenticated()
+				.pathMatchers(GET, "/aicheck/transaction-records/child/**").hasRole(Role.PARENT)
 				.pathMatchers(PATCH, "/aicheck/transaction-records").authenticated()
 				.pathMatchers(POST, "/aicheck/transaction-records/dutch-pays").authenticated()
 				.pathMatchers(POST, "/aicheck/transaction-records/score").hasRole(Role.PARENT)
 
 				.anyExchange().denyAll())
 			.exceptionHandling(exceptionHandling -> exceptionHandling
-				.authenticationEntryPoint((exchange, ex) ->
-					Mono.error(new GatewayException(GlobalErrorCodes.INVALID_LOGIN_TOKEN)))
-				.accessDeniedHandler((exchange, ex) ->
-					Mono.error(new GatewayException(GlobalErrorCodes.ACCESS_DENIED)))
+				.authenticationEntryPoint(new CustomAuthenticationEntryPoint())
+				.accessDeniedHandler(new CustomAccessDeniedHandler())
 			)
-			.addFilterBefore(new JwtAuthenticationFilter(jwtProvider),
-				SecurityWebFiltersOrder.AUTHENTICATION);
+			.addFilterBefore(new JwtAuthenticationFilter(jwtProvider), SecurityWebFiltersOrder.AUTHENTICATION);
 		return http.build();
 	}
 
