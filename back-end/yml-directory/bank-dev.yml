@@ -10,9 +10,6 @@ spring:
   jackson:
     property-naming-strategy: SNAKE_CASE
 
-  jackson:
-    property-naming-strategy: SNAKE_CASE
-
   jpa:
     database: mysql
     hibernate:
