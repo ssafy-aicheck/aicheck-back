@@ -1,0 +1,10 @@
+rootProject.name = 'back-end'
+
+include 'alarm'
+include 'bank'
+include 'batch'
+include 'business'
+include 'chatbot'
+include 'config'
+include 'discovery'
+include 'gateway'

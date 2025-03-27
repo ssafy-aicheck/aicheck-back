@@ -1,0 +1,68 @@
+server:
+  port: 8080
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://discovery:8761/eureka/
+
+spring:
+  application:
+    name: gateway
+
+  cloud:
+    gateway:
+      routes:
+        - id: alarm
+          uri: lb://ALARM
+          predicates:
+            - Path=/alarm/**
+          filters:
+            - RewritePath=/alarm/(?<segment>/.*)?, /$\{segment}
+
+        - id: bank
+          uri: lb://BANK
+          predicates:
+            - Path=/bank/**
+          filters:
+            - RewritePath=/bank/(?<segment>/.*)?, /$\{segment}
+
+        - id: batch
+          uri: lb://BATCH
+          predicates:
+            - Path=/batch/**
+          filters:
+            - RewritePath=/batch/(?<segment>/.*)?, /$\{segment}
+
+        - id: business
+          uri: lb://BUSINESS
+          predicates:
+            - Path=/aicheck/**
+          filters:
+            - RewritePath=/aicheck/(?<segment>/.*)?, /$\{segment}
+
+        - id: chatbot
+          uri: lb://CHATBOT
+          predicates:
+            - Path=/chatbot/**
+          filters:
+            - RewritePath=/chatbot/(?<segment>/.*)?, /$\{segment}
+
+  jackson:
+    property-naming-strategy: SNAKE_CASE
+
+jwt:
+  secretKey: ${TOKEN_SECRET}
+
+springdoc:
+  swagger-ui:
+    use-root-path: true
+    urls:
+      - name: aicheck
+        url: /aicheck/v3/api-docs
+      - name: alarm
+        url: /alarm/v3/api-docs
+      - name: chatbot
+        url: /chatbot/v3/api-docs
