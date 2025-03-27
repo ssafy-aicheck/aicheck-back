@@ -19,7 +19,6 @@ public class AccountController {
 
     @GetMapping("/{memberId}")
     public ResponseEntity<List<FindAccountFeignResponse>> findMyAccounts(@PathVariable Long memberId) {
-
         return ResponseEntity.ok(accountService.findMyAccounts(memberId));
     }
 
