@@ -17,15 +17,12 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.reactive.CorsWebFilter;
 import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
 
-import com.aicheck.gateway.common.error.GlobalErrorCodes;
-import com.aicheck.gateway.common.exception.GatewayException;
 import com.aicheck.gateway.common.exception.handler.CustomAccessDeniedHandler;
 import com.aicheck.gateway.common.exception.handler.CustomAuthenticationEntryPoint;
 import com.aicheck.gateway.security.filter.JwtAuthenticationFilter;
 import com.aicheck.gateway.security.jwt.JwtProvider;
 
 import lombok.RequiredArgsConstructor;
-import reactor.core.publisher.Mono;
 
 @Configuration
 @RequiredArgsConstructor
@@ -65,9 +62,6 @@ public class SecurityConfig {
 
 				// swagger 관련
 				.pathMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
-
-				// 로그인 및 회원가입
-				.pathMatchers(PUBLIC_PATHS).permitAll()
 
 				// 인증 관련
 				.pathMatchers(POST, "/aicheck/auth/reissue").authenticated()
