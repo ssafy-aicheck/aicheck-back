@@ -50,9 +50,6 @@ spring:
           filters:
             - RewritePath=/chatbot/(?<segment>/.*)?, /$\{segment}
 
-  jackson:
-    property-naming-strategy: SNAKE_CASE
-
 jwt:
   secretKey: ${TOKEN_SECRET}
 
