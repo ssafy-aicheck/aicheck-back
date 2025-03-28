@@ -1,6 +1,6 @@
 package com.aicheck.business.domain.account.infrastructure.client.dto;
 
-import com.aicheck.business.domain.account.dto.VerifyAccountRequest;
+import com.aicheck.business.domain.account.dto.RegisterMainAccountRequest;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -9,13 +9,11 @@ import lombok.Getter;
 public class VerifyAccountFeignRequest {
     private Long bankMemberId;
     private Long accountId;
-    private String password;
 
-    public static VerifyAccountFeignRequest from(Long bankMemberId, VerifyAccountRequest verifyAccountRequest) {
+    public static VerifyAccountFeignRequest from(Long bankMemberId, RegisterMainAccountRequest registerMainAccountRequest) {
         return VerifyAccountFeignRequest.builder()
                 .bankMemberId(bankMemberId)
-                .accountId(verifyAccountRequest.getAccountId())
-                .password(verifyAccountRequest.getPassword())
+                .accountId(registerMainAccountRequest.getAccountId())
                 .build();
     }
 }
