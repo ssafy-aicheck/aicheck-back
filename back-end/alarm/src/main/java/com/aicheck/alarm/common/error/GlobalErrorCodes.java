@@ -1,6 +1,7 @@
 package com.aicheck.alarm.common.error;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.METHOD_NOT_ALLOWED;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 
@@ -22,6 +23,7 @@ public enum GlobalErrorCodes implements ErrorCode {
 
     MESSAGE_EXTRACTION_FAILED(INTERNAL_SERVER_ERROR, "COMMON_MESSAGE_EXTRACTION_FAILED_500", "에러 메시지 추출 중 문제가 발생했습니다"),
 
+    BAD_METHOD(METHOD_NOT_ALLOWED, "COMMON_BAD_METHOD_405", "잘못된 형식의 Method 입니다.")
     ;
 
     private final HttpStatus httpStatus;

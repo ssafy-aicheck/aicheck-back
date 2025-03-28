@@ -43,7 +43,7 @@ public class Alarm extends BaseEntity {
 	private Long endPointId;
 
 	@Builder
-	public Alarm(Long memberId, String body, boolean isRead, Type type, Long endPointId) {
+	private Alarm(Long memberId, String body, boolean isRead, Type type, Long endPointId) {
 		this.memberId = memberId;
 		this.body = body;
 		this.isRead = isRead;

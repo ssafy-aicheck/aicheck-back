@@ -2,8 +2,8 @@ package com.aicheck.alarm.common.exception.handler;
 
 import static com.aicheck.alarm.common.error.AlarmErrorCodes.INCLUDED_NULL_VALUE;
 import static com.aicheck.alarm.common.error.AlarmErrorCodes.INVALID_REQUEST;
-import static com.aicheck.alarm.common.error.AlarmErrorCodes.METHOD_NOT_ALLOWED;
 import static com.aicheck.alarm.common.error.AlarmErrorCodes.NOT_FOUND_URL;
+import static com.aicheck.alarm.common.error.GlobalErrorCodes.BAD_METHOD;
 import static com.aicheck.alarm.common.error.GlobalErrorCodes.MESSAGE_EXTRACTION_FAILED;
 import static com.aicheck.alarm.common.error.GlobalErrorCodes.SERVER_ERROR;
 
@@ -60,7 +60,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     public ResponseEntity<ErrorResponse> handleMethodNotSupported(HttpRequestMethodNotSupportedException e) {
-        return buildResponse(METHOD_NOT_ALLOWED);
+        return buildResponse(BAD_METHOD);
     }
 
     @ExceptionHandler(Exception.class)
