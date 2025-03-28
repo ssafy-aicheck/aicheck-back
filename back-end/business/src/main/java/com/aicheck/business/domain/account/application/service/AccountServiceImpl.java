@@ -30,8 +30,8 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     @Transactional
-    public void registerAccount(VerifyAccountRequest request) {
-        Member member = memberRepository.findById(request.getMemberId()).orElseThrow(
+    public void registerAccount(Long memberId, VerifyAccountRequest request) {
+        Member member = memberRepository.findById(memberId).orElseThrow(
                 () -> new BusinessException(BusinessErrorCodes.BUSINESS_MEMBER_NOT_FOUND));
 
         VerifyAccountFeignRequest verifyAccountFeignRequest =
