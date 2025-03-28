@@ -20,7 +20,9 @@ public enum BusinessErrorCodes implements ErrorCode {
     ILLEGAL_JWT(HttpStatus.BAD_REQUEST, "BUSINESS_JWT_ILLEGAL_400", "잘못된 JWT 요청입니다"),
 
     NOT_FOUND_URL(HttpStatus.NOT_FOUND, "BUSINESS_NOT_FOUND_URL_404", "존재하지 않는 URL입니다"),
-    METHOD_NOT_ALLOWED(HttpStatus.METHOD_NOT_ALLOWED, "BUSINESS_METHOD_NOT_ALLOWED_405", "지원하지 않는 HTTP 메서드입니다");
+    METHOD_NOT_ALLOWED(HttpStatus.METHOD_NOT_ALLOWED, "BUSINESS_METHOD_NOT_ALLOWED_405", "지원하지 않는 HTTP 메서드입니다"),
+
+    MAIN_ACCOUNT_NOT_SET(HttpStatus.BAD_REQUEST, "BUSINESS_MAIN_ACCOUNT_NOT_SET_400", "대표 계좌가 설정되지 않았습니다");
 
 
     private final HttpStatus httpStatus;

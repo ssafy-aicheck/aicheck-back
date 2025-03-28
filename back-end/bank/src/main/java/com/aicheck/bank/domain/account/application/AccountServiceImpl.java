@@ -1,8 +1,11 @@
 package com.aicheck.bank.domain.account.application;
 
+import com.aicheck.bank.domain.account.dto.AccountInfoFeignResponse;
 import com.aicheck.bank.domain.account.dto.FindAccountsFeignResponse;
 import com.aicheck.bank.domain.account.dto.VerifyAccountFeignRequest;
 import com.aicheck.bank.domain.account.dto.VerifyAccountFeignResponse;
+import com.aicheck.bank.domain.account.dto.VerifyAccountPasswordFeignRequest;
+import com.aicheck.bank.domain.account.dto.VerifyAccountPasswordFeignResponse;
 import com.aicheck.bank.domain.account.entity.Account;
 import com.aicheck.bank.domain.account.repository.AccountRepository;
 import com.aicheck.bank.domain.member.entity.Member;
@@ -27,22 +30,36 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public VerifyAccountFeignResponse verifyAccount(VerifyAccountFeignRequest request) {
-        Member member = memberRepository.findById(request.getBankMemberId())
-                .orElseThrow(() -> new BankException(BankErrorCodes.BANK_MEMBER_NOT_FOUND));
-
+    public VerifyAccountPasswordFeignResponse verifyAccountPassword(VerifyAccountPasswordFeignRequest request) {
         Account account = accountRepository.findById(request.getAccountId())
                 .orElseThrow(() -> new BankException(BankErrorCodes.ACCOUNT_NOT_FOUND));
-
-        if (member.getId() != account.getMemberId()) {
-            throw new BankException(BankErrorCodes.NOT_YOUR_ACCOUNT);
-        }
 
         if (!account.getPassword().equals(request.getPassword())) {
             throw new BankException(BankErrorCodes.INVALID_PASSWORD);
         }
 
+        return VerifyAccountPasswordFeignResponse.builder()
+                .verified(true)
+                .accountNo(account.getAccountNo())
+                .build();
+    }
+
+    @Override
+    public AccountInfoFeignResponse getAccountInfoByNumber(String accountNo) {
+        Account account = accountRepository.findAccountByAccountNo(accountNo)
+                .orElseThrow(() -> new BankException(BankErrorCodes.ACCOUNT_NOT_FOUND));
+        return AccountInfoFeignResponse.from(account);
+    }
+
+    @Override
+    public VerifyAccountFeignResponse verifyAccount(VerifyAccountFeignRequest request) {
+        Account account = accountRepository.findById(request.getAccountId())
+                .orElseThrow(() -> new BankException(BankErrorCodes.ACCOUNT_NOT_FOUND));
+        if(account.getMemberId() != request.getBankMemberId()) {
+            throw new BankException(BankErrorCodes.NOT_YOUR_ACCOUNT);
+        }
         return VerifyAccountFeignResponse.builder()
+                .verified(true)
                 .accountNo(account.getAccountNo())
                 .build();
     }

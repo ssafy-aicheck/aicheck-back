@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class VerifyAccountFeignResponse {
-    private boolean verified;
+public class VerifyAccountPasswordFeignResponse {
+    private Boolean verified;
     private String accountNo;
 }
