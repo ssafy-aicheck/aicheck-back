@@ -36,6 +36,11 @@ public class SecurityConfig {
 		"/aicheck/auth/signin",
 		"/aicheck/auth/email",
 		"/aicheck/auth/email/check",
+		"/swagger-ui/**",
+		"/swagger-ui.html",
+		"/aicheck/v3/api-docs",
+		"/alarm/v3/api-docs",
+		"/chatbot/v3/api-docs",
 	};
 
 	@Bean
