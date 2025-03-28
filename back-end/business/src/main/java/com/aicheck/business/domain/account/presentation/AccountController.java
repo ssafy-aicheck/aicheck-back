@@ -3,7 +3,8 @@ package com.aicheck.business.domain.account.presentation;
 import com.aicheck.business.domain.account.application.service.AccountService;
 import com.aicheck.business.domain.account.dto.AccountInfoResponse;
 import com.aicheck.business.domain.account.dto.FindAccountFeignResponse;
-import com.aicheck.business.domain.account.dto.VerifyAccountRequest;
+import com.aicheck.business.domain.account.dto.VerifyAccountPasswordRequest;
+import com.aicheck.business.domain.account.dto.RegisterMainAccountRequest;
 import com.aicheck.business.domain.account.dto.VerifyAccountResponse;
 import com.aicheck.business.global.auth.annotation.CurrentMemberId;
 import java.util.List;
@@ -29,8 +30,15 @@ public class AccountController {
 
     @PostMapping
     public ResponseEntity<VerifyAccountResponse> registerMainAccount(@CurrentMemberId Long memberId,
-                                                                 @RequestBody VerifyAccountRequest request) {
+                                                                 @RequestBody RegisterMainAccountRequest request) {
         accountService.registerMainAccount(memberId, request);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/check")
+    public ResponseEntity<Void> verifyAccountPassword(@CurrentMemberId Long memberId,
+                                                      @RequestBody VerifyAccountPasswordRequest request) {
+        accountService.verifyAccountPassword(request);
         return ResponseEntity.ok().build();
     }
 

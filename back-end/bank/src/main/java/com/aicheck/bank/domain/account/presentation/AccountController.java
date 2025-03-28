@@ -5,6 +5,8 @@ import com.aicheck.bank.domain.account.dto.AccountInfoFeignResponse;
 import com.aicheck.bank.domain.account.dto.FindAccountsFeignResponse;
 import com.aicheck.bank.domain.account.dto.VerifyAccountFeignRequest;
 import com.aicheck.bank.domain.account.dto.VerifyAccountFeignResponse;
+import com.aicheck.bank.domain.account.dto.VerifyAccountPasswordFeignRequest;
+import com.aicheck.bank.domain.account.dto.VerifyAccountPasswordFeignResponse;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -31,6 +33,12 @@ public class AccountController {
     @PostMapping("/verify")
     public ResponseEntity<VerifyAccountFeignResponse> verifyAccount(@RequestBody VerifyAccountFeignRequest request) {
         VerifyAccountFeignResponse response = accountService.verifyAccount(request);
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/verify-password")
+    public ResponseEntity<VerifyAccountPasswordFeignResponse> verifyAccountPassword(@RequestBody VerifyAccountPasswordFeignRequest request) {
+        VerifyAccountPasswordFeignResponse response = accountService.verifyAccountPassword(request);
         return ResponseEntity.ok(response);
     }
 
