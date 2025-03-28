@@ -4,26 +4,22 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import com.aicheck.gateway.common.error.ErrorCode;
-import com.aicheck.gateway.common.error.ErrorResponseDto;
-import com.aicheck.gateway.common.error.GlobalErrorCodes;
-import com.aicheck.gateway.common.exception.BusinessException;
+import com.aicheck.gateway.common.error.ErrorResponse;
+import com.aicheck.gateway.common.error.GatewayErrorCodes;
+import com.aicheck.gateway.common.exception.AicheckException;
 
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
-	@ExceptionHandler(BusinessException.class)
-	protected ResponseEntity<ErrorResponseDto> handleBusinessException(BusinessException e) {
-		log.error("BusinessException : {}", e.getErrorCode().getMessage());
-		ErrorCode errorMessage = e.getErrorCode();
-		return ErrorResponseDto.of(errorMessage);
+	@ExceptionHandler(AicheckException.class)
+	protected ResponseEntity<ErrorResponse> handleBusinessException(AicheckException e) {
+		return ErrorResponse.of(e.getErrorCode());
 	}
 
 	@ExceptionHandler(Exception.class)
-	protected ResponseEntity<ErrorResponseDto> handleException(Exception e) {
-		log.error("Exception : {}", e.getMessage());
-		return ErrorResponseDto.of(GlobalErrorCodes.INTERNAL_SERVER_ERROR);
+	protected ResponseEntity<ErrorResponse> handleException(Exception e) {
+		return ErrorResponse.of(GatewayErrorCodes.INTERNAL_SERVER_ERROR);
 	}
 }

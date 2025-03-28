@@ -131,6 +131,7 @@ services:
       RABBITMQ_USERNAME: ${RABBITMQ_USERNAME}
       RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD}
       TOKEN_SECRET: ${TOKEN_SECRET}
+      CLOUD_FRONT_URL: ${CLOUD_FRONT_URL}
     depends_on:
       config:
         condition: service_healthy
