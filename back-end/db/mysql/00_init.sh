@@ -1,42 +1,35 @@
 #!/bin/bash
 set -e
+# 초기화 대상 DB 리스트
+DATABASES=(alarm bank batch business chatbot)
 
-echo "[Init] MySQL 초기화 시작..."
+# 1. 데이터베이스 생성
+for DB in "${DATABASES[@]}"; do
+  echo "[Init] 생성 중: ${DB}"
+  mysql -u root -p"${MYSQL_ROOT_PASSWORD}" -e "
+    CREATE DATABASE IF NOT EXISTS \`${DB}\`
+    DEFAULT CHARACTER SET utf8mb4
+    COLLATE utf8mb4_unicode_ci;"
+done
 
-# 기본 환경 변수 출력 (디버깅 용도)
-echo "[Init] MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}"
-echo "[Init] MYSQL_USER=${MYSQL_USER}"
-echo "[Init] MYSQL_PASSWORD=${MYSQL_PASSWORD}"
+# 2. 사용자 생성 및 권한 부여
+mysql -u root -p"${MYSQL_ROOT_PASSWORD}" -e "
+  CREATE USER IF NOT EXISTS '${MYSQL_USER}'@'%' IDENTIFIED BY '${MYSQL_PASSWORD}';"
 
-# 기본 DB/사용자/권한 생성
-echo "[Init] 데이터베이스 및 사용자 생성..."
+for DB in "${DATABASES[@]}"; do
+  echo "[Init] 권한 부여: ${DB}"
+  mysql -u root -p"${MYSQL_ROOT_PASSWORD}" -e "
+    GRANT ALL PRIVILEGES ON \`${DB}\`.*
+    TO '${MYSQL_USER}'@'%';"
+done
 
-mysql -u root -p"${MYSQL_ROOT_PASSWORD}" <<-EOSQL
-  CREATE DATABASE IF NOT EXISTS alarm DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-  CREATE DATABASE IF NOT EXISTS bank DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-  CREATE DATABASE IF NOT EXISTS batch DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-  CREATE DATABASE IF NOT EXISTS business DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-  CREATE DATABASE IF NOT EXISTS chatbot DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+mysql -u root -p"${MYSQL_ROOT_PASSWORD}" -e "FLUSH PRIVILEGES;"
 
-  CREATE USER IF NOT EXISTS '${MYSQL_USER}'@'%' IDENTIFIED BY '${MYSQL_PASSWORD}';
-  GRANT ALL PRIVILEGES ON alarm.* TO '${MYSQL_USER}'@'%';
-  GRANT ALL PRIVILEGES ON bank.* TO '${MYSQL_USER}'@'%';
-  GRANT ALL PRIVILEGES ON batch.* TO '${MYSQL_USER}'@'%';
-  GRANT ALL PRIVILEGES ON business.* TO '${MYSQL_USER}'@'%';
-  GRANT ALL PRIVILEGES ON chatbot.* TO '${MYSQL_USER}'@'%';
-
-  FLUSH PRIVILEGES;
-EOSQL
-
-echo "[Init] 데이터베이스 및 사용자 설정 완료 ✅"
-
-# 테이블 생성 SQL 실행
-echo "[Init] 테이블 생성 시작..."
-
-mysql -u root -p"${MYSQL_ROOT_PASSWORD}" alarm < /docker-entrypoint-initdb.d/alarm.sql
-mysql -u root -p"${MYSQL_ROOT_PASSWORD}" bank < /docker-entrypoint-initdb.d/bank.sql
-mysql -u root -p"${MYSQL_ROOT_PASSWORD}" batch < /docker-entrypoint-initdb.d/batch.sql
-mysql -u root -p"${MYSQL_ROOT_PASSWORD}" business < /docker-entrypoint-initdb.d/business.sql
-mysql -u root -p"${MYSQL_ROOT_PASSWORD}" chatbot < /docker-entrypoint-initdb.d/chatbot.sql
-
-echo "[Init] 테이블 생성 완료 ✅"
+# 3. 테이블 SQL 실행
+for DB in "${DATABASES[@]}"; do
+  SQL_FILE="/docker-entrypoint-initdb.d/${DB}.sql"
+  if [ -f "$SQL_FILE" ]; then
+    echo "[Init] Importing: ${SQL_FILE} → ${DB}"
+    mysql -u root -p"${MYSQL_ROOT_PASSWORD}" "$DB" < "$SQL_FILE"
+  fi
+done
