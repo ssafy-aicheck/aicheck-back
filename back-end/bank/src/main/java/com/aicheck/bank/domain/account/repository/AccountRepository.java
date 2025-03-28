@@ -9,5 +9,10 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface AccountRepository extends JpaRepository<Account, Long> {
     List<Account> findAllByMemberId(Long memberId);
+
     Optional<Account> findAccountByAccountNo(String accountNo);
+
+    List<Account> findByAccountNoIn(List<String> accountNos);
+
+    List<String> accountNo(String accountNo);
 }

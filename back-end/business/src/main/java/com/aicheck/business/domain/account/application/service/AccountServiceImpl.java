@@ -1,6 +1,7 @@
 package com.aicheck.business.domain.account.application.service;
 
 import com.aicheck.business.domain.account.dto.AccountInfoResponse;
+import com.aicheck.business.domain.account.dto.ChildAccountInfoResponse;
 import com.aicheck.business.domain.account.dto.FindAccountFeignResponse;
 import com.aicheck.business.domain.account.dto.VerifyAccountPasswordRequest;
 import com.aicheck.business.domain.account.dto.RegisterMainAccountRequest;
@@ -8,10 +9,14 @@ import com.aicheck.business.domain.account.dto.VerifyAccountResponse;
 import com.aicheck.business.domain.account.infrastructure.client.BankClient;
 import com.aicheck.business.domain.account.infrastructure.client.dto.VerifyAccountFeignRequest;
 import com.aicheck.business.domain.auth.domain.entity.Member;
+import com.aicheck.business.domain.auth.domain.entity.MemberType;
 import com.aicheck.business.domain.auth.domain.repository.MemberRepository;
 import com.aicheck.business.domain.auth.exception.BusinessException;
 import com.aicheck.business.global.error.BusinessErrorCodes;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -55,6 +60,34 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public void verifyAccountPassword(VerifyAccountPasswordRequest request) {
         bankClient.verifyAccountPassword(request);
+    }
+
+    @Override
+    public List<ChildAccountInfoResponse> findMyChildAccounts(Long memberId) {
+        List<Member> children = memberRepository.findMembersByManagerIdAndType(memberId, MemberType.CHILD);
+        List<String> childrenAccountNos = children.stream()
+                .map(Member::getAccountNo)
+                .toList();
+
+        List<AccountInfoResponse> accountFeignResponses = bankClient.findAccountsInfoList(childrenAccountNos);
+
+        // accountNo 기준으로 매핑
+        Map<String, AccountInfoResponse> accountInfoMap = accountFeignResponses.stream()
+                .collect(Collectors.toMap(AccountInfoResponse::getAccountNo, Function.identity()));
+
+        return children.stream()
+                .map(child -> {
+                    AccountInfoResponse account = accountInfoMap.get(child.getAccountNo());
+                    return ChildAccountInfoResponse.builder()
+                            .memberId(child.getId())
+                            .image(child.getProfileUrl())
+                            .name(child.getName())
+                            .accountNo(child.getAccountNo() != null ? child.getAccountNo() : null)
+                            .accountName(account != null ? account.getAccountName() : null)
+                            .balance(account != null ? account.getBalance() : null)
+                            .build();
+                })
+                .toList();
     }
 
 }

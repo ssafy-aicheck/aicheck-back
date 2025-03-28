@@ -63,4 +63,12 @@ public class AccountServiceImpl implements AccountService {
                 .accountNo(account.getAccountNo())
                 .build();
     }
+
+    @Override
+    public List<AccountInfoFeignResponse> findChildrenAccountInfos(List<String> accountNos) {
+        List<Account> accounts = accountRepository.findByAccountNoIn(accountNos);
+        List<AccountInfoFeignResponse> feignResponses = accounts.stream().map(AccountInfoFeignResponse::from).toList();
+
+        return feignResponses;
+    }
 }
