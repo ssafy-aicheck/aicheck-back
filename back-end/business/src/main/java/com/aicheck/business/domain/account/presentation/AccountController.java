@@ -1,6 +1,7 @@
 package com.aicheck.business.domain.account.presentation;
 
 import com.aicheck.business.domain.account.application.service.AccountService;
+import com.aicheck.business.domain.account.dto.AccountInfoResponse;
 import com.aicheck.business.domain.account.dto.FindAccountFeignResponse;
 import com.aicheck.business.domain.account.dto.VerifyAccountRequest;
 import com.aicheck.business.domain.account.dto.VerifyAccountResponse;
@@ -27,10 +28,16 @@ public class AccountController {
     }
 
     @PostMapping
-    public ResponseEntity<VerifyAccountResponse> registerAccount(@CurrentMemberId Long memberId,
+    public ResponseEntity<VerifyAccountResponse> registerMainAccount(@CurrentMemberId Long memberId,
                                                                  @RequestBody VerifyAccountRequest request) {
-        accountService.registerAccount(memberId, request);
+        accountService.registerMainAccount(memberId, request);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/my")
+    public ResponseEntity<AccountInfoResponse> findMyAccountsInfo(@CurrentMemberId Long memberId) {
+        AccountInfoResponse account = accountService.findMyMainAccountInfo(memberId);
+        return ResponseEntity.ok(account);
     }
 
 }

@@ -1,5 +1,6 @@
 package com.aicheck.bank.domain.account.application;
 
+import com.aicheck.bank.domain.account.dto.AccountInfoFeignResponse;
 import com.aicheck.bank.domain.account.dto.FindAccountsFeignResponse;
 import com.aicheck.bank.domain.account.dto.VerifyAccountFeignRequest;
 import com.aicheck.bank.domain.account.dto.VerifyAccountFeignResponse;
@@ -45,5 +46,12 @@ public class AccountServiceImpl implements AccountService {
         return VerifyAccountFeignResponse.builder()
                 .accountNo(account.getAccountNo())
                 .build();
+    }
+
+    @Override
+    public AccountInfoFeignResponse getAccountInfoByNumber(String accountNo) {
+        Account account = accountRepository.findAccountByAccountNo(accountNo)
+                .orElseThrow(() -> new BankException(BankErrorCodes.ACCOUNT_NOT_FOUND));
+        return AccountInfoFeignResponse.from(account);
     }
 }

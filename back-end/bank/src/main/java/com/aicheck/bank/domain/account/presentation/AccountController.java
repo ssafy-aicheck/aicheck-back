@@ -1,6 +1,7 @@
 package com.aicheck.bank.domain.account.presentation;
 
 import com.aicheck.bank.domain.account.application.AccountService;
+import com.aicheck.bank.domain.account.dto.AccountInfoFeignResponse;
 import com.aicheck.bank.domain.account.dto.FindAccountsFeignResponse;
 import com.aicheck.bank.domain.account.dto.VerifyAccountFeignRequest;
 import com.aicheck.bank.domain.account.dto.VerifyAccountFeignResponse;
@@ -22,7 +23,7 @@ public class AccountController {
     private final AccountService accountService;
 
     @GetMapping("/{memberId}")
-    public ResponseEntity<List<FindAccountsFeignResponse>> getMyAccounts(@PathVariable Long memberId) {
+    public ResponseEntity<List<FindAccountsFeignResponse>> getMyAccountsInfo(@PathVariable Long memberId) {
         List<FindAccountsFeignResponse> accounts = accountService.findMyAccountsByMemberId(memberId);
         return ResponseEntity.ok(accounts);
     }
@@ -31,6 +32,11 @@ public class AccountController {
     public ResponseEntity<VerifyAccountFeignResponse> verifyAccount(@RequestBody VerifyAccountFeignRequest request) {
         VerifyAccountFeignResponse response = accountService.verifyAccount(request);
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/{accountNo}/info")
+    public ResponseEntity<AccountInfoFeignResponse> findAccountInfo(@PathVariable String accountNo) {
+        return ResponseEntity.ok(accountService.getAccountInfoByNumber(accountNo));
     }
 
 }

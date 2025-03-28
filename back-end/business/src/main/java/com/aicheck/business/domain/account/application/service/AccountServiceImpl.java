@@ -1,5 +1,6 @@
 package com.aicheck.business.domain.account.application.service;
 
+import com.aicheck.business.domain.account.dto.AccountInfoResponse;
 import com.aicheck.business.domain.account.dto.FindAccountFeignResponse;
 import com.aicheck.business.domain.account.dto.VerifyAccountRequest;
 import com.aicheck.business.domain.account.dto.VerifyAccountResponse;
@@ -19,18 +20,17 @@ import org.springframework.transaction.annotation.Transactional;
 public class AccountServiceImpl implements AccountService {
 
     private final MemberRepository memberRepository;
-    private final BankClient bankAccountClient;
     private final BankClient bankClient;
 
     @Override
     public List<FindAccountFeignResponse> findMyAccounts(Long memberId) {
         Member member = memberRepository.findById(memberId).orElseThrow();
-        return bankAccountClient.findMyAccounts(member.getBankMemberId());
+        return bankClient.findMyAccounts(member.getBankMemberId());
     }
 
     @Override
     @Transactional
-    public void registerAccount(Long memberId, VerifyAccountRequest request) {
+    public void registerMainAccount(Long memberId, VerifyAccountRequest request) {
         Member member = memberRepository.findById(memberId).orElseThrow(
                 () -> new BusinessException(BusinessErrorCodes.BUSINESS_MEMBER_NOT_FOUND));
 
@@ -39,6 +39,16 @@ public class AccountServiceImpl implements AccountService {
         VerifyAccountResponse response = bankClient.verifyAccount(verifyAccountFeignRequest);
 
         member.registerAccount(response.getAccountNo());
+    }
+
+    @Override
+    public AccountInfoResponse findMyMainAccountInfo(Long memberId) {
+        Member member = memberRepository.findById(memberId).orElseThrow(
+                () -> new BusinessException(BusinessErrorCodes.BUSINESS_MEMBER_NOT_FOUND));
+        if (member.getAccountNo() == null) {
+            throw new BusinessException(BusinessErrorCodes.MAIN_ACCOUNT_NOT_SET);
+        }
+        return bankClient.findAccountsInfo(member.getAccountNo());
     }
 
 }
