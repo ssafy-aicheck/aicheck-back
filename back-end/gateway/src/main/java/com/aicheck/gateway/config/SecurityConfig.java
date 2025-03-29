@@ -86,11 +86,11 @@ public class SecurityConfig {
                         .pathMatchers(GET, "aicheck/accounts/children/internal/**").permitAll()
 
                         // 정기 송금
-                        .pathMatchers(GET, "/batch").hasRole(Role.PARENT)
-                        .pathMatchers(POST, "/batch").hasRole(Role.PARENT)
-                        .pathMatchers(PATCH, "/batch").hasRole(Role.PARENT)
-                        .pathMatchers(DELETE, "/batch/{id}").hasRole(Role.PARENT)
-                        .pathMatchers(GET, "/batch/check").hasRole(Role.CHILD)
+                        .pathMatchers(GET, "/batch/schedules").hasRole(Role.PARENT)
+                        .pathMatchers(POST, "/batch/schedules").hasRole(Role.PARENT)
+                        .pathMatchers(PATCH, "/batch/schedules/{scheduleId}").hasRole(Role.PARENT)
+                        .pathMatchers(DELETE, "/batch/schedules/{scheduleId}").hasRole(Role.PARENT)
+                        .pathMatchers(GET, "/batch/schedules/check").hasRole(Role.CHILD)
 
                         // 송금
                         .pathMatchers(GET, "/aicheck/transfer/{accountNo}").authenticated()

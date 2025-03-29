@@ -62,7 +62,6 @@ public class AccountController {
 
     @GetMapping("/children/internal/{memberId}")
     public ResponseEntity<List<ChildAccountInfoResponse>> getChildrenAccountsInfo(@PathVariable Long memberId) {
-        System.out.println("요청 들어옴 !!!!        memberId = " + memberId);
         List<ChildAccountInfoResponse> children = accountService.findMyChildAccounts(memberId);
         return ResponseEntity.ok(children);
     }

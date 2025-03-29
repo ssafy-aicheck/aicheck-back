@@ -25,8 +25,8 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     @Override
     @Transactional
-    public void createSchedule(RegisterScheduledTransferRequest request, String authorizationHeader) {
-        Schedule schedule = RegisterScheduledTransferRequest.toEntity(request);
+    public void createSchedule(Long memberId, RegisterScheduledTransferRequest request) {
+        Schedule schedule = RegisterScheduledTransferRequest.toEntity(memberId, request);
         scheduleRepository.save(schedule);
     }
 
@@ -34,7 +34,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     public ScheduleListResponse getSchedules(Long memberId) {
         List<ChildAccountInfoResponse> accounts = businessClient.getChildrenAccounts(memberId);
         List<Schedule> schedules = scheduleRepository.findByMemberIdAndDeletedAtIsNull(memberId);
-        
+
         Map<String, List<Schedule>> scheduleMap = schedules.stream()
                 .collect(Collectors.groupingBy(Schedule::getChildAccountNo));
 
@@ -66,5 +66,12 @@ public class ScheduleServiceImpl implements ScheduleService {
                 .build();
     }
 
+    @Override
+    @Transactional
+    public void updateSchedule(Long memberId, Long scheduleId, RegisterScheduledTransferRequest request) {
+        scheduleRepository.deleteById(scheduleId);
+        Schedule schedule = RegisterScheduledTransferRequest.toEntity(memberId, request);
+        scheduleRepository.save(schedule);
+    }
 
 }

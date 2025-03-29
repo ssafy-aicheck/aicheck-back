@@ -4,7 +4,9 @@ import com.aicheck.batch.domain.schedule.application.client.dto.ScheduleListResp
 import com.aicheck.batch.domain.schedule.dto.RegisterScheduledTransferRequest;
 
 public interface ScheduleService {
-    void createSchedule(RegisterScheduledTransferRequest request, String authorizationHeader);
+    void createSchedule(Long memberId, RegisterScheduledTransferRequest request);
 
     ScheduleListResponse getSchedules(Long memberId);
+
+    void updateSchedule(Long memberId, Long scheduleId, RegisterScheduledTransferRequest request);
 }

@@ -9,14 +9,16 @@ import lombok.ToString;
 @Getter
 @ToString
 public class RegisterScheduledTransferRequest {
+    private Long memberId;
     private String parentAccountNo;
     private String childAccountNo;
     private Long amount;
     private String interval;
     private LocalDate startDate;
 
-    public static Schedule toEntity(RegisterScheduledTransferRequest request) {
+    public static Schedule toEntity(Long memberId, RegisterScheduledTransferRequest request) {
         return Schedule.builder()
+                .memberId(memberId)
                 .parentAccountNo(request.getParentAccountNo())
                 .childAccountNo(request.getChildAccountNo())
                 .amount(request.getAmount())
