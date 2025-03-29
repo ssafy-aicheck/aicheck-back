@@ -32,6 +32,9 @@ public class Schedule {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "member_id")
+    private Long memberId;
+
     @Column(name = "parent_account_no", nullable = false, length = 20)
     private String parentAccountNo;
 

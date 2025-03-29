@@ -3,8 +3,8 @@ package com.aicheck.business.domain.account.application.service;
 import com.aicheck.business.domain.account.dto.AccountInfoResponse;
 import com.aicheck.business.domain.account.dto.ChildAccountInfoResponse;
 import com.aicheck.business.domain.account.dto.FindAccountFeignResponse;
-import com.aicheck.business.domain.account.dto.VerifyAccountPasswordRequest;
 import com.aicheck.business.domain.account.dto.RegisterMainAccountRequest;
+import com.aicheck.business.domain.account.dto.VerifyAccountPasswordRequest;
 import com.aicheck.business.domain.account.dto.VerifyAccountResponse;
 import com.aicheck.business.domain.account.infrastructure.client.BankClient;
 import com.aicheck.business.domain.account.infrastructure.client.dto.VerifyAccountFeignRequest;
@@ -71,7 +71,6 @@ public class AccountServiceImpl implements AccountService {
 
         List<AccountInfoResponse> accountFeignResponses = bankClient.findAccountsInfoList(childrenAccountNos);
 
-        // accountNo 기준으로 매핑
         Map<String, AccountInfoResponse> accountInfoMap = accountFeignResponses.stream()
                 .collect(Collectors.toMap(AccountInfoResponse::getAccountNo, Function.identity()));
 
