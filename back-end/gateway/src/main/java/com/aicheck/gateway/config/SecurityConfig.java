@@ -83,7 +83,8 @@ public class SecurityConfig {
                         .pathMatchers(POST, "/aicheck/accounts/check").authenticated()
                         .pathMatchers(GET, "/aicheck/accounts/children").hasRole(Role.PARENT)
                         .pathMatchers(GET, "/aicheck/accounts/description-ratio").authenticated()
-                        .pathMatchers(GET, "aicheck/accounts/children/internal/**").permitAll()
+                        .pathMatchers(GET, "/aicheck/accounts/children/internal/**").permitAll()
+                        .pathMatchers(GET, "/aicheck/accounts/number/{memberId}").permitAll()
 
                         // 정기 송금
                         .pathMatchers(GET, "/batch/schedules").hasRole(Role.PARENT)

@@ -1,6 +1,7 @@
 package com.aicheck.business.domain.account.application.service;
 
 import com.aicheck.business.domain.account.dto.AccountInfoResponse;
+import com.aicheck.business.domain.account.dto.AccountNoResponse;
 import com.aicheck.business.domain.account.dto.ChildAccountInfoResponse;
 import com.aicheck.business.domain.account.dto.FindAccountFeignResponse;
 import com.aicheck.business.domain.account.dto.RegisterMainAccountRequest;
@@ -87,6 +88,15 @@ public class AccountServiceImpl implements AccountService {
                             .build();
                 })
                 .toList();
+    }
+
+    @Override
+    public AccountNoResponse findAccountNoByMemberId(Long memberId) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new BusinessException(BusinessErrorCodes.BUSINESS_MEMBER_NOT_FOUND));
+        return AccountNoResponse.builder()
+                .accountNo(member.getAccountNo())
+                .build();
     }
 
 }

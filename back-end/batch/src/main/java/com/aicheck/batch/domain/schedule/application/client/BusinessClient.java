@@ -1,6 +1,7 @@
 package com.aicheck.batch.domain.schedule.application.client;
 
 import com.aicheck.batch.domain.schedule.application.client.dto.ChildAccountInfoResponse;
+import com.aicheck.batch.domain.schedule.dto.AccountNoResponse;
 import java.util.List;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,4 +12,7 @@ public interface BusinessClient {
 
     @GetMapping("/accounts/children/internal/{memberId}")
     List<ChildAccountInfoResponse> getChildrenAccounts(@PathVariable("memberId") Long memberId);
+
+    @GetMapping("/accounts/number/{memberId}")
+    AccountNoResponse getAccountNumber(@PathVariable("memberId") Long memberId);
 }

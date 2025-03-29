@@ -2,6 +2,7 @@ package com.aicheck.business.domain.account.presentation;
 
 import com.aicheck.business.domain.account.application.service.AccountService;
 import com.aicheck.business.domain.account.dto.AccountInfoResponse;
+import com.aicheck.business.domain.account.dto.AccountNoResponse;
 import com.aicheck.business.domain.account.dto.ChildAccountInfoResponse;
 import com.aicheck.business.domain.account.dto.ChildrenAccountsResponse;
 import com.aicheck.business.domain.account.dto.FindAccountFeignResponse;
@@ -58,6 +59,11 @@ public class AccountController {
                 .accounts(accounts)
                 .build();
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/number/{memberId}")
+    public ResponseEntity<AccountNoResponse> getAccountNumber(@PathVariable Long memberId) {
+        return ResponseEntity.ok(accountService.findAccountNoByMemberId(memberId));
     }
 
     @GetMapping("/children/internal/{memberId}")
