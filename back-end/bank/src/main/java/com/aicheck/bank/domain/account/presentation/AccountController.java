@@ -47,4 +47,9 @@ public class AccountController {
         return ResponseEntity.ok(accountService.getAccountInfoByNumber(accountNo));
     }
 
+    @PostMapping("/children")
+    public ResponseEntity<?> findChildrenAccountInfos(@RequestBody List<String> childrenAccountNos) {
+        return ResponseEntity.ok(accountService.findChildrenAccountInfos(childrenAccountNos));
+    }
+
 }

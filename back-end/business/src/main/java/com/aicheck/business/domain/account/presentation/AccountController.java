@@ -2,6 +2,8 @@ package com.aicheck.business.domain.account.presentation;
 
 import com.aicheck.business.domain.account.application.service.AccountService;
 import com.aicheck.business.domain.account.dto.AccountInfoResponse;
+import com.aicheck.business.domain.account.dto.ChildAccountInfoResponse;
+import com.aicheck.business.domain.account.dto.ChildrenAccountsResponse;
 import com.aicheck.business.domain.account.dto.FindAccountFeignResponse;
 import com.aicheck.business.domain.account.dto.VerifyAccountPasswordRequest;
 import com.aicheck.business.domain.account.dto.RegisterMainAccountRequest;
@@ -46,6 +48,15 @@ public class AccountController {
     public ResponseEntity<AccountInfoResponse> findMyAccountsInfo(@CurrentMemberId Long memberId) {
         AccountInfoResponse account = accountService.findMyMainAccountInfo(memberId);
         return ResponseEntity.ok(account);
+    }
+
+    @GetMapping("/children")
+    public ResponseEntity<ChildrenAccountsResponse> findChildrenAccountsInfo(@CurrentMemberId Long memberId) {
+        List<ChildAccountInfoResponse> accounts = accountService.findMyChildAccounts(memberId);
+        ChildrenAccountsResponse response = ChildrenAccountsResponse.builder()
+                .accounts(accounts)
+                .build();
+        return ResponseEntity.ok(response);
     }
 
 }

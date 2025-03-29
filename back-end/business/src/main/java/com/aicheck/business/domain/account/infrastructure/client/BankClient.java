@@ -1,6 +1,8 @@
 package com.aicheck.business.domain.account.infrastructure.client;
 
+import com.aicheck.business.domain.account.dto.AccountInfoFeignResponse;
 import com.aicheck.business.domain.account.dto.AccountInfoResponse;
+import com.aicheck.business.domain.account.dto.ChildAccountInfoResponse;
 import com.aicheck.business.domain.account.dto.FindAccountFeignResponse;
 import com.aicheck.business.domain.account.dto.VerifyAccountPasswordRequest;
 import com.aicheck.business.domain.account.dto.VerifyAccountResponse;
@@ -29,5 +31,8 @@ public interface BankClient {
 
     @PostMapping("/accounts/verify")
     VerifyAccountResponse verifyAccount(@RequestBody VerifyAccountFeignRequest verifyAccountFeignRequest);
+
+    @PostMapping("/accounts/children")
+    List<AccountInfoResponse> findAccountsInfoList(@RequestBody List<String> childrenAccountNos);
 
 }

@@ -16,4 +16,6 @@ public interface AccountService {
     AccountInfoFeignResponse getAccountInfoByNumber(String accountNo);
 
     VerifyAccountFeignResponse verifyAccount(VerifyAccountFeignRequest request);
+
+    List<AccountInfoFeignResponse> findChildrenAccountInfos(List<String> accountNos);
 }
