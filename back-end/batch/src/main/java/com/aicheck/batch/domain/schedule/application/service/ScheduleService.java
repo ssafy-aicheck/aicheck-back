@@ -9,4 +9,6 @@ public interface ScheduleService {
     ScheduleListResponse getSchedules(Long memberId);
 
     void updateSchedule(Long memberId, Long scheduleId, RegisterScheduledTransferRequest request);
+
+    void deleteSchedule(Long scheduleId);
 }

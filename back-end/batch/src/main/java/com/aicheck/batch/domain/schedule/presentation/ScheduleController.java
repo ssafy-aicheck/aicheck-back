@@ -6,6 +6,7 @@ import com.aicheck.batch.domain.schedule.dto.RegisterScheduledTransferRequest;
 import com.aicheck.batch.global.auth.annotation.CurrentMemberId;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -39,6 +40,12 @@ public class ScheduleController {
                                                @PathVariable Long scheduleId,
                                                @RequestBody RegisterScheduledTransferRequest request) {
         scheduleService.updateSchedule(memberId, scheduleId, request);
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/{scheduleId}")
+    public ResponseEntity<Void> deleteSchedule(@PathVariable Long scheduleId) {
+        scheduleService.deleteSchedule(scheduleId);
         return ResponseEntity.ok().build();
     }
 
