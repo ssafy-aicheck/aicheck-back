@@ -92,6 +92,7 @@ public class SecurityConfig {
                         .pathMatchers(PATCH, "/batch/schedules/{scheduleId}").hasRole(Role.PARENT)
                         .pathMatchers(DELETE, "/batch/schedules/{scheduleId}").hasRole(Role.PARENT)
                         .pathMatchers(GET, "/batch/schedules/check").hasRole(Role.CHILD)
+                        .pathMatchers(GET, "/batch/schedules/child/{childId}").permitAll()
 
                         // 송금
                         .pathMatchers(GET, "/aicheck/transfer/{accountNo}").authenticated()
@@ -106,7 +107,7 @@ public class SecurityConfig {
                         .pathMatchers(GET, "/aicheck/allowance/details").authenticated()
                         .pathMatchers(POST, "/aicheck/allowance/increase").hasRole(Role.CHILD)
                         .pathMatchers(POST, "/aicheck/allowance/increase/{id}").hasRole(Role.PARENT)
-                        .pathMatchers(GET, "/aicheck/allowance/increase/details").authenticated()
+                        .pathMatchers(GET, "/aicheck/allowance/increase/details/{id}").authenticated()
                         .pathMatchers(GET, "/aicheck/allowance/summary").hasRole(Role.CHILD)
 
                         // 채팅

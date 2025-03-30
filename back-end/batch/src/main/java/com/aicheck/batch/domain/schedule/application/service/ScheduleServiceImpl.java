@@ -8,6 +8,8 @@ import com.aicheck.batch.domain.schedule.application.client.dto.ScheduleListResp
 import com.aicheck.batch.domain.schedule.dto.RegisterScheduledTransferRequest;
 import com.aicheck.batch.domain.schedule.entity.Schedule;
 import com.aicheck.batch.domain.schedule.repository.ScheduleRepository;
+import com.aicheck.batch.global.error.BatchException;
+import com.aicheck.batch.global.error.ScheduleErrorCodes;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -26,9 +28,11 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Override
     @Transactional
     public void createSchedule(Long memberId, RegisterScheduledTransferRequest request) {
+        scheduleRepository.deleteAllByChildId(request.getChildId());
         String parentAccount = businessClient.getAccountNumber(memberId).getAccountNo();
         String childAccount = businessClient.getAccountNumber(request.getChildId()).getAccountNo();
-        Schedule schedule = RegisterScheduledTransferRequest.toEntity(memberId, parentAccount, childAccount, request);
+        Schedule schedule = RegisterScheduledTransferRequest.toEntity(
+                memberId, request.getChildId(), parentAccount, childAccount, request);
         scheduleRepository.save(schedule);
     }
 
@@ -43,24 +47,9 @@ public class ScheduleServiceImpl implements ScheduleService {
         List<ChildScheduleGroup> children = accounts.stream()
                 .map(account -> {
                     List<Schedule> childSchedules = scheduleMap.getOrDefault(account.getAccountNo(), List.of());
-
                     List<ChildScheduleItem> scheduleItems = childSchedules.stream()
-                            .map(s -> ChildScheduleItem.builder()
-                                    .scheduleId(s.getId())
-                                    .amount(s.getAmount().intValue())
-                                    .interval(s.getInterval().name())
-                                    .day(s.getStartDate().getDayOfWeek().name())
-                                    .startDate(s.getStartDate())
-                                    .build()
-                            ).toList();
-
-                    return ChildScheduleGroup.builder()
-                            .childId(account.getMemberId())
-                            .childName(account.getName())
-                            .image(account.getImage())
-                            .childAccountNo(account.getAccountNo())
-                            .schedules(scheduleItems)
-                            .build();
+                            .map(ChildScheduleItem::from).toList();
+                    return ChildScheduleGroup.from(account, scheduleItems);
                 }).toList();
 
         return ScheduleListResponse.builder()
@@ -74,7 +63,8 @@ public class ScheduleServiceImpl implements ScheduleService {
         scheduleRepository.deleteById(scheduleId);
         String parentAccount = businessClient.getAccountNumber(memberId).getAccountNo();
         String childAccount = businessClient.getAccountNumber(request.getChildId()).getAccountNo();
-        Schedule schedule = RegisterScheduledTransferRequest.toEntity(memberId, parentAccount, childAccount, request);
+        Schedule schedule = RegisterScheduledTransferRequest.toEntity(
+                memberId, request.getChildId(), parentAccount, childAccount, request);
         scheduleRepository.save(schedule);
     }
 
@@ -82,6 +72,13 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Transactional
     public void deleteSchedule(Long scheduleId) {
         scheduleRepository.deleteById(scheduleId);
+    }
+
+    @Override
+    public ChildScheduleItem findByChildId(Long childId) {
+        Schedule schedule = scheduleRepository.findByChildIdAndDeletedAtIsNull(childId)
+                .orElseThrow(() -> new BatchException(ScheduleErrorCodes.SCHEDULE_NOT_FOUND));
+        return ChildScheduleItem.from(schedule);
     }
 
 }
