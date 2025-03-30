@@ -107,7 +107,7 @@ public class SecurityConfig {
                         .pathMatchers(GET, "/aicheck/allowance/details").authenticated()
                         .pathMatchers(POST, "/aicheck/allowance/increase").hasRole(Role.CHILD)
                         .pathMatchers(POST, "/aicheck/allowance/increase/{id}").hasRole(Role.PARENT)
-                        .pathMatchers(GET, "/aicheck/allowance/increase/details").authenticated()
+                        .pathMatchers(GET, "/aicheck/allowance/increase/details/{id}").authenticated()
                         .pathMatchers(GET, "/aicheck/allowance/summary").hasRole(Role.CHILD)
 
                         // 채팅

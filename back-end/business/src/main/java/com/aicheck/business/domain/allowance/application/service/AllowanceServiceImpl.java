@@ -3,6 +3,7 @@ package com.aicheck.business.domain.allowance.application.service;
 import com.aicheck.business.domain.allowance.application.client.BatchClient;
 import com.aicheck.business.domain.allowance.application.client.dto.ChildScheduleResponse;
 import com.aicheck.business.domain.allowance.dto.AllowanceIncreaseDecisionRequest;
+import com.aicheck.business.domain.allowance.dto.AllowanceIncreaseRequestDetailResponse;
 import com.aicheck.business.domain.allowance.dto.CreateAllowanceIncreaseRequest;
 import com.aicheck.business.domain.allowance.entity.AllowanceIncreaseRequest;
 import com.aicheck.business.domain.allowance.entity.AllowanceIncreaseRequest.Status;
@@ -72,6 +73,17 @@ public class AllowanceServiceImpl implements AllowanceService {
             TODO : 자녀에게 거절 푸시알림
              */
         }
+    }
+
+    @Override
+    public AllowanceIncreaseRequestDetailResponse getAllowanceIncreaseRequestDetail(Long requestId) {
+        AllowanceIncreaseRequest allowanceIncreaseRequest = allowanceIncreaseRequestRepository.findById(requestId)
+                .orElseThrow(() -> new BusinessException(BusinessErrorCodes.ALLOWANCE_REQUEST_NOT_FOUND));
+
+        Member child = memberRepository.findById(allowanceIncreaseRequest.getChildId())
+                .orElseThrow(() -> new BusinessException(BusinessErrorCodes.BUSINESS_MEMBER_NOT_FOUND));
+
+        return AllowanceIncreaseRequestDetailResponse.from(child, allowanceIncreaseRequest);
     }
 
 }
