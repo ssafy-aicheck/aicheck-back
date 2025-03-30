@@ -37,6 +37,9 @@ public class Schedule {
     @Column(name = "member_id")
     private Long memberId;
 
+    @Column(name = "child_id")
+    private Long childId;
+
     @Column(name = "parent_account_no", nullable = false, length = 20)
     private String parentAccountNo;
 
