@@ -1,5 +1,6 @@
-package com.aicheck.business.domain.allowance;
+package com.aicheck.business.domain.allowance.application.client;
 
+import com.aicheck.business.domain.allowance.application.client.dto.ChildScheduleResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

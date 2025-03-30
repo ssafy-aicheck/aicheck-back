@@ -1,4 +1,4 @@
-package com.aicheck.business.domain.allowance;
+package com.aicheck.business.domain.allowance.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -67,6 +67,18 @@ public class AllowanceIncreaseRequest {
 
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
+
+    public void accept() {
+        this.status = Status.ACCEPTED;
+    }
+
+    public void reject() {
+        this.status = Status.REJECTED;
+    }
+
+    public boolean isAlreadyDecided() {
+        return !this.status.equals(Status.WAITING);
+    }
 
     public enum Status {
         ACCEPTED, REJECTED, WAITING

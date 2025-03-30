@@ -1,4 +1,4 @@
-package com.aicheck.business.domain.allowance;
+package com.aicheck.business.domain.allowance.dto;
 
 import lombok.Getter;
 import lombok.ToString;

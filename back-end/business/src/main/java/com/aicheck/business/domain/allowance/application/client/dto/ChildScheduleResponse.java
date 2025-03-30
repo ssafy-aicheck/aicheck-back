@@ -1,4 +1,4 @@
-package com.aicheck.business.domain.allowance;
+package com.aicheck.business.domain.allowance.application.client.dto;
 
 import java.time.LocalDate;
 import lombok.Builder;
