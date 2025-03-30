@@ -1,5 +1,6 @@
 package com.aicheck.batch.domain.schedule.application.service;
 
+import com.aicheck.batch.domain.schedule.application.client.dto.ChildScheduleItem;
 import com.aicheck.batch.domain.schedule.application.client.dto.ScheduleListResponse;
 import com.aicheck.batch.domain.schedule.dto.RegisterScheduledTransferRequest;
 
@@ -11,4 +12,6 @@ public interface ScheduleService {
     void updateSchedule(Long memberId, Long scheduleId, RegisterScheduledTransferRequest request);
 
     void deleteSchedule(Long scheduleId);
+
+    ChildScheduleItem findByChildId(Long childId);
 }

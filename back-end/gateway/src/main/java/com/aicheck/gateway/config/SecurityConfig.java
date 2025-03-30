@@ -92,6 +92,7 @@ public class SecurityConfig {
                         .pathMatchers(PATCH, "/batch/schedules/{scheduleId}").hasRole(Role.PARENT)
                         .pathMatchers(DELETE, "/batch/schedules/{scheduleId}").hasRole(Role.PARENT)
                         .pathMatchers(GET, "/batch/schedules/check").hasRole(Role.CHILD)
+                        .pathMatchers(GET, "/batch/schedules/child/{childId}").permitAll()
 
                         // 송금
                         .pathMatchers(GET, "/aicheck/transfer/{accountNo}").authenticated()

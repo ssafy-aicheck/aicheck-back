@@ -10,7 +10,7 @@ import lombok.ToString;
 @ToString
 public class RegisterScheduledTransferRequest {
     private Long childId;
-    private Long amount;
+    private Integer amount;
     private String interval;
     private LocalDate startDate;
 

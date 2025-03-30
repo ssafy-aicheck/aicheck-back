@@ -19,11 +19,11 @@ public enum ScheduleErrorCodes implements ErrorCode {
     MALFORMED_JWT(HttpStatus.BAD_REQUEST, "SCHEDULE_JWT_MALFORMED_400", "위조된 JWT 토큰입니다"),
     ILLEGAL_JWT(HttpStatus.BAD_REQUEST, "SCHEDULE_JWT_ILLEGAL_400", "잘못된 JWT 요청입니다"),
 
-    NOT_FOUND_URL(HttpStatus.NOT_FOUND, "SCHEDULE_NOT_FOUND_URL_404", "존재하지 않는 URL입니다"),
-    METHOD_NOT_ALLOWED(HttpStatus.METHOD_NOT_ALLOWED, "SCHEDULE_METHOD_NOT_ALLOWED_405", "지원하지 않는 HTTP 메서드입니다"),
-    
-    ;
 
+    SCHEDULE_NOT_FOUND(HttpStatus.NOT_FOUND, "SCHEDULE_NOT_FOUND_URL_404", "용돈이 존재하지 않습니다"),
+    METHOD_NOT_ALLOWED(HttpStatus.METHOD_NOT_ALLOWED, "SCHEDULE_METHOD_NOT_ALLOWED_405", "지원하지 않는 HTTP 메서드입니다"),
+    NOT_FOUND_URL(HttpStatus.NOT_FOUND, "SCHEDULE_NOT_FOUND_URL_404", "존재하지 않는 URL입니다"),
+    ;
 
     private final HttpStatus httpStatus;
     private final String code;

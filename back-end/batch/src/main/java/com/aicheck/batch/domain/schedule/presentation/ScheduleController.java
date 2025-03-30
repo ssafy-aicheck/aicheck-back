@@ -1,5 +1,6 @@
 package com.aicheck.batch.domain.schedule.presentation;
 
+import com.aicheck.batch.domain.schedule.application.client.dto.ChildScheduleItem;
 import com.aicheck.batch.domain.schedule.application.client.dto.ScheduleListResponse;
 import com.aicheck.batch.domain.schedule.application.service.ScheduleService;
 import com.aicheck.batch.domain.schedule.dto.RegisterScheduledTransferRequest;
@@ -47,6 +48,12 @@ public class ScheduleController {
     public ResponseEntity<Void> deleteSchedule(@PathVariable Long scheduleId) {
         scheduleService.deleteSchedule(scheduleId);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/child/{childId}")
+    public ResponseEntity<ChildScheduleItem> getSchedulesByChildId(@PathVariable Long childId) {
+        ChildScheduleItem response = scheduleService.findByChildId(childId);
+        return ResponseEntity.ok(response);
     }
 
 }

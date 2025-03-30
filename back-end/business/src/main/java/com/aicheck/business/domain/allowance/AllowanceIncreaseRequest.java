@@ -1,4 +1,4 @@
-package com.aicheck.batch.domain.schedule.entity;
+package com.aicheck.business.domain.allowance;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -9,52 +9,53 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.SQLDelete;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
-@Table(name = "schedule")
+@Table(name = "allowance_increase_requests")
 @EntityListeners(AuditingEntityListener.class)
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@SQLDelete(sql = "UPDATE schedule SET deleted_at = NOW() WHERE id = ?")
 @Builder
-public class Schedule {
+public class AllowanceIncreaseRequest {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "member_id")
-    private Long memberId;
+    @Column(name = "parent_id", nullable = false)
+    private Long parentId;
 
-    @Column(name = "child_id")
+    @Column(name = "child_id", nullable = false)
     private Long childId;
 
-    @Column(name = "parent_account_no", nullable = false, length = 20)
-    private String parentAccountNo;
+    @Column(name = "before_amount", nullable = false)
+    private Integer beforeAmount;
 
-    @Column(name = "child_account_no", nullable = false, length = 20)
-    private String childAccountNo;
+    @Column(name = "after_amount", nullable = false)
+    private Integer afterAmount;
 
-    @Column(nullable = false)
-    private Integer amount;
-
-    @Column(name = "start_date", nullable = false)
-    private LocalDate startDate;
+    @Column(name = "report_id", nullable = false)
+    private Long reportId;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "`interval`", nullable = false)
-    private Interval interval;
+    @Column(nullable = false)
+    @Builder.Default
+    private Status status = Status.WAITING;
+
+    @Column(nullable = false, length = 255)
+    private String summary;
+
+    @Column(length = 255)
+    private String description;
 
     @CreatedDate
     @Column(name = "created_at", nullable = false, updatable = false)
@@ -67,8 +68,8 @@ public class Schedule {
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
 
-    public enum Interval {
-        MONTHLY, WEEKLY, BIWEEKLY
+    public enum Status {
+        ACCEPTED, REJECTED, WAITING
     }
 }
 
