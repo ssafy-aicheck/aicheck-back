@@ -84,6 +84,7 @@ services:
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
       DEFAULT_LABEL_BRANCH: ${DEFAULT_LABEL_BRANCH}
       TOKEN_SECRET: ${TOKEN_SECRET}
+      FIREBASE_PATH: ${FIREBASE_PATH}
     networks:
       - aicheck-network
     depends_on:
@@ -238,6 +239,7 @@ services:
       RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD}
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      FIREBASE_PATH: ${FIREBASE_PATH}
     depends_on:
       config:
         condition: service_healthy
@@ -358,11 +360,9 @@ services:
       - kafka2
       - kafka3
     entrypoint: [ "/bin/sh", "-c" ]
-#    command: >
-#      "sleep 20 &&
-#        kafka-topics --create --bootstrap-server kafka1:9092 --replication-factor 1 --partitions 1 --topic chat || true &&
-#        kafka-topics --create --bootstrap-server kafka1:9092 --replication-factor 1 --partitions 1 --topic coupon || true &&
-#        kafka-topics --create --bootstrap-server kafka1:9092 --replication-factor 1 --partitions 1 --topic alarm || true"
+    command: >
+      "sleep 20 && 
+        kafka-topics --create --bootstrap-server kafka1:9092 --replication-factor 1 --partitions 1 --topic alarm || true"
     networks:
       - aicheck-network
 

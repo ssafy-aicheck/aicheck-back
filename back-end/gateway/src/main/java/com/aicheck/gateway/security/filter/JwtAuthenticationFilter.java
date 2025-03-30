@@ -1,5 +1,7 @@
 package com.aicheck.gateway.security.filter;
 
+import static com.aicheck.gateway.common.error.GatewayErrorCodes.*;
+
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
@@ -16,7 +18,6 @@ import org.springframework.web.server.WebFilter;
 import org.springframework.web.server.WebFilterChain;
 
 import com.aicheck.gateway.common.error.ErrorResponse;
-import com.aicheck.gateway.common.error.GatewayErrorCodes;
 import com.aicheck.gateway.common.exception.GatewayException;
 import com.aicheck.gateway.security.jwt.JwtProvider;
 import com.aicheck.gateway.util.HeaderUtil;
@@ -45,13 +46,13 @@ public class JwtAuthenticationFilter implements WebFilter {
 			Claims claims = jwtProvider.getClaims(token);
 			String subject = claims.getSubject();
 			if (subject == null || subject.isBlank()) {
-				throw new GatewayException(GatewayErrorCodes.INVALID_LOGIN_TOKEN);
+				throw new GatewayException(INVALID_LOGIN_TOKEN);
 			}
 
 			Long userId = Long.valueOf(subject);
 			String authString = claims.get("auth", String.class);
 			if (authString == null || authString.isBlank()) {
-				throw new GatewayException(GatewayErrorCodes.INVALID_LOGIN_TOKEN);
+				throw new GatewayException(INVALID_LOGIN_TOKEN);
 			}
 
 			List<GrantedAuthority> authorities = Arrays.stream(authString.split(","))
@@ -75,7 +76,7 @@ public class JwtAuthenticationFilter implements WebFilter {
 			return handleJwtException(exchange, e);
 		} catch (Exception e) {
 			log.error("Unexpected error in JwtAuthenticationFilter", e);
-			return handleJwtException(exchange, new GatewayException(GatewayErrorCodes.INTERNAL_SERVER_ERROR));
+			return handleJwtException(exchange, new GatewayException(INTERNAL_SERVER_ERROR));
 		}
 	}
 
