@@ -12,5 +12,16 @@ public class ChildScheduleGroup {
     private String image;
     private String childAccountNo;
     private List<ChildScheduleItem> schedules;
+
+    public static ChildScheduleGroup from(ChildAccountInfoResponse account, List<ChildScheduleItem> scheduleItems) {
+        return ChildScheduleGroup.builder()
+                .childId(account.getMemberId())
+                .childName(account.getName())
+                .image(account.getImage())
+                .childAccountNo(account.getAccountNo())
+                .schedules(scheduleItems)
+                .build();
+    }
+
 }
 

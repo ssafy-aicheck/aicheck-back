@@ -22,8 +22,13 @@ public enum BusinessErrorCodes implements ErrorCode {
     NOT_FOUND_URL(HttpStatus.NOT_FOUND, "BUSINESS_NOT_FOUND_URL_404", "존재하지 않는 URL입니다"),
     METHOD_NOT_ALLOWED(HttpStatus.METHOD_NOT_ALLOWED, "BUSINESS_METHOD_NOT_ALLOWED_405", "지원하지 않는 HTTP 메서드입니다"),
 
-    MAIN_ACCOUNT_NOT_SET(HttpStatus.BAD_REQUEST, "BUSINESS_MAIN_ACCOUNT_NOT_SET_400", "대표 계좌가 설정되지 않았습니다");
-
+    MAIN_ACCOUNT_NOT_SET(HttpStatus.BAD_REQUEST, "BUSINESS_MAIN_ACCOUNT_NOT_SET_400", "대표 계좌가 설정되지 않았습니다"),
+    ALLOWANCE_REQUEST_ALREADY_EXIST(HttpStatus.BAD_REQUEST, "BUSINESS_ALLOWANCE_REQUEST_ALREADY_EXIST_400",
+            "용돈 인상 요청이 이미 존재합니다"),
+    ALLOWANCE_REQUEST_NOT_FOUND(HttpStatus.NOT_FOUND, "BUSINESS_ALLOWANCE_REQUEST_NOT_FOUND_404",
+            "존재하지 않는 용돈 인상 요청입니다"),
+    INVALID_RESPOND_STATUS(HttpStatus.BAD_REQUEST, "BUSINESS_INVALID_RESPOND_STATUS_400", "유효하지 않은 응답코드입니다"),
+    ALREADY_DECIDED_ALLOWANCE_REQUEST(HttpStatus.BAD_REQUEST, "BUSINESS_ALLOWANCE_ALREADY_DECIDED_400", "이미 결정된 요청입니다");
 
     private final HttpStatus httpStatus;
     private final String code;

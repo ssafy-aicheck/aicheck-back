@@ -10,16 +10,18 @@ import lombok.ToString;
 @ToString
 public class RegisterScheduledTransferRequest {
     private Long childId;
-    private Long amount;
+    private Integer amount;
     private String interval;
     private LocalDate startDate;
 
     public static Schedule toEntity(Long memberId,
+                                    Long childId,
                                     String parentAccountNo,
                                     String childAccountNo,
                                     RegisterScheduledTransferRequest request) {
         return Schedule.builder()
                 .memberId(memberId)
+                .childId(childId)
                 .parentAccountNo(parentAccountNo)
                 .childAccountNo(childAccountNo)
                 .amount(request.getAmount())
