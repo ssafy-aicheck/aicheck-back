@@ -2,23 +2,20 @@ package com.aicheck.alarm.common.exception.handler;
 
 import static com.aicheck.alarm.common.error.AlarmErrorCodes.INCLUDED_NULL_VALUE;
 import static com.aicheck.alarm.common.error.AlarmErrorCodes.INVALID_REQUEST;
-import static com.aicheck.alarm.common.error.AlarmErrorCodes.NOT_FOUND_URL;
-import static com.aicheck.alarm.common.error.GlobalErrorCodes.BAD_METHOD;
 import static com.aicheck.alarm.common.error.GlobalErrorCodes.MESSAGE_EXTRACTION_FAILED;
 import static com.aicheck.alarm.common.error.GlobalErrorCodes.SERVER_ERROR;
 
 import java.time.LocalDateTime;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.servlet.NoHandlerFoundException;
 
 import com.aicheck.alarm.common.exception.AlarmException;
 import com.aicheck.alarm.common.error.ErrorCode;
 import com.aicheck.alarm.common.error.ErrorResponse;
+import com.aicheck.alarm.common.exception.FCMException;
 
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
@@ -29,7 +26,12 @@ import lombok.extern.slf4j.Slf4j;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(AlarmException.class)
-    public ResponseEntity<ErrorResponse> handleBusinessException(AlarmException e) {
+    public ResponseEntity<ErrorResponse> handleAlarmException(AlarmException e) {
+        return buildResponse(e.getErrorCode());
+    }
+
+    @ExceptionHandler(FCMException.class)
+    public ResponseEntity<ErrorResponse> handleFCMException(FCMException e) {
         return buildResponse(e.getErrorCode());
     }
 
@@ -51,16 +53,6 @@ public class GlobalExceptionHandler {
             .orElseThrow(() -> new AlarmException(MESSAGE_EXTRACTION_FAILED));
         return ResponseEntity.badRequest()
             .body(new ErrorResponse(INVALID_REQUEST.getCode(), errorMessage, LocalDateTime.now()));
-    }
-
-    @ExceptionHandler(NoHandlerFoundException.class)
-    public ResponseEntity<ErrorResponse> handleNotFoundException(NoHandlerFoundException ex) {
-        return buildResponse(NOT_FOUND_URL);
-    }
-
-    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
-    public ResponseEntity<ErrorResponse> handleMethodNotSupported(HttpRequestMethodNotSupportedException e) {
-        return buildResponse(BAD_METHOD);
     }
 
     @ExceptionHandler(Exception.class)

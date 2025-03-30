@@ -29,6 +29,9 @@ public class Alarm extends BaseEntity {
 	@Column(name = "member_id", nullable = false)
 	private Long memberId;
 
+	@Column(name = "title", length = 80, nullable = false)
+	private String title;
+
 	@Column(name = "body", length = 80, nullable = false)
 	private String body;
 
@@ -43,10 +46,11 @@ public class Alarm extends BaseEntity {
 	private Long endPointId;
 
 	@Builder
-	private Alarm(Long memberId, String body, boolean isRead, Type type, Long endPointId) {
+	private Alarm(Long memberId, String title, String body, Type type, Long endPointId) {
 		this.memberId = memberId;
+		this.title = title;
 		this.body = body;
-		this.isRead = isRead;
+		this.isRead = false;
 		this.type = type;
 		this.endPointId = endPointId;
 	}
