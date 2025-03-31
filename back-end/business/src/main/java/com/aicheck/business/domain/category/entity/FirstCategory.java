@@ -1,29 +1,27 @@
 package com.aicheck.business.domain.category.entity;
 
-import jakarta.persistence.*;
-import lombok.*;
-
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import java.util.ArrayList;
 import java.util.List;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "first_categories")
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
-@Builder
+@NoArgsConstructor
 public class FirstCategory {
-
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
-    @Column(nullable = false, length = 30)
-    private String name;
-
-    @Column(name = "display_name", length = 30)
+    @Column(name = "display_name", nullable = false)
     private String displayName;
 
-    @OneToMany(mappedBy = "firstCategory", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<SecondCategory> secondCategories;
+    @OneToMany(mappedBy = "firstCategory", fetch = FetchType.LAZY)
+    private List<SecondCategory> secondCategories = new ArrayList<>();
 }
-

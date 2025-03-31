@@ -3,6 +3,7 @@ package com.aicheck.business.domain.transaction_record.application;
 import com.aicheck.business.domain.transaction_record.application.dto.CalendarRecordListResponse;
 import com.aicheck.business.domain.transaction_record.presentation.dto.TransactionRecordDetailResponse;
 import com.aicheck.business.domain.transaction_record.presentation.dto.TransactionRecordListResponse;
+import com.aicheck.business.domain.transaction_record.presentation.dto.UpdateTransactionRecordRequest;
 import java.time.LocalDate;
 
 public interface TransactionRecordService {
@@ -10,5 +11,6 @@ public interface TransactionRecordService {
     TransactionRecordListResponse getChildTransactionRecords(Long memberId, Long childId, LocalDate startDate, LocalDate endDate, String type);
     CalendarRecordListResponse getCalendarData(Long memberId, int year, int month);
     TransactionRecordDetailResponse getTransactionRecordDetail(Long recordId);
+    void updateTransactionRecord(UpdateTransactionRecordRequest request);
 }
 

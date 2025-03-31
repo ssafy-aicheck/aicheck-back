@@ -10,7 +10,9 @@ import lombok.Getter;
 @Builder
 public class TransactionRecordItem {
     private Long recordId;
+    private Integer firstCategoryId;
     private String firstCategoryName;
+    private Integer secondCategoryId;
     private String secondCategoryName;
     private String displayName;
     private String type;
@@ -23,8 +25,10 @@ public class TransactionRecordItem {
     public static TransactionRecordItem from(TransactionRecord entity) {
         return TransactionRecordItem.builder()
                 .recordId(entity.getId())
-                .firstCategoryName(entity.getFirstCategoryName())
-                .secondCategoryName(entity.getSecondCategoryName())
+                .firstCategoryId(entity.getFirstCategory().getId())
+                .firstCategoryName(entity.getFirstCategory().getDisplayName())
+                .secondCategoryId(entity.getSecondCategory().getId())
+                .secondCategoryName(entity.getSecondCategory().getDisplayName())
                 .displayName(entity.getDisplayName())
                 .type(entity.getType().name())
                 .amount(entity.getAmount().longValue())

@@ -21,8 +21,8 @@ public class TransactionRecordDetailResponse {
     public static TransactionRecordDetailResponse from(TransactionRecord record) {
         return TransactionRecordDetailResponse.builder()
                 .recordId(record.getId())
-                .firstCategoryName(record.getFirstCategoryName())
-                .secondCategoryName(record.getSecondCategoryName())
+                .firstCategoryName(record.getFirstCategory().getDisplayName())
+                .secondCategoryName(record.getSecondCategory().getDisplayName())
                 .displayName(record.getDisplayName())
                 .type(record.getType().name())
                 .amount(record.getAmount())

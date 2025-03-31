@@ -7,14 +7,13 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class CategoryResponse {
-
+public class FirstCategoryWithSecondResponse {
     private Integer id;
     private String displayName;
     private List<SecondCategoryResponse> secondCategories;
 
-    public static CategoryResponse from(FirstCategory entity) {
-        return CategoryResponse.builder()
+    public static FirstCategoryWithSecondResponse from(FirstCategory entity) {
+        return FirstCategoryWithSecondResponse.builder()
                 .id(entity.getId())
                 .displayName(entity.getDisplayName())
                 .secondCategories(

@@ -8,10 +8,12 @@ import com.aicheck.business.domain.transaction_record.application.dto.CalendarRe
 import com.aicheck.business.domain.transaction_record.entity.TransactionRecord;
 import com.aicheck.business.domain.transaction_record.presentation.dto.TransactionRecordDetailResponse;
 import com.aicheck.business.domain.transaction_record.presentation.dto.TransactionRecordListResponse;
+import com.aicheck.business.domain.transaction_record.presentation.dto.UpdateTransactionRecordRequest;
 import com.aicheck.business.domain.transaction_record.repository.TransactionRecordQueryRepository;
 import com.aicheck.business.domain.transaction_record.entity.TransactionType;
 import com.aicheck.business.domain.transaction_record.repository.TransactionRecordRepository;
 import com.aicheck.business.global.error.BusinessErrorCodes;
+import jakarta.transaction.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Comparator;
@@ -88,6 +90,19 @@ public class TransactionRecordServiceImpl implements TransactionRecordService {
                 .orElseThrow(() -> new BusinessException(BusinessErrorCodes.TRANSACTION_RECORD_NOT_FOUND));
 
         return TransactionRecordDetailResponse.from(record);
+    }
+
+    @Override
+    @Transactional
+    public void updateTransactionRecord(UpdateTransactionRecordRequest request) {
+        TransactionRecord record = transactionRecordRepository.findById(request.getRecordId())
+                .orElseThrow(() -> new BusinessException(BusinessErrorCodes.TRANSACTION_RECORD_NOT_FOUND));
+
+        record.updateCategoryAndDescription(
+                request.getFirstCategoryName(),
+                request.getSecondCategoryName(),
+                request.getDescription()
+        );
     }
 
     public TransactionType getTransactionType(String type) {
