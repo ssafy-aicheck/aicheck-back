@@ -28,7 +28,9 @@ public enum BusinessErrorCodes implements ErrorCode {
     ALLOWANCE_REQUEST_NOT_FOUND(HttpStatus.NOT_FOUND, "BUSINESS_ALLOWANCE_REQUEST_NOT_FOUND_404",
             "존재하지 않는 용돈 인상 요청입니다"),
     INVALID_RESPOND_STATUS(HttpStatus.BAD_REQUEST, "BUSINESS_INVALID_RESPOND_STATUS_400", "유효하지 않은 응답코드입니다"),
-    ALREADY_DECIDED_ALLOWANCE_REQUEST(HttpStatus.BAD_REQUEST, "BUSINESS_ALLOWANCE_ALREADY_DECIDED_400", "이미 결정된 요청입니다");
+    ALREADY_DECIDED_ALLOWANCE_REQUEST(HttpStatus.BAD_REQUEST, "BUSINESS_ALLOWANCE_ALREADY_DECIDED_400", "이미 결정된 요청입니다"),
+
+    NOT_YOUR_CHILD(HttpStatus.BAD_REQUEST, "BUSINESS_TRANSACTION_NOT_YOUR_CHILD", "자신의 자녀만 조회할 수 있습니다");
 
     private final HttpStatus httpStatus;
     private final String code;

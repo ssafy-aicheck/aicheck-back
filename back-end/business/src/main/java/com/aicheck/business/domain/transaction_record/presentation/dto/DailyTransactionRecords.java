@@ -12,4 +12,3 @@ public class DailyTransactionRecords {
     private LocalDate date;
     private List<TransactionRecordItem> records;
 }
-

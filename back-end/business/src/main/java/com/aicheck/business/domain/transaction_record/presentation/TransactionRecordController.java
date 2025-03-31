@@ -7,6 +7,7 @@ import java.time.LocalDate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,7 +28,19 @@ public class TransactionRecordController {
     ) {
         TransactionRecordListResponse response =
                 transactionRecordService.getTransactionRecords(memberId, startDate, endDate, type);
+        return ResponseEntity.ok(response);
+    }
 
+    @GetMapping("/child/{childId}")
+    public ResponseEntity<TransactionRecordListResponse> getTransactionRecords(
+            @CurrentMemberId Long memberId,
+            @PathVariable Long childId,
+            @RequestParam LocalDate startDate,
+            @RequestParam LocalDate endDate,
+            @RequestParam(required = false) String type
+    ) {
+        TransactionRecordListResponse response =
+                transactionRecordService.getChildTransactionRecords(memberId, childId, startDate, endDate, type);
         return ResponseEntity.ok(response);
     }
 

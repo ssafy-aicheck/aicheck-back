@@ -1,7 +1,7 @@
 package com.aicheck.business.domain.transaction_record.repository;
 
-import com.aicheck.business.domain.transaction_record.QTransactionRecord;
 import com.aicheck.business.domain.transaction_record.application.dto.TransactionRecordItem;
+import com.aicheck.business.domain.transaction_record.entity.QTransactionRecord;
 import com.aicheck.business.domain.transaction_record.presentation.dto.TransactionRecordListResponse;
 import com.aicheck.business.domain.transaction_record.entity.TransactionType;
 import com.aicheck.business.domain.transaction_record.presentation.dto.DailyTransactionRecords;
