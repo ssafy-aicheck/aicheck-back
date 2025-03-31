@@ -106,7 +106,6 @@ CREATE TABLE `transaction_records`
     `store_id`             INT UNSIGNED NULL,
     `first_category_name`  VARCHAR(30) NOT NULL,
     `second_category_name` VARCHAR(30) NULL,
-    `is_dutch_pay`         TINYINT(1) NOT NULL DEFAULT 0,
     `display_name`         VARCHAR(20) NOT NULL,
     `type`                 ENUM('PAYMENT', 'DEPOSIT', 'WITHDRAW', 'INBOUND_TRANSFER', 'OUTBOUND_TRANSFER') NOT NULL,
     `amount`               INT UNSIGNED NOT NULL,
@@ -115,14 +114,4 @@ CREATE TABLE `transaction_records`
     `created_at`           DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `modified_at`          DATETIME NULL DEFAULT NULL,
     `deleted_at`           DATETIME NULL DEFAULT NULL
-);
-
-CREATE TABLE `dutch_pays`
-(
-    `id`                    INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    `transaction_record_id` INT UNSIGNED NOT NULL,
-    `transfer_record_id`    INT UNSIGNED NOT NULL,
-    `created_at`            DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    `modified_at`           DATETIME NULL DEFAULT NULL,
-    `deleted_at`            DATETIME NULL DEFAULT NULL
 );

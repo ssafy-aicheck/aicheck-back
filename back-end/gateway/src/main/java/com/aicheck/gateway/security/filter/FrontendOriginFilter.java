@@ -44,7 +44,6 @@ public class FrontendOriginFilter implements WebFilter {
 			trust.equals(origin) || (referer != null && referer.startsWith(trust)));
 
 		if (!allowed) {
-			log.warn("차단된 Origin 요청: origin={}, referer={}", origin, referer);
 			exchange.getResponse().setStatusCode(HttpStatus.FORBIDDEN);
 			exchange.getResponse().getHeaders().setContentType(MediaType.APPLICATION_JSON);
 

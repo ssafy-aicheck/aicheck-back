@@ -11,5 +11,8 @@ spring:
   jpa:
     hibernate:
       ddl-auto: none
-    show-sql: none
+    show-sql: false
     database-platform: org.hibernate.dialect.MySQLDialect
+
+  kafka:
+    bootstrap-servers: kafka1:9092,kafka2:9092,kafka3:9092
