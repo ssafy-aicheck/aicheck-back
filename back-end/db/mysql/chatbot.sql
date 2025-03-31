@@ -6,7 +6,7 @@ CREATE TABLE `prompts`
     `manager_id`  INT UNSIGNED NOT NULL,
     `birth`       DATE     NOT NULL,
     `category`    JSON     NOT NULL,
-    `contents`    TEXT     NOT NULL,
+    `content`     TEXT     NOT NULL,
     `gender`      ENUM('MALE', 'FEMALE') NOT NULL,
     `created_at`  DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `modified_at` DATETIME NULL DEFAULT NULL,
