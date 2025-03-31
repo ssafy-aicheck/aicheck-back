@@ -1,17 +1,20 @@
 package com.aicheck.business.domain.transaction_record.presentation;
 
+import com.aicheck.business.domain.transaction_record.application.TransactionRecordService;
 import com.aicheck.business.domain.transaction_record.application.dto.CalendarRecordListResponse;
+import com.aicheck.business.domain.transaction_record.presentation.dto.RatingRequest;
 import com.aicheck.business.domain.transaction_record.presentation.dto.TransactionRecordDetailResponse;
 import com.aicheck.business.domain.transaction_record.presentation.dto.TransactionRecordListResponse;
-import com.aicheck.business.domain.transaction_record.application.TransactionRecordService;
 import com.aicheck.business.domain.transaction_record.presentation.dto.UpdateTransactionRecordRequest;
 import com.aicheck.business.global.auth.annotation.CurrentMemberId;
+import jakarta.validation.Valid;
 import java.time.LocalDate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -68,5 +71,12 @@ public class TransactionRecordController {
         transactionRecordService.updateTransactionRecord(request);
         return ResponseEntity.ok().build();
     }
+
+    @PostMapping("/rating")
+    public ResponseEntity<Void> rateTransaction(@RequestBody @Valid RatingRequest request) {
+        transactionRecordService.rateTransaction(request);
+        return ResponseEntity.ok().build();
+    }
+
 
 }

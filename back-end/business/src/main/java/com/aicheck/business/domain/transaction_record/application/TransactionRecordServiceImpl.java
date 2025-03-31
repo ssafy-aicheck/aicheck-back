@@ -11,6 +11,7 @@ import com.aicheck.business.domain.transaction_record.application.dto.CalendarRe
 import com.aicheck.business.domain.transaction_record.application.dto.CalendarRecordListResponse;
 import com.aicheck.business.domain.transaction_record.entity.TransactionRecord;
 import com.aicheck.business.domain.transaction_record.entity.TransactionType;
+import com.aicheck.business.domain.transaction_record.presentation.dto.RatingRequest;
 import com.aicheck.business.domain.transaction_record.presentation.dto.TransactionRecordDetailResponse;
 import com.aicheck.business.domain.transaction_record.presentation.dto.TransactionRecordListResponse;
 import com.aicheck.business.domain.transaction_record.presentation.dto.UpdateTransactionRecordRequest;
@@ -135,6 +136,13 @@ public class TransactionRecordServiceImpl implements TransactionRecordService {
             }
         }
         return null;
+    }
+
+    @Transactional
+    public void rateTransaction(RatingRequest request) {
+        TransactionRecord record = transactionRecordRepository.findById(request.getRecordId())
+                .orElseThrow(() -> new BusinessException(BusinessErrorCodes.TRANSACTION_RECORD_NOT_FOUND));
+        record.updateRating(request.getRating());
     }
 
 }

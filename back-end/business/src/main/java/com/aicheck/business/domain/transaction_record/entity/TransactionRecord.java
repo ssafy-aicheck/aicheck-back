@@ -86,4 +86,9 @@ public class TransactionRecord {
         this.secondCategory = secondCategoryName;
         this.description = description;
     }
+
+    public void updateRating(Integer rating) {
+        this.rating = rating;
+    }
+
 }
