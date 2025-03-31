@@ -29,4 +29,8 @@ public class FCMToken extends BaseEntity {
 		this.memberId = memberId;
 		this.token = token;
 	}
+
+	public void changeToken(String token) {
+		this.token = token;
+	}
 }

@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.aicheck.alarm.common.exception.AlarmException;
+import com.aicheck.alarm.domain.FCMToken;
 import com.aicheck.alarm.domain.repository.FCMTokenRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,16 @@ public class FCMTokenServiceImpl implements FCMTokenService {
 	@Override
 	public String searchFCMToken(final Long memberId) {
 		return fcmTokenRepository.findByMemberIdAndDeletedAtIsNull(memberId)
-			.orElseThrow(()-> new AlarmException(NOT_FOUND_FCM_TOKEN)).getToken();
+			.orElseThrow(() -> new AlarmException(NOT_FOUND_FCM_TOKEN)).getToken();
+	}
+
+	@Transactional
+	@Override
+	public void saveFCMToken(Long memberId, String token) {
+		fcmTokenRepository.findByMemberIdAndDeletedAtIsNull(memberId)
+			.ifPresentOrElse(
+				fcm -> fcm.changeToken(token),
+				() -> fcmTokenRepository.save(FCMToken.builder().memberId(memberId).token(token).build())
+			);
 	}
 }
