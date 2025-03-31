@@ -1,5 +1,6 @@
 package com.aicheck.business.domain.transaction_record.presentation;
 
+import com.aicheck.business.domain.transaction_record.application.dto.CalendarRecordListResponse;
 import com.aicheck.business.domain.transaction_record.presentation.dto.TransactionRecordListResponse;
 import com.aicheck.business.domain.transaction_record.application.TransactionRecordService;
 import com.aicheck.business.global.auth.annotation.CurrentMemberId;
@@ -41,6 +42,14 @@ public class TransactionRecordController {
     ) {
         TransactionRecordListResponse response =
                 transactionRecordService.getChildTransactionRecords(memberId, childId, startDate, endDate, type);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/calendar")
+    public ResponseEntity<CalendarRecordListResponse> getCalendarData(@CurrentMemberId Long memberId,
+                                                                      @RequestParam int year,
+                                                                      @RequestParam int month) {
+        CalendarRecordListResponse response = transactionRecordService.getCalendarData(memberId, year, month);
         return ResponseEntity.ok(response);
     }
 
