@@ -84,7 +84,6 @@ services:
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
       DEFAULT_LABEL_BRANCH: ${DEFAULT_LABEL_BRANCH}
       TOKEN_SECRET: ${TOKEN_SECRET}
-      FIREBASE_PATH: ${FIREBASE_PATH}
     networks:
       - aicheck-network
     depends_on:
@@ -239,7 +238,6 @@ services:
       RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD}
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-      FIREBASE_PATH: ${FIREBASE_PATH}
     depends_on:
       config:
         condition: service_healthy
