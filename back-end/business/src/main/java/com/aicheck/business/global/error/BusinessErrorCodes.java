@@ -32,7 +32,10 @@ public enum BusinessErrorCodes implements ErrorCode {
 
     NOT_YOUR_CHILD(HttpStatus.BAD_REQUEST, "BUSINESS_TRANSACTION_NOT_YOUR_CHILD", "자신의 자녀만 조회할 수 있습니다"),
 
-    TRANSACTION_RECORD_NOT_FOUND(HttpStatus.NOT_FOUND, "BUSINESS_TRANSACTION_RECORD_NOT_FOUND", "해당 기록을 찾을 수 없습니다");
+    TRANSACTION_RECORD_NOT_FOUND(HttpStatus.NOT_FOUND, "BUSINESS_TRANSACTION_RECORD_NOT_FOUND", "해당 기록을 찾을 수 없습니다"),
+    FIRST_CATEGORY_NOT_FOUND(HttpStatus.NOT_FOUND, "BUSINESS_FIRST_CATEGORY_NOT_FOUND", "해당 대분류 카테고리를 찾을 수 없습니다"),
+    SECOND_CATEGORY_NOT_FOUND_OR_INVALID(HttpStatus.BAD_REQUEST, "BUSINESS_SECOND_CATEGORY_NOT_FOUND_OR_INVALID",
+            "해당 소분류 카테고리가 존재하지 않거나 대분류에 속하지 않습니다");
 
     private final HttpStatus httpStatus;
     private final String code;
