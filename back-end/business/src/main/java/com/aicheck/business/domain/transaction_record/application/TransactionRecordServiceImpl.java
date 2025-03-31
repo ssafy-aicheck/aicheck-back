@@ -6,6 +6,7 @@ import com.aicheck.business.domain.auth.exception.BusinessException;
 import com.aicheck.business.domain.transaction_record.application.dto.CalendarRecordItem;
 import com.aicheck.business.domain.transaction_record.application.dto.CalendarRecordListResponse;
 import com.aicheck.business.domain.transaction_record.entity.TransactionRecord;
+import com.aicheck.business.domain.transaction_record.presentation.dto.TransactionRecordDetailResponse;
 import com.aicheck.business.domain.transaction_record.presentation.dto.TransactionRecordListResponse;
 import com.aicheck.business.domain.transaction_record.repository.TransactionRecordQueryRepository;
 import com.aicheck.business.domain.transaction_record.entity.TransactionType;
@@ -79,6 +80,14 @@ public class TransactionRecordServiceImpl implements TransactionRecordService {
         return CalendarRecordListResponse.builder()
                 .calendar(calendar)
                 .build();
+    }
+
+    @Override
+    public TransactionRecordDetailResponse getTransactionRecordDetail(Long recordId) {
+        TransactionRecord record = transactionRecordRepository.findByIdAndDeletedAtIsNull(recordId)
+                .orElseThrow(() -> new BusinessException(BusinessErrorCodes.TRANSACTION_RECORD_NOT_FOUND));
+
+        return TransactionRecordDetailResponse.from(record);
     }
 
     public TransactionType getTransactionType(String type) {
