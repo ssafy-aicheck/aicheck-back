@@ -2,6 +2,7 @@ package com.aicheck.business.domain.member.presentation;
 
 import com.aicheck.business.domain.member.presentation.dto.ChildrenProfileResponse;
 import com.aicheck.business.domain.member.application.MemberService;
+import com.aicheck.business.domain.member.presentation.dto.ProfileResponse;
 import com.aicheck.business.global.auth.annotation.CurrentMemberId;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +17,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class MemberController {
 
     private final MemberService memberService;
+
+    @GetMapping("/details")
+    public ResponseEntity<ProfileResponse> getProfile(@CurrentMemberId Long memberId) {
+        return ResponseEntity.ok(memberService.getMyProfile(memberId));
+    }
 
     @GetMapping("/children/profiles")
     public ResponseEntity<List<ChildrenProfileResponse>> getChildrenProfiles(@CurrentMemberId Long memberId) {
