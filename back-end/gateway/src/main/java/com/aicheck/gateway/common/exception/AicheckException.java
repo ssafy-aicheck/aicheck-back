@@ -5,10 +5,10 @@ import com.aicheck.gateway.common.error.ErrorCode;
 import lombok.Getter;
 
 @Getter
-public class BusinessException extends RuntimeException {
+public class AicheckException extends RuntimeException {
 	private final ErrorCode errorCode;
 
-	public BusinessException(ErrorCode errorCode) {
+	public AicheckException(ErrorCode errorCode) {
 		super(errorCode.getMessage());
 		this.errorCode = errorCode;
 	}

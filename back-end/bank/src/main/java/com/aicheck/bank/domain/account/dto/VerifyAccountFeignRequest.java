@@ -5,8 +5,5 @@ import lombok.Getter;
 @Getter
 public class VerifyAccountFeignRequest {
     private Long bankMemberId;
-    
     private Long accountId;
-
-    private String password;
 }

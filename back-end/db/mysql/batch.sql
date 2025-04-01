@@ -3,6 +3,8 @@ USE batch;
 CREATE TABLE `schedule`
 (
     `id`                INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `member_id`         INT UNSIGNED NOT NULL,
+    `schedule_id`       INT UNSIGNED NOT NULL,
     `parent_account_no` VARCHAR(20) NOT NULL,
     `child_account_no`  VARCHAR(20) NOT NULL,
     `amount`            MEDIUMINT UNSIGNED NOT NULL,

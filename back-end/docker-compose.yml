@@ -131,6 +131,7 @@ services:
       RABBITMQ_USERNAME: ${RABBITMQ_USERNAME}
       RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD}
       TOKEN_SECRET: ${TOKEN_SECRET}
+      CLOUD_FRONT_URL: ${CLOUD_FRONT_URL}
     depends_on:
       config:
         condition: service_healthy
@@ -295,8 +296,8 @@ services:
       zookeeper:
         condition: service_healthy
     ports:
-      - "9092:9092"  # 내부 통신
-      - "29092:29092" # 외부 접근
+      - "9092:9092"
+      - "29092:29092"
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
@@ -316,8 +317,8 @@ services:
       zookeeper:
         condition: service_healthy
     ports:
-      - "9093:9092"  # 내부 통신
-      - "29093:29092" # 외부 접근
+      - "9093:9092"
+      - "29093:29092"
     environment:
       KAFKA_BROKER_ID: 2
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
@@ -357,11 +358,10 @@ services:
       - kafka2
       - kafka3
     entrypoint: [ "/bin/sh", "-c" ]
-#    command: >
-#      "sleep 20 &&
-#        kafka-topics --create --bootstrap-server kafka1:9092 --replication-factor 1 --partitions 1 --topic chat || true &&
-#        kafka-topics --create --bootstrap-server kafka1:9092 --replication-factor 1 --partitions 1 --topic coupon || true &&
-#        kafka-topics --create --bootstrap-server kafka1:9092 --replication-factor 1 --partitions 1 --topic alarm || true"
+    command: >
+      "sleep 20 && 
+        kafka-topics --create --bootstrap-server kafka1:9092 --replication-factor 1 --partitions 1 --topic alarm || true &&
+        kafka-topics --create --bootstrap-server kafka1:9092 --replication-factor 1 --partitions 1 --topic alarm-retry || true"
     networks:
       - aicheck-network
 

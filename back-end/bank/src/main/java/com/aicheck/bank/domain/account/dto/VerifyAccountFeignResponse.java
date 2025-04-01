@@ -6,7 +6,6 @@ import lombok.Getter;
 @Getter
 @Builder
 public class VerifyAccountFeignResponse {
-    private Boolean verified;
-
+    private boolean verified;
     private String accountNo;
 }

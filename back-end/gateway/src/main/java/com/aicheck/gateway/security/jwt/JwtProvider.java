@@ -9,7 +9,7 @@ import io.jsonwebtoken.security.Keys;
 import java.security.Key;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import com.aicheck.gateway.common.error.GlobalErrorCodes;
+import com.aicheck.gateway.common.error.GatewayErrorCodes;
 import com.aicheck.gateway.common.exception.GatewayException;
 
 import jakarta.annotation.PostConstruct;
@@ -38,9 +38,9 @@ public class JwtProvider {
 				.parseClaimsJws(token)
 				.getBody();
 		}catch (ExpiredJwtException e) {
-			throw new GatewayException(GlobalErrorCodes.TOKEN_EXPIRED);
+			throw new GatewayException(GatewayErrorCodes.TOKEN_EXPIRED);
 		} catch (JwtException e) {
-			throw new GatewayException(GlobalErrorCodes.INVALID_LOGIN_TOKEN);
+			throw new GatewayException(GatewayErrorCodes.INVALID_LOGIN_TOKEN);
 		}
 	}
 }

@@ -234,3 +234,4 @@ gradlew.bat
 gradle
 
 .env
+alarm/src/main/resources/serviceAccountKey.json

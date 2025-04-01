@@ -30,6 +30,9 @@ public class Account {
     @Column(name = "member_id", nullable = false)
     private Long memberId;
 
+    @Column(name = "account_name")
+    private String accountName;
+
     @Column(name = "account_no", nullable = false, unique = true, length = 20)
     private String accountNo;
 

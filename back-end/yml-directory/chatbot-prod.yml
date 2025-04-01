@@ -10,6 +10,6 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: update
-    show-sql: none
+      ddl-auto: none
+    show-sql: false
     database-platform: org.hibernate.dialect.MySQLDialect
