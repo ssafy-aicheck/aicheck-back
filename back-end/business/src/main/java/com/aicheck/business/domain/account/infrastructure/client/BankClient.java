@@ -1,13 +1,13 @@
 package com.aicheck.business.domain.account.infrastructure.client;
 
-import com.aicheck.business.domain.account.dto.AccountInfoFeignResponse;
 import com.aicheck.business.domain.account.dto.AccountInfoResponse;
-import com.aicheck.business.domain.account.dto.ChildAccountInfoResponse;
 import com.aicheck.business.domain.account.dto.FindAccountFeignResponse;
 import com.aicheck.business.domain.account.dto.VerifyAccountPasswordRequest;
 import com.aicheck.business.domain.account.dto.VerifyAccountResponse;
 import com.aicheck.business.domain.account.infrastructure.client.dto.VerifyAccountFeignRequest;
 import com.aicheck.business.domain.auth.dto.BankMemberFeignResponse;
+import com.aicheck.business.domain.transfer.TransferReceiverDto;
+import com.aicheck.business.domain.transfer.TransferSenderDto;
 import java.util.List;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,5 +34,11 @@ public interface BankClient {
 
     @PostMapping("/accounts/children")
     List<AccountInfoResponse> findAccountsInfoList(@RequestBody List<String> childrenAccountNos);
+
+    @GetMapping("/accounts/receiver/{accountNo}")
+    TransferReceiverDto findReceiverAccountInfo(@PathVariable String accountNo);
+
+    @GetMapping("/accounts/sender/{accountNo}")
+    TransferSenderDto findSenderAccountInfo(@PathVariable String accountNo);
 
 }

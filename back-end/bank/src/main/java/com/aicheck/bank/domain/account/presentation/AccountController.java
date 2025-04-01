@@ -7,6 +7,8 @@ import com.aicheck.bank.domain.account.dto.VerifyAccountFeignRequest;
 import com.aicheck.bank.domain.account.dto.VerifyAccountFeignResponse;
 import com.aicheck.bank.domain.account.dto.VerifyAccountPasswordFeignRequest;
 import com.aicheck.bank.domain.account.dto.VerifyAccountPasswordFeignResponse;
+import com.aicheck.bank.domain.account.infrastructure.feign.dto.TransferSenderResponse;
+import com.aicheck.bank.domain.account.infrastructure.feign.dto.TransferReceiverResponse;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -50,6 +52,16 @@ public class AccountController {
     @PostMapping("/children")
     public ResponseEntity<?> findChildrenAccountInfos(@RequestBody List<String> childrenAccountNos) {
         return ResponseEntity.ok(accountService.findChildrenAccountInfos(childrenAccountNos));
+    }
+
+    @GetMapping("/receiver/{accountNo}")
+    public ResponseEntity<TransferReceiverResponse> findReceiverAccountInfo(@PathVariable String accountNo) {
+        return ResponseEntity.ok(accountService.findTransferReceiverInfo(accountNo));
+    }
+
+    @GetMapping("/sender/{accountNo}")
+    public ResponseEntity<TransferSenderResponse> findSenderAccountInfo(@PathVariable String accountNo) {
+        return ResponseEntity.ok(accountService.findSenderAccountInfo(accountNo));
     }
 
 }
