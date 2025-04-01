@@ -1,4 +1,4 @@
-package com.aicheck.business.domain.transfer;
+package com.aicheck.business.domain.transfer.dto;
 
 import lombok.Builder;
 import lombok.Getter;

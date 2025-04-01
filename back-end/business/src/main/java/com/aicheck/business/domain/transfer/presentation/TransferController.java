@@ -1,5 +1,7 @@
-package com.aicheck.business.domain.transfer;
+package com.aicheck.business.domain.transfer.presentation;
 
+import com.aicheck.business.domain.transfer.presentation.dto.TransferPreviewResponse;
+import com.aicheck.business.domain.transfer.application.TransferService;
 import com.aicheck.business.global.auth.annotation.CurrentMemberId;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
