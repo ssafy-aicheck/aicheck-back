@@ -7,6 +7,7 @@ import com.aicheck.batch.domain.schedule.application.client.dto.ChildScheduleIte
 import com.aicheck.batch.domain.schedule.application.client.dto.ScheduleListResponse;
 import com.aicheck.batch.domain.schedule.dto.RegisterScheduledTransferRequest;
 import com.aicheck.batch.domain.schedule.entity.Schedule;
+import com.aicheck.batch.domain.schedule.presentation.dto.AllowanceRegisteredResponse;
 import com.aicheck.batch.domain.schedule.repository.ScheduleRepository;
 import com.aicheck.batch.global.error.BatchException;
 import com.aicheck.batch.global.error.ScheduleErrorCodes;
@@ -79,6 +80,14 @@ public class ScheduleServiceImpl implements ScheduleService {
         Schedule schedule = scheduleRepository.findByChildIdAndDeletedAtIsNull(childId)
                 .orElseThrow(() -> new BatchException(ScheduleErrorCodes.SCHEDULE_NOT_FOUND));
         return ChildScheduleItem.from(schedule);
+    }
+
+    @Override
+    public AllowanceRegisteredResponse checkAllowanceRegistered(Long childId) {
+        boolean registered = scheduleRepository.findByChildIdAndDeletedAtIsNull(childId).isPresent();
+        return AllowanceRegisteredResponse.builder()
+                .registered(registered)
+                .build();
     }
 
 }
