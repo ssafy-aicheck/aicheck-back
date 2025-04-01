@@ -4,7 +4,7 @@ import lombok.Getter;
 
 @Getter
 public class AccountInfoResponse {
-    private String accountId;
+    private Integer accountId;
     private String accountName;
     private String accountNo;
     private Long balance;
