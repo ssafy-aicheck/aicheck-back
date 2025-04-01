@@ -6,6 +6,8 @@ import com.aicheck.bank.domain.account.dto.VerifyAccountFeignRequest;
 import com.aicheck.bank.domain.account.dto.VerifyAccountFeignResponse;
 import com.aicheck.bank.domain.account.dto.VerifyAccountPasswordFeignRequest;
 import com.aicheck.bank.domain.account.dto.VerifyAccountPasswordFeignResponse;
+import com.aicheck.bank.domain.account.infrastructure.feign.dto.TransferSenderResponse;
+import com.aicheck.bank.domain.account.infrastructure.feign.dto.TransferReceiverResponse;
 import java.util.List;
 
 public interface AccountService {
@@ -18,4 +20,8 @@ public interface AccountService {
     VerifyAccountFeignResponse verifyAccount(VerifyAccountFeignRequest request);
 
     List<AccountInfoFeignResponse> findChildrenAccountInfos(List<String> accountNos);
+
+    TransferReceiverResponse findTransferReceiverInfo(String accountNo);
+
+    TransferSenderResponse findSenderAccountInfo(String accountNo);
 }
