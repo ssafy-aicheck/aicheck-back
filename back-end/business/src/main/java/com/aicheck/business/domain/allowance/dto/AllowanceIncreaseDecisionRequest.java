@@ -4,6 +4,5 @@ import lombok.Getter;
 
 @Getter
 public class AllowanceIncreaseDecisionRequest {
-    private Integer id;
     private String status;
 }
