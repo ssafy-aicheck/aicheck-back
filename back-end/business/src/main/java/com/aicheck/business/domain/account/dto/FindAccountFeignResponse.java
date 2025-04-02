@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class FindAccountFeignResponse {
     private Long accountId;
-    private String bankName;
     private String accountName;
     private String accountNo;
 }

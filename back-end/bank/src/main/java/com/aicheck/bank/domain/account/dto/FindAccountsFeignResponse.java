@@ -10,8 +10,6 @@ public class FindAccountsFeignResponse {
 
     private Long accountId;
 
-    private String bankName;
-
     private String accountName;
 
     private String accountNo;
@@ -19,6 +17,7 @@ public class FindAccountsFeignResponse {
     public static FindAccountsFeignResponse from(Account account) {
         return FindAccountsFeignResponse.builder()
                 .accountId(account.getId())
+                .accountName(account.getAccountName())
                 .accountNo(account.getAccountNo())
                 .build();
     }
