@@ -15,6 +15,8 @@ public interface AccountService {
 
     AccountInfoResponse findMyMainAccountInfo(Long memberId);
 
+    AccountInfoResponse findMyChildAccountInfo(Long memberId, Long childId);
+
     void verifyAccountPassword(VerifyAccountPasswordRequest request);
 
     List<ChildAccountInfoResponse> findMyChildAccounts(Long memberId);

@@ -52,6 +52,13 @@ public class AccountController {
         return ResponseEntity.ok(account);
     }
 
+    @GetMapping("/{childId}")
+    public ResponseEntity<AccountInfoResponse> findMyChildAccountsInfo(@CurrentMemberId Long memberId,
+                                                                       @PathVariable Long childId) {
+        AccountInfoResponse account = accountService.findMyChildAccountInfo(memberId, childId);
+        return ResponseEntity.ok(account);
+    }
+
     @GetMapping("/children")
     public ResponseEntity<ChildrenAccountsResponse> findChildrenAccountsInfo(@CurrentMemberId Long memberId) {
         List<ChildAccountInfoResponse> accounts = accountService.findMyChildAccounts(memberId);
