@@ -7,9 +7,10 @@ import com.aicheck.bank.domain.account.dto.VerifyAccountFeignResponse;
 import com.aicheck.bank.domain.account.dto.VerifyAccountPasswordFeignRequest;
 import com.aicheck.bank.domain.account.dto.VerifyAccountPasswordFeignResponse;
 import com.aicheck.bank.domain.account.entity.Account;
-import com.aicheck.bank.domain.account.repository.AccountRepository;
+import com.aicheck.bank.domain.account.infrastructure.feign.dto.TransferSenderResponse;
+import com.aicheck.bank.domain.account.infrastructure.feign.dto.TransferReceiverResponse;
+import com.aicheck.bank.domain.account.infrastructure.repository.AccountRepository;
 import com.aicheck.bank.domain.member.entity.Member;
-import com.aicheck.bank.domain.member.repository.MemberRepository;
 import com.aicheck.bank.global.exception.BankErrorCodes;
 import com.aicheck.bank.global.exception.BankException;
 import java.util.List;
@@ -20,7 +21,6 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class AccountServiceImpl implements AccountService {
 
-    private final MemberRepository memberRepository;
     private final AccountRepository accountRepository;
 
     @Override
@@ -55,7 +55,7 @@ public class AccountServiceImpl implements AccountService {
     public VerifyAccountFeignResponse verifyAccount(VerifyAccountFeignRequest request) {
         Account account = accountRepository.findById(request.getAccountId())
                 .orElseThrow(() -> new BankException(BankErrorCodes.ACCOUNT_NOT_FOUND));
-        if(account.getMemberId() != request.getBankMemberId()) {
+        if(account.getMember().getId() != request.getBankMemberId()) {
             throw new BankException(BankErrorCodes.NOT_YOUR_ACCOUNT);
         }
         return VerifyAccountFeignResponse.builder()
@@ -70,5 +70,29 @@ public class AccountServiceImpl implements AccountService {
         List<AccountInfoFeignResponse> feignResponses = accounts.stream().map(AccountInfoFeignResponse::from).toList();
 
         return feignResponses;
+    }
+
+    @Override
+    public TransferReceiverResponse findTransferReceiverInfo(String accountNo) {
+        Account account = accountRepository.findAccountByAccountNo(accountNo)
+                .orElseThrow(() -> new BankException(BankErrorCodes.ACCOUNT_NOT_FOUND));
+        Member member = account.getMember();
+
+        return TransferReceiverResponse.builder()
+                .accountNo(account.getAccountNo())
+                .name(member.getName())
+                .build();
+    }
+
+    @Override
+    public TransferSenderResponse findSenderAccountInfo(String accountNo) {
+        Account account = accountRepository.findAccountByAccountNo(accountNo)
+                .orElseThrow(() -> new BankException(BankErrorCodes.ACCOUNT_NOT_FOUND));
+
+        return TransferSenderResponse.builder()
+                .accountName(account.getAccountName())
+                .accountNo(account.getAccountNo())
+                .balance(account.getBalance())
+                .build();
     }
 }

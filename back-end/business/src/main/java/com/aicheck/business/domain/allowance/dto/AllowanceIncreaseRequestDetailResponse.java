@@ -13,8 +13,11 @@ public class AllowanceIncreaseRequestDetailResponse {
     private Long id;
     private String type;
     private String status;
+    private Long childId;
     private String childName;
-    private Integer amount;
+    private String image;
+    private Integer prevAmount;
+    private Integer afterAmount;
     private String description;
     private LocalDateTime createdAt;
 
@@ -23,8 +26,11 @@ public class AllowanceIncreaseRequestDetailResponse {
                 .id(request.getId())
                 .type(AllowanceRequestType.INCREASE.name())
                 .status(request.getStatus().name())
+                .childId(child.getId())
                 .childName(child.getName())
-                .amount(request.getAfterAmount())
+                .image(child.getProfileUrl())
+                .prevAmount(request.getBeforeAmount())
+                .afterAmount(request.getAfterAmount())
                 .description(request.getDescription())
                 .createdAt(request.getCreatedAt())
                 .build();

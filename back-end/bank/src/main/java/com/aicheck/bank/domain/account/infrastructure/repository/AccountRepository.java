@@ -1,4 +1,4 @@
-package com.aicheck.bank.domain.account.repository;
+package com.aicheck.bank.domain.account.infrastructure.repository;
 
 import com.aicheck.bank.domain.account.entity.Account;
 import java.util.List;
