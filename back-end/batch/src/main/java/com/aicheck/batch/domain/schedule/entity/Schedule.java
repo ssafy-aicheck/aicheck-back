@@ -46,6 +46,9 @@ public class Schedule {
     @Column(name = "child_account_no", nullable = false, length = 20)
     private String childAccountNo;
 
+    @Column(name = "report_id")
+    private String reportId;
+
     @Column(nullable = false)
     private Integer amount;
 
