@@ -15,4 +15,5 @@ public interface BusinessClient {
 
     @GetMapping("/accounts/number/{memberId}")
     AccountNoResponse getAccountNumber(@PathVariable("memberId") Long memberId);
+
 }
