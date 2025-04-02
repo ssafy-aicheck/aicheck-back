@@ -43,6 +43,17 @@ services:
       timeout: 5s
       retries: 5
 
+  chatbot-redis:
+    image: redis:7.0
+    container_name: chatbot-redis
+    restart: always
+    ports:
+      - "6378:6378"
+    networks:
+      - aicheck-network
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+
   rabbitmq:
     image: rabbitmq:3-management
     container_name: rabbitmq
@@ -84,6 +95,9 @@ services:
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
       DEFAULT_LABEL_BRANCH: ${DEFAULT_LABEL_BRANCH}
       TOKEN_SECRET: ${TOKEN_SECRET}
+      BUCKET: ${BUCKET}
+      AWS_S3_ACCESS_KEY: ${AWS_S3_ACCESS_KEY}
+      AWS_S3_SECRET_KEY: ${AWS_S3_SECRET_KEY}
     networks:
       - aicheck-network
     depends_on:
@@ -186,6 +200,9 @@ services:
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
       TOKEN_SECRET: ${TOKEN_SECRET}
+      BUCKET: ${BUCKET}
+      AWS_S3_ACCESS_KEY: ${AWS_S3_ACCESS_KEY}
+      AWS_S3_SECRET_KEY: ${AWS_S3_SECRET_KEY}
     depends_on:
       config:
         condition: service_healthy

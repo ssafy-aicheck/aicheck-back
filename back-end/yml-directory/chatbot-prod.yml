@@ -13,3 +13,8 @@ spring:
       ddl-auto: none
     show-sql: false
     database-platform: org.hibernate.dialect.MySQLDialect
+
+  data:
+    redis:
+      host: chatbot-redis
+      port: 6378
