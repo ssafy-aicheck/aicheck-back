@@ -1,5 +1,6 @@
 package com.aicheck.batch.domain.schedule.application.service;
 
+import com.aicheck.batch.domain.report.ReportRepository;
 import com.aicheck.batch.domain.schedule.application.client.BusinessClient;
 import com.aicheck.batch.domain.schedule.application.client.dto.ChildAccountInfoResponse;
 import com.aicheck.batch.domain.schedule.application.client.dto.ChildScheduleGroup;
@@ -25,6 +26,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     private final ScheduleRepository scheduleRepository;
     private final BusinessClient businessClient;
+    private final ReportRepository reportRepository;
 
     @Override
     @Transactional
@@ -83,10 +85,11 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
     @Override
-    public AllowanceRegisteredResponse checkAllowanceRegistered(Long childId) {
+    public AllowanceRegisteredResponse checkAllowanceRegistered(Long childId, String reportId) {
         boolean registered = scheduleRepository.findByChildIdAndDeletedAtIsNull(childId).isPresent();
+        boolean notRequestedYet = reportRepository.findById(reportId).isEmpty();
         return AllowanceRegisteredResponse.builder()
-                .registered(registered)
+                .registered(registered && notRequestedYet)
                 .build();
     }
 

@@ -16,5 +16,5 @@ public interface ScheduleService {
 
     ChildScheduleItem findByChildId(Long childId);
 
-    AllowanceRegisteredResponse checkAllowanceRegistered(Long childId);
+    AllowanceRegisteredResponse checkAllowanceRegistered(Long childId, String reportId);
 }

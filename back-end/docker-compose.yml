@@ -32,9 +32,12 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: ${MONGO_USERNAME}
       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
+      MONGO_INITDB_DATABASE: ${MONGO_INITDB_DATABASE}
+    ports:
+      - "27018:27017"
     volumes:
       - mongo_data:/data/db
-      - ./db/mongo/init.js:/docker-entrypoint-initdb.d/init.js:ro
+      - ./db/mongo/init-mongo.sh:/docker-entrypoint-initdb.d/init-mongo.sh:ro
     networks:
       - aicheck-network
     healthcheck:
@@ -107,7 +110,7 @@ services:
         condition: service_healthy
     healthcheck:
       test: [ "CMD-SHELL", "curl -f -u ${CONFIG_SPRING_SECURITY_USER_NAME}:${CONFIG_SPRING_SECURITY_USER_PASSWORD} http://localhost:8888/actuator/health || exit 1" ]
-      interval: 5s
+      interval: 10s
       timeout: 100s
       retries: 5
 
