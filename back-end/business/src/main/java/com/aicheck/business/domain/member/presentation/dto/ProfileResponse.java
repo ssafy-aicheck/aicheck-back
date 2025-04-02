@@ -9,6 +9,7 @@ import lombok.Getter;
 @Getter
 @Builder
 public class ProfileResponse {
+    private Long memberId;
     private String name;
     private LocalDate birth;
     private String image;
@@ -25,6 +26,7 @@ public class ProfileResponse {
 
     public static ProfileResponse from(Member member, AccountInfoResponse accountInfo) {
         return ProfileResponse.builder()
+                .memberId(member.getId())
                 .name(member.getName())
                 .birth(member.getBirth())
                 .image(member.getProfileUrl())
