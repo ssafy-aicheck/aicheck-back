@@ -59,6 +59,16 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
+    public AccountInfoResponse findMyChildAccountInfo(Long memberId, Long childId) {
+        Member child = memberRepository.findById(childId)
+                .orElseThrow(() -> new BusinessException(BusinessErrorCodes.BUSINESS_MEMBER_NOT_FOUND));
+        if (child.getManagerId() != memberId) {
+            throw new BusinessException(BusinessErrorCodes.NOT_YOUR_CHILD);
+        }
+        return bankClient.findAccountsInfo(child.getAccountNo());
+    }
+
+    @Override
     public void verifyAccountPassword(VerifyAccountPasswordRequest request) {
         bankClient.verifyAccountPassword(request);
     }
