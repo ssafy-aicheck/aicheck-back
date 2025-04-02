@@ -9,6 +9,9 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
+import com.aicheck.chatbot.domain.chat.ChatNode;
+import com.aicheck.chatbot.domain.chat.CustomSetting;
+
 @Configuration
 public class RedisConfig {
 
@@ -24,15 +27,20 @@ public class RedisConfig {
 	}
 
 	@Bean
-	public RedisTemplate<String, Object> redisTemplate(LettuceConnectionFactory redisConnectionFactory) {
-		RedisTemplate<String, Object> template = new RedisTemplate<>();
-		template.setConnectionFactory(redisConnectionFactory());
+	public RedisTemplate<String, CustomSetting> customSettingsRedisTemplate(LettuceConnectionFactory factory) {
+		RedisTemplate<String, CustomSetting> template = new RedisTemplate<>();
+		template.setConnectionFactory(factory);
 		template.setKeySerializer(new StringRedisSerializer());
 		template.setValueSerializer(new GenericJackson2JsonRedisSerializer());
-		template.setHashKeySerializer(new StringRedisSerializer());
-		template.setHashValueSerializer(new GenericJackson2JsonRedisSerializer());
-		template.setEnableTransactionSupport(true);
-		template.afterPropertiesSet();
+		return template;
+	}
+
+	@Bean
+	public RedisTemplate<String, ChatNode> chatNodeRedisTemplate(LettuceConnectionFactory factory) {
+		RedisTemplate<String, ChatNode> template = new RedisTemplate<>();
+		template.setConnectionFactory(factory);
+		template.setKeySerializer(new StringRedisSerializer());
+		template.setValueSerializer(new GenericJackson2JsonRedisSerializer());
 		return template;
 	}
 }

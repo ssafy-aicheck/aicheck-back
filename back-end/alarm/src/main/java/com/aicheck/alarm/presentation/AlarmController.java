@@ -31,8 +31,8 @@ public class AlarmController {
 	private final FCMTokenService fcmTokenService;
 
 	@GetMapping
-	public ResponseEntity<List<AlarmResponse>> findAlarms(@CurrentMemberId Long memberId) {
-		return ResponseEntity.ok(alarmService.searchAlarms(memberId));
+	public ResponseEntity<List<AlarmResponse>> getAlarms(@CurrentMemberId Long memberId) {
+		return ResponseEntity.ok(alarmService.getAlarms(memberId));
 	}
 
 	@PostMapping

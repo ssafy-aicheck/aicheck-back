@@ -11,11 +11,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.aicheck.chatbot.application.service.PromptService;
+import com.aicheck.chatbot.application.service.prompt.PromptService;
 import com.aicheck.chatbot.common.resolver.CurrentMemberId;
 import com.aicheck.chatbot.presentation.prompt.dto.request.SavePromptRequest;
 import com.aicheck.chatbot.presentation.prompt.dto.request.UpdatePromptRequest;
-import com.aicheck.chatbot.presentation.prompt.dto.response.PromptResponse;
+import com.aicheck.chatbot.presentation.prompt.dto.response.FindPromptResponse;
+import com.aicheck.chatbot.presentation.prompt.dto.response.UpdatePromptResponse;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -35,14 +36,14 @@ public class ChatPromptController {
 	}
 
 	@GetMapping("/{childId}")
-	public ResponseEntity<PromptResponse> findPrompt(@PathVariable(name = "childId") @NotNull Long childId) {
-		return ResponseEntity.ok(promptService.searchPrompt(childId));
+	public ResponseEntity<FindPromptResponse> getPrompt(@PathVariable(name = "childId") @NotNull Long childId) {
+		return ResponseEntity.ok(FindPromptResponse.from(promptService.getPrompt(childId)));
 	}
 
 	@PatchMapping("/")
-	public ResponseEntity<PromptResponse> updatePrompt(
+	public ResponseEntity<UpdatePromptResponse> updatePrompt(
 		@CurrentMemberId Long managerId,
 		@Valid @RequestBody UpdatePromptRequest request) {
-		return ResponseEntity.ok(promptService.updatePrompt(managerId, request));
+		return ResponseEntity.ok(UpdatePromptResponse.from(promptService.updatePrompt(managerId, request)));
 	}
 }

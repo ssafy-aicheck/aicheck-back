@@ -32,7 +32,7 @@ public class AlarmEventListener {
 	public void onMessage(final AlarmEventMessage message, final Acknowledgment ack) {
 		String token = null;
 		try {
-			token = fcmTokenService.searchFCMToken(message.memberId());
+			token = fcmTokenService.getFCMToken(message.memberId());
 			alarmService.saveAlarm(message);
 			fcmService.sendNotification(token, message.title(), message.body());
 			ack.acknowledge();

@@ -1,6 +1,6 @@
 package com.aicheck.alarm.application.service;
 
 public interface FCMTokenService {
-	String searchFCMToken(Long memberId);
+	String getFCMToken(Long memberId);
 	void saveFCMToken(Long memberId, String token);
 }
