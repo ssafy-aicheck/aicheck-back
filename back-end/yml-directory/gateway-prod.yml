@@ -51,6 +51,7 @@ spring:
             - RewritePath=/chatbot/(?<segment>/.*)?, /$\{segment}
 
     globalcors:
+      add-to-simple-url-handler-mapping: true
       corsConfigurations:
         '[/**]':
           allowedOrigins:
