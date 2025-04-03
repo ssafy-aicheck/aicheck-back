@@ -156,7 +156,7 @@ public class SecurityConfig {
 	public CorsWebFilter corsWebFilter() {
 		CorsConfiguration config = new CorsConfiguration();
 		config.setAllowCredentials(true);
-		config.setAllowedOriginPatterns(List.of("*"));
+		config.setAllowedOrigins(List.of("http://localhost:3000", "http://j12a603.p.ssafy.io"));
 		config.setAllowedHeaders(List.of("*"));
 		config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
 		config.setExposedHeaders(List.of("Authorization", "X-User-ID", "X-User-Role"));
@@ -165,7 +165,6 @@ public class SecurityConfig {
 		source.registerCorsConfiguration("/**", config);
 		return new CorsWebFilter(source);
 	}
-
 	private static class Role {
 		static final String PARENT = "PARENT";
 		static final String CHILD = "CHILD";
