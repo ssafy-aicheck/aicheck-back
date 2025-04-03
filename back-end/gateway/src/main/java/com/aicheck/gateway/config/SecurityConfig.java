@@ -101,7 +101,8 @@ public class SecurityConfig {
                         .pathMatchers(POST, "/aicheck/transfer").authenticated()
 
                         // 리포트
-                        .pathMatchers(GET, "/aicheck/reports/**").authenticated()
+                        .pathMatchers(GET, "/batch/reports/**").authenticated()
+                        .pathMatchers(GET, "/batch/reports/test").permitAll()
 
                         // 용돈 요청
                         .pathMatchers(GET, "/aicheck/allowance").authenticated()
@@ -135,6 +136,7 @@ public class SecurityConfig {
                         .pathMatchers(PATCH, "/aicheck/transaction-records").authenticated()
                         .pathMatchers(POST, "/aicheck/transaction-records/dutch-pays").authenticated()
                         .pathMatchers(POST, "/aicheck/transaction-records/score").hasRole(Role.PARENT)
+                        .pathMatchers(GET, "/aicheck/transaction-records/statistics").permitAll()
 
                         .anyExchange().denyAll())
                 .exceptionHandling(exceptionHandling -> exceptionHandling

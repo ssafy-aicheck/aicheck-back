@@ -4,12 +4,16 @@ import com.aicheck.business.domain.transaction_record.entity.TransactionRecord;
 import java.time.format.DateTimeFormatter;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.ToString;
 
 @Getter
 @Builder
+@ToString
 public class TransactionRecordDetailResponse {
     private Long recordId;
+    private Integer firstCategoryId;
     private String firstCategoryName;
+    private Integer secondCategoryId;
     private String secondCategoryName;
     private String displayName;
     private String type;
@@ -21,7 +25,9 @@ public class TransactionRecordDetailResponse {
     public static TransactionRecordDetailResponse from(TransactionRecord record) {
         return TransactionRecordDetailResponse.builder()
                 .recordId(record.getId())
+                .firstCategoryId(record.getFirstCategory().getId())
                 .firstCategoryName(record.getFirstCategory().getDisplayName())
+                .secondCategoryId(record.getSecondCategory().getId())
                 .secondCategoryName(record.getSecondCategory().getDisplayName())
                 .displayName(record.getDisplayName())
                 .type(record.getType().name())

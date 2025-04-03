@@ -1,6 +1,7 @@
 package com.aicheck.business.domain.transaction_record.application;
 
 import com.aicheck.business.domain.auth.domain.entity.Member;
+import com.aicheck.business.domain.auth.domain.entity.MemberType;
 import com.aicheck.business.domain.auth.domain.repository.MemberRepository;
 import com.aicheck.business.domain.auth.exception.BusinessException;
 import com.aicheck.business.domain.category.entity.FirstCategory;
@@ -11,6 +12,7 @@ import com.aicheck.business.domain.transaction_record.application.dto.CalendarRe
 import com.aicheck.business.domain.transaction_record.application.dto.CalendarRecordListResponse;
 import com.aicheck.business.domain.transaction_record.entity.TransactionRecord;
 import com.aicheck.business.domain.transaction_record.entity.TransactionType;
+import com.aicheck.business.domain.transaction_record.presentation.dto.MemberTransactionRecords;
 import com.aicheck.business.domain.transaction_record.presentation.dto.RatingRequest;
 import com.aicheck.business.domain.transaction_record.presentation.dto.TransactionRecordDetailResponse;
 import com.aicheck.business.domain.transaction_record.presentation.dto.TransactionRecordListResponse;
@@ -21,6 +23,8 @@ import com.aicheck.business.global.error.BusinessErrorCodes;
 import jakarta.transaction.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.YearMonth;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -143,6 +147,36 @@ public class TransactionRecordServiceImpl implements TransactionRecordService {
         TransactionRecord record = transactionRecordRepository.findById(request.getRecordId())
                 .orElseThrow(() -> new BusinessException(BusinessErrorCodes.TRANSACTION_RECORD_NOT_FOUND));
         record.updateRating(request.getRating());
+    }
+
+    @Override
+    public List<MemberTransactionRecords> getTransactionRecords() {
+        List<Member> children = memberRepository.findMembersByTypeAndDeletedAtIsNull(MemberType.CHILD);
+
+        LocalDate now = LocalDate.now();
+        YearMonth lastMonth = YearMonth.from(now.minusMonths(1));
+
+        int year = lastMonth.getYear();
+        int month = lastMonth.getMonthValue();
+
+        List<TransactionRecord> records = transactionRecordRepository.findByYearAndMonth(year, month);
+
+        List<MemberTransactionRecords> memberTransactionRecords = new ArrayList<>();
+        for (Member child : children) {
+            List<TransactionRecordDetailResponse> transactionDetails = new ArrayList<>();
+            records.stream().filter(record -> record.getMemberId() == child.getId())
+                    .forEach(record -> transactionDetails.add(TransactionRecordDetailResponse.from(record)));
+            memberTransactionRecords.add(MemberTransactionRecords.builder()
+                    .memberId(child.getId())
+                    .records(transactionDetails)
+                    .build());
+        }
+
+        for(MemberTransactionRecords memberTransactionRecord : memberTransactionRecords) {
+            System.out.println(memberTransactionRecord);
+        }
+
+        return memberTransactionRecords;
     }
 
 }

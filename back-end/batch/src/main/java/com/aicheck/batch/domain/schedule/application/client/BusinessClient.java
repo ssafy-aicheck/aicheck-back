@@ -1,5 +1,6 @@
 package com.aicheck.batch.domain.schedule.application.client;
 
+import com.aicheck.batch.domain.report.MemberTransactionRecords;
 import com.aicheck.batch.domain.schedule.application.client.dto.ChildAccountInfoResponse;
 import com.aicheck.batch.domain.schedule.dto.AccountNoResponse;
 import java.util.List;
@@ -15,5 +16,8 @@ public interface BusinessClient {
 
     @GetMapping("/accounts/number/{memberId}")
     AccountNoResponse getAccountNumber(@PathVariable("memberId") Long memberId);
+
+    @GetMapping("/transaction-records/statistics")
+    List<MemberTransactionRecords> getChildrenTransactions();
 
 }
