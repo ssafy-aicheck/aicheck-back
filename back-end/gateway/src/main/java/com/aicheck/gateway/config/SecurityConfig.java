@@ -1,5 +1,6 @@
 package com.aicheck.gateway.config;
 
+import static org.springframework.http.HttpMethod.*;
 import static org.springframework.http.HttpMethod.DELETE;
 import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpMethod.PATCH;
@@ -17,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
@@ -142,6 +144,8 @@ public class SecurityConfig {
 				.pathMatchers(PATCH, "/aicheck/transaction-records").authenticated()
 				.pathMatchers(POST, "/aicheck/transaction-records/dutch-pays").authenticated()
 				.pathMatchers(POST, "/aicheck/transaction-records/rating").hasRole(Role.PARENT)
+
+				.pathMatchers(OPTIONS, "/**").permitAll()
 
 				.anyExchange().denyAll())
 			.exceptionHandling(exceptionHandling -> exceptionHandling
