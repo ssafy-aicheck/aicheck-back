@@ -8,4 +8,5 @@ import lombok.ToString;
 public class CreateAllowanceIncreaseRequest {
     private Integer increaseAmount;
     private String reason;
+    private Long reportId;
 }

@@ -1,11 +1,13 @@
 package com.aicheck.batch.domain.schedule.application.service;
 
+import com.aicheck.batch.domain.report.ReportRepository;
 import com.aicheck.batch.domain.schedule.application.client.BusinessClient;
 import com.aicheck.batch.domain.schedule.application.client.dto.ChildAccountInfoResponse;
 import com.aicheck.batch.domain.schedule.application.client.dto.ChildScheduleGroup;
 import com.aicheck.batch.domain.schedule.application.client.dto.ChildScheduleItem;
 import com.aicheck.batch.domain.schedule.application.client.dto.ScheduleListResponse;
 import com.aicheck.batch.domain.schedule.dto.RegisterScheduledTransferRequest;
+import com.aicheck.batch.domain.schedule.dto.ScheduleDto;
 import com.aicheck.batch.domain.schedule.entity.Schedule;
 import com.aicheck.batch.domain.schedule.presentation.dto.AllowanceRegisteredResponse;
 import com.aicheck.batch.domain.schedule.repository.ScheduleRepository;
@@ -25,6 +27,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     private final ScheduleRepository scheduleRepository;
     private final BusinessClient businessClient;
+    private final ReportRepository reportRepository;
 
     @Override
     @Transactional
@@ -83,11 +86,17 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
     @Override
-    public AllowanceRegisteredResponse checkAllowanceRegistered(Long childId) {
+    public AllowanceRegisteredResponse checkAllowanceRegistered(Long childId, String reportId) {
         boolean registered = scheduleRepository.findByChildIdAndDeletedAtIsNull(childId).isPresent();
+        boolean notRequestedYet = reportRepository.findById(reportId).isEmpty();
         return AllowanceRegisteredResponse.builder()
-                .registered(registered)
+                .registered(registered && notRequestedYet)
                 .build();
     }
 
+    @Override
+    public ScheduleDto getSchedule(Long childId) {
+        return ScheduleDto.from(scheduleRepository.findByChildIdAndDeletedAtIsNull(childId)
+            .orElseThrow(() -> new BatchException(ScheduleErrorCodes.SCHEDULE_NOT_FOUND)));
+    }
 }

@@ -13,6 +13,7 @@ public class AllowanceIncreaseRequestDetailResponse {
     private Long id;
     private String type;
     private String status;
+    private Long reportId;
     private Long childId;
     private String childName;
     private String image;
@@ -26,6 +27,7 @@ public class AllowanceIncreaseRequestDetailResponse {
                 .id(request.getId())
                 .type(AllowanceRequestType.INCREASE.name())
                 .status(request.getStatus().name())
+                .reportId(request.getReportId())
                 .childId(child.getId())
                 .childName(child.getName())
                 .image(child.getProfileUrl())

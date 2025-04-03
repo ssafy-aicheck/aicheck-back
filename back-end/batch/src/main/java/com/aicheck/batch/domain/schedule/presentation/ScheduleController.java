@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -58,8 +59,9 @@ public class ScheduleController {
     }
 
     @GetMapping("/check")
-    public ResponseEntity<AllowanceRegisteredResponse> checkAllowanceSchedule(@CurrentMemberId Long memberId) {
-        AllowanceRegisteredResponse response = scheduleService.checkAllowanceRegistered(memberId);
+    public ResponseEntity<AllowanceRegisteredResponse> checkAllowanceSchedule(@CurrentMemberId Long memberId,
+                                                                              @RequestParam String reportId) {
+        AllowanceRegisteredResponse response = scheduleService.checkAllowanceRegistered(memberId, reportId);
         return ResponseEntity.ok(response);
     }
 

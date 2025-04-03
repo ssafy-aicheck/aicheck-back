@@ -39,6 +39,7 @@ public class AllowanceServiceImpl implements AllowanceService {
         AllowanceIncreaseRequest allowanceIncreaseRequest = AllowanceIncreaseRequest.builder()
                 .childId(childId)
                 .parentId(member.getManagerId())
+                .reportId(request.getReportId())
                 .beforeAmount(childScheduleResponse.getAmount())
                 .afterAmount(childScheduleResponse.getAmount() + request.getIncreaseAmount())
                 .description(request.getReason())
