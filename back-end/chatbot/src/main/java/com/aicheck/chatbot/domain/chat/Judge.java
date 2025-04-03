@@ -1,5 +1,5 @@
 package com.aicheck.chatbot.domain.chat;
 
-public enum Type {
-	PERSUADE, QUESTION
+public enum Judge {
+	JUDGING, YES, NO;
 }

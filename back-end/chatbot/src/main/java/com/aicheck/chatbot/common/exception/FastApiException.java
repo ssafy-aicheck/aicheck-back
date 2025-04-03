@@ -5,10 +5,10 @@ import com.aicheck.chatbot.common.error.ErrorCode;
 import lombok.Getter;
 
 @Getter
-public class ChatbotException extends RuntimeException {
+public class FastApiException extends RuntimeException {
 	private final ErrorCode errorCode;
 
-	public ChatbotException(ErrorCode errorCode) {
+	public FastApiException(ErrorCode errorCode) {
 		super(errorCode.getMessage());
 		this.errorCode = errorCode;
 	}

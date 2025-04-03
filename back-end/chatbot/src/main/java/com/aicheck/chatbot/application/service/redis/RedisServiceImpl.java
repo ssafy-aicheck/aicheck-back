@@ -1,5 +1,7 @@
 package com.aicheck.chatbot.application.service.redis;
 
+import static java.lang.Boolean.*;
+
 import java.util.List;
 
 import org.springframework.data.redis.core.RedisTemplate;
@@ -10,8 +12,8 @@ import com.aicheck.chatbot.application.service.redis.dto.request.AIMessage;
 import com.aicheck.chatbot.application.service.redis.dto.request.CustomSettingRequest;
 import com.aicheck.chatbot.application.service.redis.dto.request.MemberMessage;
 import com.aicheck.chatbot.domain.chat.ChatNode;
+import com.aicheck.chatbot.domain.chat.ChatType;
 import com.aicheck.chatbot.domain.chat.CustomSetting;
-import com.aicheck.chatbot.domain.chat.Type;
 
 import lombok.RequiredArgsConstructor;
 
@@ -35,6 +37,7 @@ public class RedisServiceImpl implements RedisService {
 			.gender(request.gender())
 			.averageScore(request.averageScore())
 			.categoryDifficulties(request.categoryDifficulties())
+			.transactionRecords(request.transactionRecords())
 			.build();
 
 		final String key = settingKey(request.childId());
@@ -54,9 +57,9 @@ public class RedisServiceImpl implements RedisService {
 
 	@Override
 	@Transactional
-	public void initChatHistory(Long childId, Type type) {
-		String key = historyKey(type, childId);
-		if (Boolean.FALSE.equals(chatNodeRedisTemplate.hasKey(key))) {
+	public void initChatHistory(Long childId, ChatType chatType) {
+		String key = historyKey(chatType, childId);
+		if (FALSE.equals(chatNodeRedisTemplate.hasKey(key))) {
 			chatNodeRedisTemplate.opsForList().rightPushAll(key);
 		}
 	}
@@ -64,8 +67,8 @@ public class RedisServiceImpl implements RedisService {
 	@Transactional
 	@Override
 	public void appendChatHistory(
-		final Long childId, final Type type, final AIMessage aiMessage, final MemberMessage memberMessage) {
-		final String key = historyKey(type, childId);
+		final Long childId, final ChatType chatType, final AIMessage aiMessage, final MemberMessage memberMessage) {
+		final String key = historyKey(chatType, childId);
 
 		chatNodeRedisTemplate.opsForList().rightPush(key, ChatNode.builder()
 			.role(memberMessage.role())
@@ -80,20 +83,20 @@ public class RedisServiceImpl implements RedisService {
 
 	@Transactional
 	@Override
-	public void removeChatHistory(Long childId, Type type) {
-		chatNodeRedisTemplate.delete(historyKey(type, childId));
+	public void removeChatHistory(Long childId, ChatType chatType) {
+		chatNodeRedisTemplate.delete(historyKey(chatType, childId));
 	}
 
 	@Override
-	public List<ChatNode> loadChatHistory(Long childId, Type type) {
-		return chatNodeRedisTemplate.opsForList().range(historyKey(type, childId), 0, -1);
+	public List<ChatNode> loadChatHistory(Long childId, ChatType chatType) {
+		return chatNodeRedisTemplate.opsForList().range(historyKey(chatType, childId), 0, -1);
 	}
 
 	private String settingKey(Long childId) {
 		return SETTING_KEY_PREFIX + childId;
 	}
 
-	private String historyKey(Type type, Long childId) {
-		return HISTORY_KEY_PREFIX + type.name().toLowerCase() + ":" + childId;
+	private String historyKey(ChatType chatType, Long childId) {
+		return HISTORY_KEY_PREFIX + chatType.name() + ":" + childId;
 	}
 }

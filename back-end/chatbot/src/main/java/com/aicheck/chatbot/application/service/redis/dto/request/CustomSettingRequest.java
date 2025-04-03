@@ -5,7 +5,8 @@ import java.util.List;
 import com.aicheck.chatbot.application.service.prompt.dto.response.PromptInfo;
 import com.aicheck.chatbot.domain.Gender;
 import com.aicheck.chatbot.domain.categoryDifficulty.CategoryDifficulty;
-import com.aicheck.chatbot.infrastructure.client.business.dto.response.MemberInfo;
+import com.aicheck.chatbot.domain.chat.TransactionRecord;
+import com.aicheck.chatbot.infrastructure.client.business.dto.response.TransactionInfoResponse;
 
 import lombok.Builder;
 
@@ -17,18 +18,22 @@ public record CustomSettingRequest(
 	Integer age,
 	Gender gender,
 	Float averageScore,
-	List<CategoryDifficulty> categoryDifficulties
+	List<CategoryDifficulty> categoryDifficulties,
+	List<TransactionRecord> transactionRecords
 ) {
 
-	public static CustomSettingRequest of(Long childId, PromptInfo promptInfo, MemberInfo memberInfo) {
+	public static CustomSettingRequest of(
+		PromptInfo promptInfo, Integer originalAllowance, TransactionInfoResponse transactionInfoResponse) {
+
 		return CustomSettingRequest.builder()
-			.childId(childId)
-			.originalAllowance(memberInfo.originalAllowance())
+			.childId(promptInfo.childId())
+			.originalAllowance(originalAllowance)
 			.conversationStyle(promptInfo.content())
 			.age(promptInfo.age())
 			.gender(promptInfo.gender())
-			.averageScore(memberInfo.averageScore())
+			.averageScore(transactionInfoResponse.averageScore())
 			.categoryDifficulties(promptInfo.categoryDifficulties())
+			.transactionRecords(transactionInfoResponse.transactionRecords())
 			.build();
 	}
 }

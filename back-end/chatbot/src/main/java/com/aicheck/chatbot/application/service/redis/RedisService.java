@@ -7,15 +7,15 @@ import com.aicheck.chatbot.application.service.redis.dto.request.CustomSettingRe
 import com.aicheck.chatbot.application.service.redis.dto.request.MemberMessage;
 import com.aicheck.chatbot.domain.chat.ChatNode;
 import com.aicheck.chatbot.domain.chat.CustomSetting;
-import com.aicheck.chatbot.domain.chat.Type;
+import com.aicheck.chatbot.domain.chat.ChatType;
 
 public interface RedisService {
 	void storeCustomSetting(CustomSettingRequest customSettingRequest);
 	void removeCustomSetting(Long childId);
 	CustomSetting loadCustomSetting(Long childId);
 
-	void initChatHistory(Long childId, Type type);
-	void appendChatHistory(Long childId, Type type, AIMessage aiMessage, MemberMessage memberMessage);
-	void removeChatHistory(Long childId, Type type);
-	List<ChatNode> loadChatHistory(Long childId, Type type);
+	void initChatHistory(Long childId, ChatType chatType);
+	void appendChatHistory(Long childId, ChatType chatType, AIMessage aiMessage, MemberMessage memberMessage);
+	void removeChatHistory(Long childId, ChatType chatType);
+	List<ChatNode> loadChatHistory(Long childId, ChatType chatType);
 }

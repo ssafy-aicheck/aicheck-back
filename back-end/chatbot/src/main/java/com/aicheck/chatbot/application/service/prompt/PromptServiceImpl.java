@@ -16,7 +16,7 @@ import com.aicheck.chatbot.domain.categoryDifficulty.CategoryDifficulty;
 import com.aicheck.chatbot.domain.repository.PromptRepository;
 import com.aicheck.chatbot.presentation.prompt.dto.request.SavePromptRequest;
 import com.aicheck.chatbot.presentation.prompt.dto.request.UpdatePromptRequest;
-import com.aicheck.chatbot.util.JsonUtils;
+import com.aicheck.chatbot.util.JsonMapper;
 
 import lombok.RequiredArgsConstructor;
 
@@ -25,14 +25,14 @@ import lombok.RequiredArgsConstructor;
 @Service
 public class PromptServiceImpl implements PromptService {
 
-	private final JsonUtils jsonUtils;
+	private final JsonMapper jsonMapper;
 	private final PromptRepository promptRepository;
 
 	@Transactional
 	@Override
 	public void savePrompt(final SavePromptRequest request) {
 		final List<CategoryDifficulty> sampleCategoryDifficulties = createSampleCategoryDifficulties();
-		final String categoryDifficulty = jsonUtils.toJson(sampleCategoryDifficulties);
+		final String categoryDifficulty = jsonMapper.toJson(sampleCategoryDifficulties);
 
 		promptRepository.save(Prompt.builder()
 			.childId(request.childId())
@@ -49,7 +49,7 @@ public class PromptServiceImpl implements PromptService {
 		final Prompt prompt = promptRepository.findById(childId)
 			.orElseThrow(() -> new ChatbotException(NOT_FOUND_PROMPT));
 
-		final List<CategoryDifficulty> categoryDifficulties = jsonUtils.fromJsonList(
+		final List<CategoryDifficulty> categoryDifficulties = jsonMapper.fromJsonList(
 			prompt.getCategoryDifficulty(),
 			CategoryDifficulty.class
 		);
@@ -67,7 +67,7 @@ public class PromptServiceImpl implements PromptService {
 			throw new ChatbotException(UNAUTHORIZED_CHANGE_PROMPT);
 		}
 
-		final String categoryDifficulty = jsonUtils.toJson(request.categoryDifficulties());
+		final String categoryDifficulty = jsonMapper.toJson(request.categoryDifficulties());
 
 		prompt.updatePrompt(categoryDifficulty, request.content());
 		return PromptInfo.of(prompt, request.categoryDifficulties());

@@ -14,7 +14,8 @@ import com.aicheck.chatbot.common.resolver.CurrentMemberId;
 import com.aicheck.chatbot.presentation.chatbot.dto.request.EndChatRequest;
 import com.aicheck.chatbot.presentation.chatbot.dto.request.SendChatRequest;
 import com.aicheck.chatbot.presentation.chatbot.dto.request.StartChatRequest;
-import com.aicheck.chatbot.presentation.chatbot.dto.response.ChatResponse;
+import com.aicheck.chatbot.presentation.chatbot.dto.response.PersuadeChatResponse;
+import com.aicheck.chatbot.presentation.chatbot.dto.response.QuestionChatResponse;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -30,22 +31,29 @@ public class ChatbotController {
 	public ResponseEntity<Void> startChat(
 		@CurrentMemberId final Long memberId,
 		@Valid @RequestBody final StartChatRequest request) {
-		chatbotService.startChat(memberId, request.type());
+		chatbotService.startChat(memberId, request.chatType());
 		return ResponseEntity.status(CREATED).build();
 	}
 
-	@PostMapping("/send")
-	public ResponseEntity<ChatResponse> sendChat(
+	@PostMapping("/persuade")
+	public ResponseEntity<PersuadeChatResponse> sendPersuadeChat(
 		@CurrentMemberId final Long childId,
 		@Valid @RequestBody final SendChatRequest request) {
-		return ResponseEntity.status(CREATED).body(chatbotService.sendChat(childId, request.type(), request.message()));
+		return ResponseEntity.status(CREATED).body(chatbotService.sendPersuadeChat(childId, request.message()));
+	}
+
+	@PostMapping("/question")
+	public ResponseEntity<QuestionChatResponse> sendQuestionChat(
+		@CurrentMemberId final Long childId,
+		@Valid @RequestBody final SendChatRequest request) {
+		return ResponseEntity.status(CREATED).body(chatbotService.sendQuestionChat(childId, request.message()));
 	}
 
 	@DeleteMapping("/end")
 	public ResponseEntity<Void> endChat(
 		@CurrentMemberId final Long childId,
 		@Valid @RequestBody final EndChatRequest request) {
-		chatbotService.endChat(childId, request.type());
+		chatbotService.endChat(childId, request.chatType());
 		return ResponseEntity.noContent().build();
 	}
 }

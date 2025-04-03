@@ -1,4 +1,4 @@
-package com.aicheck.chatbot.infrastructure.client.business.config;
+package com.aicheck.chatbot.infrastructure.client.config;
 
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Bean;
@@ -10,7 +10,7 @@ import feign.RequestInterceptor;
 import feign.codec.ErrorDecoder;
 
 @Configuration
-@EnableFeignClients(basePackages = "com.aicheck.chatbot.infrastructure.client.business")
+@EnableFeignClients(basePackages = "com.aicheck.chatbot.infrastructure.client.*")
 public class FeignConfig {
 
 	@Bean

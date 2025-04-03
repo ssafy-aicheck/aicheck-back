@@ -15,7 +15,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Component
-public class JsonUtils {
+public class JsonMapper {
 
 	private final ObjectMapper objectMapper;
 

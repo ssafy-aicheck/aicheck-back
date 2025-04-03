@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import com.aicheck.chatbot.common.error.ErrorCode;
 import com.aicheck.chatbot.common.error.ErrorResponse;
 import com.aicheck.chatbot.common.exception.ChatbotException;
+import com.aicheck.chatbot.common.exception.FastApiException;
 
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
@@ -23,6 +24,11 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
+	@ExceptionHandler(FastApiException.class)
+	public ResponseEntity<ErrorResponse> handleFastApiException(FastApiException e) {
+		return buildResponse(e.getErrorCode());
+	}
 
 	@ExceptionHandler(ChatbotException.class)
 	public ResponseEntity<ErrorResponse> handleAlarmException(ChatbotException e) {
