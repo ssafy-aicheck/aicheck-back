@@ -393,4 +393,4 @@ volumes:
 
 networks:
   aicheck-network:
-    external: true
+    driver: bridge

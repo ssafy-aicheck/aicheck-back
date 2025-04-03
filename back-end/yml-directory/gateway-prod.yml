@@ -50,31 +50,22 @@ spring:
           filters:
             - RewritePath=/chatbot/(?<segment>/.*)?, /$\{segment}
 
-#    globalcors:
-#      add-to-simple-url-handler-mapping: true
-#      corsConfigurations:
-#        '[/**]':
-#          allowedOrigins:
-#            - "http://localhost:3000"
-#            - "https://j12a603.p.ssafy.io"
-#            - "http://j12a603.p.ssafy.io"
-#            - "http://j12a603.p.ssafy.io:8080"
-#          allowedMethods:
-#            - GET
-#            - POST
-#            - PUT
-#            - DELETE
-#            - OPTIONS
-#          allowedHeaders:
-#            - "*"
-#          allowCredentials: true
+      globalcors:
+        add-to-simple-url-handler-mapping: true
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins:
+              - "http://localhost:3000"
+              - "https://j12a603.p.ssafy.io"
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+              - OPTIONS
+            allowedHeaders:
+              - "*"
+            allowCredentials: true
 
 jwt:
   secretKey: ${TOKEN_SECRET}
-
-trusted:
-  origins:
-    - "http://j12a603.p.ssafy.io"
-    - "http://localhost:3000"
-    - "http://localhost:8888"
-    - "http://localhost:8761"
