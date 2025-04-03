@@ -5,6 +5,6 @@ public record TransactionRecord(
 	String secondCategoryName,
 	TransactionType transactionType,
 	Integer amount,
-	Short rating
+	Integer rating
 ) {
 }
