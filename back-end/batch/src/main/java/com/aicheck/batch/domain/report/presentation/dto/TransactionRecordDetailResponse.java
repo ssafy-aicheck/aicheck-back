@@ -1,4 +1,4 @@
-package com.aicheck.batch.domain.report;
+package com.aicheck.batch.domain.report.presentation.dto;
 
 import lombok.Getter;
 import lombok.ToString;

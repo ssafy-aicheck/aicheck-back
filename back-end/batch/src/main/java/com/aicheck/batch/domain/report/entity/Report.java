@@ -1,4 +1,4 @@
-package com.aicheck.batch.domain.report;
+package com.aicheck.batch.domain.report.entity;
 
 import com.aicheck.batch.domain.report.summary.dto.CategorySummary;
 import jakarta.persistence.Id;

@@ -1,5 +1,6 @@
-package com.aicheck.batch.domain.report;
+package com.aicheck.batch.domain.report.presentation;
 
+import com.aicheck.batch.domain.report.application.ReportScheduler;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;

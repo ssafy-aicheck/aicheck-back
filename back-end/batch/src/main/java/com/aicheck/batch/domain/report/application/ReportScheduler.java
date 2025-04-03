@@ -1,5 +1,6 @@
-package com.aicheck.batch.domain.report;
+package com.aicheck.batch.domain.report.application;
 
+import com.aicheck.batch.domain.report.dto.MemberTransactionRecords;
 import com.aicheck.batch.domain.schedule.application.client.BusinessClient;
 import java.time.YearMonth;
 import java.util.List;

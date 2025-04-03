@@ -1,5 +1,9 @@
-package com.aicheck.batch.domain.report;
+package com.aicheck.batch.domain.report.application;
 
+import com.aicheck.batch.domain.report.dto.MemberTransactionRecords;
+import com.aicheck.batch.domain.report.entity.Report;
+import com.aicheck.batch.domain.report.presentation.dto.TransactionRecordDetailResponse;
+import com.aicheck.batch.domain.report.repository.ReportRepository;
 import com.aicheck.batch.domain.report.summary.dto.CategorySummary;
 import com.aicheck.batch.domain.report.summary.dto.SubCategorySummary;
 import java.time.LocalDateTime;
@@ -26,7 +30,7 @@ public class TransactionStatisticsService {
             // PAYMENT만 필터링
             List<TransactionRecordDetailResponse> payments = transactions.stream()
                     .filter(r -> "PAYMENT".equals(r.getType()))
-                    .collect(Collectors.toList());
+                    .toList();
 
             int totalAmount = payments.stream().mapToInt(TransactionRecordDetailResponse::getAmount).sum();
 
