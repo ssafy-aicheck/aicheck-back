@@ -55,7 +55,9 @@ spring:
         '[/**]':
           allowedOrigins:
             - "http://localhost:3000"
+            - "https://j12a603.p.ssafy.io"
             - "http://j12a603.p.ssafy.io"
+            - "http://j12a603.p.ssafy.io:8080"
           allowedMethods:
             - GET
             - POST
