@@ -33,6 +33,8 @@ public class ReportScheduler {
         int month = lastMonth.getMonthValue();
 
         transactionStatisticsService.saveMonthlyStatistics(records, year, month);
+        transactionStatisticsService.saveMonthlyPeerStatistics(records, year, month);
+
         return records;
     }
 }

@@ -168,12 +168,9 @@ public class TransactionRecordServiceImpl implements TransactionRecordService {
                     .forEach(record -> transactionDetails.add(TransactionRecordDetailResponse.from(record)));
             memberTransactionRecords.add(MemberTransactionRecords.builder()
                     .memberId(child.getId())
+                    .birth(child.getBirth())
                     .records(transactionDetails)
                     .build());
-        }
-
-        for(MemberTransactionRecords memberTransactionRecord : memberTransactionRecords) {
-            System.out.println(memberTransactionRecord);
         }
 
         return memberTransactionRecords;

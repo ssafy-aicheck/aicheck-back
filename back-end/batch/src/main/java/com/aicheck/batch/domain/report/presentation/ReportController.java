@@ -2,7 +2,7 @@ package com.aicheck.batch.domain.report.presentation;
 
 import com.aicheck.batch.domain.report.application.ReportScheduler;
 import com.aicheck.batch.domain.report.application.ReportService;
-import com.aicheck.batch.domain.report.entity.Report;
+import com.aicheck.batch.domain.report.entity.MonthlyReport;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -23,17 +23,22 @@ public class ReportController {
     @GetMapping("/test")
     public String test() {
         List<?> records = reportScheduler.collectMonthlyTransactionStatistics();
-
-        System.out.println(records);
         return "@@@";
+    }
+
+    // 또래 리포트 생성용 임시 컨트롤러
+    @GetMapping("/test2")
+    public String test2() {
+
+        return "@@@@";
     }
 
     @GetMapping
     public ResponseEntity<?> getReport(@RequestParam Integer year,
                                        @RequestParam Integer month,
                                        @RequestParam Long childId) {
-        Report report = reportService.getMonthlyReport(childId, year, month);
-        return ResponseEntity.ok(report);
+        MonthlyReport monthlyReport = reportService.getMonthlyReport(childId, year, month);
+        return ResponseEntity.ok(monthlyReport);
     }
 
 }

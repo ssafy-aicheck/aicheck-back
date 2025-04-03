@@ -10,17 +10,17 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document(collection = "reports")
+@Document(collection = "monthly_peer_reports")
 @Getter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-public class Report {
+public class MonthlyPeerReport {
 
     @Id
     private String id;
 
-    private Long childId;
+    private String peerGroup;
     private int year;
     private int month;
     private int totalAmount;
@@ -28,5 +28,4 @@ public class Report {
     private List<CategorySummary> categories;
 
     private LocalDateTime createdAt;
-
 }
