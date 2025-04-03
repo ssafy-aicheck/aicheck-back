@@ -1,6 +1,5 @@
 package com.aicheck.chatbot.common.exception;
 
-
 import com.aicheck.chatbot.common.error.ErrorCode;
 
 import lombok.Getter;

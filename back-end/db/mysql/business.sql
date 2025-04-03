@@ -5,7 +5,7 @@ CREATE TABLE `members`
     `id`             INT UNSIGNED             NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `manager_id`     INT UNSIGNED             NOT NULL,
     `bank_member_id` INT UNSIGNED             NOT NULL,
-    `account_no`     VARCHAR(20)                       DEFAULT NULL,
+    `account_no`     VARCHAR(20)              NULL     DEFAULT NULL,
     `email`          VARCHAR(255)             NOT NULL,
     `password`       CHAR(60)                 NOT NULL,
     `name`           VARCHAR(20)              NOT NULL,

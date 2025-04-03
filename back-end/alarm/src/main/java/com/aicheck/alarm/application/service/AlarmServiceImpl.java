@@ -23,7 +23,7 @@ public class AlarmServiceImpl implements AlarmService {
 	private final AlarmRepository alarmRepository;
 
 	@Override
-	public List<AlarmResponse> searchAlarms(Long memberId) {
+	public List<AlarmResponse> getAlarms(Long memberId) {
 		return alarmRepository.findAllByMemberIdAndDeletedAtIsNull(memberId)
 			.stream()
 			.map(AlarmResponse::from)

@@ -2,7 +2,7 @@ package com.aicheck.chatbot.domain;
 
 import static lombok.AccessLevel.PROTECTED;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import com.aicheck.chatbot.common.entity.BaseEntity;
 
@@ -30,19 +30,20 @@ public class Prompt extends BaseEntity {
 	private Long managerId;
 
 	@Column(name = "birth", nullable = false)
-	private Date birth;
+	private LocalDate birth;
 
 	@Column(name = "category_difficulty", nullable = false, columnDefinition = "TEXT")
 	private String categoryDifficulty;
 
-	@Column(name = "content", nullable = false)
+	@Column(name = "content")
 	private String content;
 
 	@Enumerated(EnumType.STRING)
 	private Gender gender;
 
 	@Builder
-	private Prompt(Long childId, Long managerId, Date birth, String categoryDifficulty, String content, Gender gender) {
+	private Prompt(
+		Long childId, Long managerId, LocalDate birth, String categoryDifficulty, String content, Gender gender) {
 		this.childId = childId;
 		this.managerId = managerId;
 		this.birth = birth;
@@ -51,7 +52,8 @@ public class Prompt extends BaseEntity {
 		this.gender = gender;
 	}
 
-	public void updateCategoryDifficulty(String categoryDifficulty) {
+	public void updatePrompt(String categoryDifficulty, String content) {
 		this.categoryDifficulty = categoryDifficulty;
+		this.content = content;
 	}
 }

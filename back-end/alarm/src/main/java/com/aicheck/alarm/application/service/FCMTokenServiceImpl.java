@@ -19,7 +19,7 @@ public class FCMTokenServiceImpl implements FCMTokenService {
 	private final FCMTokenRepository fcmTokenRepository;
 
 	@Override
-	public String searchFCMToken(final Long memberId) {
+	public String getFCMToken(final Long memberId) {
 		return fcmTokenRepository.findByMemberIdAndDeletedAtIsNull(memberId)
 			.orElseThrow(() -> new AlarmException(NOT_FOUND_FCM_TOKEN)).getToken();
 	}
