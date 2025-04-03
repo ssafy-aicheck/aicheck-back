@@ -3,6 +3,7 @@ package com.aicheck.batch.domain.schedule.application.service;
 import com.aicheck.batch.domain.schedule.application.client.dto.ChildScheduleItem;
 import com.aicheck.batch.domain.schedule.application.client.dto.ScheduleListResponse;
 import com.aicheck.batch.domain.schedule.dto.RegisterScheduledTransferRequest;
+import com.aicheck.batch.domain.schedule.dto.ScheduleDto;
 import com.aicheck.batch.domain.schedule.presentation.dto.AllowanceRegisteredResponse;
 
 public interface ScheduleService {
@@ -17,4 +18,6 @@ public interface ScheduleService {
     ChildScheduleItem findByChildId(Long childId);
 
     AllowanceRegisteredResponse checkAllowanceRegistered(Long childId, String reportId);
+
+    ScheduleDto getSchedule(Long childId);
 }
