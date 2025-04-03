@@ -46,7 +46,7 @@ public class PromptServiceImpl implements PromptService {
 
 	@Override
 	public PromptInfo getPrompt(final Long childId) {
-		final Prompt prompt = promptRepository.findById(childId)
+		final Prompt prompt = promptRepository.findByChildIdAndDeletedAtIsNull(childId)
 			.orElseThrow(() -> new ChatbotException(NOT_FOUND_PROMPT));
 
 		final List<CategoryDifficulty> categoryDifficulties = jsonMapper.fromJsonList(
@@ -60,7 +60,7 @@ public class PromptServiceImpl implements PromptService {
 	@Transactional
 	@Override
 	public PromptInfo updatePrompt(final Long managerId, final UpdatePromptRequest request) {
-		final Prompt prompt = promptRepository.findById(request.childId())
+		final Prompt prompt = promptRepository.findByChildIdAndDeletedAtIsNull(request.childId())
 			.orElseThrow(() -> new ChatbotException(NOT_FOUND_PROMPT));
 
 		if (!prompt.getManagerId().equals(managerId)) {

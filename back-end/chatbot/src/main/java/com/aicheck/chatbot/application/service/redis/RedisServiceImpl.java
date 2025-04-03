@@ -30,18 +30,7 @@ public class RedisServiceImpl implements RedisService {
 	@Override
 	@Transactional
 	public void storeCustomSetting(final CustomSettingRequest request) {
-		final CustomSetting setting = CustomSetting.builder()
-			.originalAllowance(request.originalAllowance())
-			.conversationStyle(request.conversationStyle())
-			.age(request.age())
-			.gender(request.gender())
-			.averageScore(request.averageScore())
-			.categoryDifficulties(request.categoryDifficulties())
-			.transactionRecords(request.transactionRecords())
-			.build();
-
-		final String key = settingKey(request.childId());
-		customSettingRedisTemplate.opsForValue().set(key, setting);
+		customSettingRedisTemplate.opsForValue().set(settingKey(request.childId()), CustomSetting.from(request));
 	}
 
 	@Transactional

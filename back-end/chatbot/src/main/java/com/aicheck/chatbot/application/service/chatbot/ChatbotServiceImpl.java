@@ -7,7 +7,6 @@ import static com.aicheck.chatbot.domain.chat.Judge.*;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.aicheck.chatbot.application.service.ai.AIService;
 import com.aicheck.chatbot.infrastructure.client.fastApi.dto.response.PersuadeResponse;
@@ -34,31 +33,30 @@ import com.aicheck.chatbot.presentation.chatbot.dto.response.QuestionChatRespons
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
 @Service
 public class ChatbotServiceImpl implements ChatbotService {
 
 	private final PromptService promptService;
 	private final RedisService redisService;
+	private final AIService aiService;
 	private final BatchFeignClient batchFeignClient;
 	private final BusinessFeignClient businessFeignClient;
-	private final AIService aiService;
 	private final AlarmEventProducer alarmEventProducer;
 
 	@Override
 	public PersuadeChatResponse sendPersuadeChat(Long childId, String message) {
 		final CustomSetting customSetting = redisService.loadCustomSetting(childId);
 		final List<ChatNode> chatHistories = redisService.loadChatHistory(childId, PERSUADE);
-		final PromptInfo promptInfo = promptService.getPrompt(childId);
 
 		final PersuadeResponse persuadeResponse = aiService.sendPersuadeChat(customSetting, chatHistories, message);
 		if (persuadeResponse.isPersuaded()) {
-			//TODO 용돈 요청 생성 로직
-			Long endPointId = businessFeignClient.saveAllowanceRequest(
-				SaveAllowanceRequest.of(childId, promptInfo.managerId(), persuadeResponse.result()));
-			//TODO 알림 전송 로직
-			alarmEventProducer.sendEvent(AlarmEventMessage.of(promptInfo.managerId(), persuadeResponse.result().title(),
+			final Long managerId = promptService.getPrompt(childId).managerId();
+			final Long endPointId = businessFeignClient.saveAllowanceRequest(
+				SaveAllowanceRequest.of(childId, managerId, persuadeResponse.result()));
+
+			alarmEventProducer.sendEvent(AlarmEventMessage.of(managerId, persuadeResponse.result().title(),
 				persuadeResponse.result().description(), endPointId));
+
 			endChat(childId, PERSUADE);
 		} else {
 			redisService.appendChatHistory(
@@ -92,7 +90,7 @@ public class ChatbotServiceImpl implements ChatbotService {
 			.getTransactionInfo(childId, scheduledAllowance.startDate(), scheduledAllowance.interval());
 
 		redisService.storeCustomSetting(
-			CustomSettingRequest.of(promptInfo, scheduledAllowance.allowance(), transactionInfo));
+			CustomSettingRequest.of(promptInfo, scheduledAllowance, transactionInfo));
 		redisService.initChatHistory(childId, chatType);
 	}
 

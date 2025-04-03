@@ -2,6 +2,7 @@ package com.aicheck.chatbot.domain.chat;
 
 import java.util.List;
 
+import com.aicheck.chatbot.application.service.redis.dto.request.CustomSettingRequest;
 import com.aicheck.chatbot.domain.Gender;
 import com.aicheck.chatbot.domain.categoryDifficulty.CategoryDifficulty;
 
@@ -14,19 +15,21 @@ public record CustomSetting(
 	Integer age,
 	Gender gender,
 	Float averageScore,
+	Interval interval,
 	List<CategoryDifficulty> categoryDifficulties,
 	List<TransactionRecord> transactionRecords
 ) {
 
-	public CustomSetting(Integer originalAllowance, String conversationStyle,
-		Integer age, Gender gender, Float averageScore, List<CategoryDifficulty> categoryDifficulties,
-		List<TransactionRecord> transactionRecords) {
-		this.originalAllowance = originalAllowance;
-		this.conversationStyle = conversationStyle;
-		this.age = age;
-		this.gender = gender;
-		this.averageScore = averageScore;
-		this.categoryDifficulties = categoryDifficulties;
-		this.transactionRecords = transactionRecords;
+	public static CustomSetting from(CustomSettingRequest request) {
+		return CustomSetting.builder()
+			.originalAllowance(request.originalAllowance())
+			.conversationStyle(request.conversationStyle())
+			.age(request.age())
+			.gender(request.gender())
+			.averageScore(request.averageScore())
+			.interval(request.interval())
+			.categoryDifficulties(request.categoryDifficulties())
+			.transactionRecords(request.transactionRecords())
+			.build();
 	}
 }

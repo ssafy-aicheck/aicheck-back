@@ -6,6 +6,7 @@ import com.aicheck.chatbot.domain.Gender;
 import com.aicheck.chatbot.domain.categoryDifficulty.CategoryDifficulty;
 import com.aicheck.chatbot.domain.chat.ChatNode;
 import com.aicheck.chatbot.domain.chat.CustomSetting;
+import com.aicheck.chatbot.domain.chat.Interval;
 import com.aicheck.chatbot.domain.chat.TransactionRecord;
 
 import lombok.Builder;
@@ -17,6 +18,7 @@ public record AIRequest(
 	Integer age,
 	Gender gender,
 	Float averageScore,
+	Interval interval,
 	List<CategoryDifficulty> categoryDifficulties,
 	List<TransactionRecord> transactionRecords,
 	List<ChatNode> chatHistories,
@@ -30,6 +32,7 @@ public record AIRequest(
 			.age(customSetting.age())
 			.gender(customSetting.gender())
 			.averageScore(customSetting.averageScore())
+			.interval(customSetting.interval())
 			.categoryDifficulties(customSetting.categoryDifficulties())
 			.transactionRecords(customSetting.transactionRecords())
 			.chatHistories(chatHistories)
