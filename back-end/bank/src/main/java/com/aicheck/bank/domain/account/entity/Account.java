@@ -1,6 +1,8 @@
 package com.aicheck.bank.domain.account.entity;
 
 import com.aicheck.bank.domain.member.entity.Member;
+import com.aicheck.bank.global.exception.BankErrorCodes;
+import com.aicheck.bank.global.exception.BankException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -56,5 +58,16 @@ public class Account {
 
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
+
+    public void deposit(Long amount) {
+        balance += amount;
+    }
+
+    public void withdraw(Long amount) {
+        if (balance < amount) {
+            throw new BankException(BankErrorCodes.INSUFFICIENT_BALANCE);
+        }
+        balance -= amount;
+    }
 
 }
