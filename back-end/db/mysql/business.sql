@@ -107,7 +107,7 @@ CREATE TABLE `transaction_records`
     `id`                 INT UNSIGNED                                                                     NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `member_id`          INT UNSIGNED                                                                     NOT NULL,
     `store_id`           INT UNSIGNED                                                                     NULL,
-    `first_category_id`  INT UNSIGNED                                                                     NOT NULL,
+    `first_category_id`  INT UNSIGNED                                                                     NULL,
     `second_category_id` INT UNSIGNED                                                                     NULL,
     `display_name`       VARCHAR(20)                                                                      NOT NULL,
     `type`               ENUM ('PAYMENT', 'DEPOSIT', 'WITHDRAW', 'INBOUND_TRANSFER', 'OUTBOUND_TRANSFER') NOT NULL,

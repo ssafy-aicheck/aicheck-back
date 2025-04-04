@@ -58,7 +58,7 @@ public class TransactionRecord {
     private TransactionType type;
 
     @Column(nullable = false)
-    private Integer amount;
+    private Long amount;
 
     @Column(length = 60)
     private String description;

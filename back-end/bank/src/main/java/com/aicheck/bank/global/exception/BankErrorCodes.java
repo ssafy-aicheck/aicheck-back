@@ -13,7 +13,9 @@ public enum BankErrorCodes implements ErrorCode {
     ACCOUNT_NOT_FOUND(HttpStatus.NOT_FOUND, "BANK_ACCOUNT_404", "찾을 수 없는 계좌입니다"),
     INVALID_PASSWORD(HttpStatus.FORBIDDEN, "BANK_INVALID_PASSWORD_403", "계좌 비밀번호가 다릅니다"),
 
-    NOT_YOUR_ACCOUNT(HttpStatus.FORBIDDEN, "BANK_NOT_YOUR_ACCOUNT_403", "본인 계좌만 등록 가능합니다");
+    NOT_YOUR_ACCOUNT(HttpStatus.FORBIDDEN, "BANK_NOT_YOUR_ACCOUNT_403", "본인 계좌만 등록 가능합니다"),
+    INSUFFICIENT_BALANCE(HttpStatus.BAD_REQUEST, "BANK_INSUFFICIENT_BALANCE_400", "잔액이 부족합니다"),
+    ;
 
     private final HttpStatus httpStatus;
     private final String code;

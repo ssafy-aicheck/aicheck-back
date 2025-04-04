@@ -8,6 +8,7 @@ import com.aicheck.business.domain.account.infrastructure.client.dto.VerifyAccou
 import com.aicheck.business.domain.auth.dto.BankMemberFeignResponse;
 import com.aicheck.business.domain.transfer.dto.TransferReceiverDto;
 import com.aicheck.business.domain.transfer.dto.TransferSenderDto;
+import com.aicheck.business.domain.transfer.dto.feign.TransferExecuteRequest;
 import java.util.List;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -40,5 +41,8 @@ public interface BankClient {
 
     @GetMapping("/accounts/sender/{accountNo}")
     TransferSenderDto findSenderAccountInfo(@PathVariable String accountNo);
+
+    @PostMapping("/transfer")
+    void executeTransfer(@RequestBody TransferExecuteRequest request);
 
 }

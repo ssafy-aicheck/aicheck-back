@@ -17,7 +17,7 @@ public class TransactionRecordDetailResponse {
     private String secondCategoryName;
     private String displayName;
     private String type;
-    private Integer amount;
+    private Long amount;
     private String description;
     private Integer rating;
     private String createdAt;

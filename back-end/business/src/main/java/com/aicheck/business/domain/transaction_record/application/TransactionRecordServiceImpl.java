@@ -12,8 +12,8 @@ import com.aicheck.business.domain.transaction_record.application.dto.CalendarRe
 import com.aicheck.business.domain.transaction_record.application.dto.CalendarRecordListResponse;
 import com.aicheck.business.domain.transaction_record.entity.TransactionRecord;
 import com.aicheck.business.domain.transaction_record.entity.TransactionType;
-import com.aicheck.business.domain.transaction_record.presentation.dto.MemberTransactionRecords;
 import com.aicheck.business.domain.transaction_record.presentation.dto.Interval;
+import com.aicheck.business.domain.transaction_record.presentation.dto.MemberTransactionRecords;
 import com.aicheck.business.domain.transaction_record.presentation.dto.RatingRequest;
 import com.aicheck.business.domain.transaction_record.presentation.dto.TransactionInfoResponse;
 import com.aicheck.business.domain.transaction_record.presentation.dto.TransactionRecordDetailResponse;
@@ -26,9 +26,9 @@ import com.aicheck.business.global.error.BusinessErrorCodes;
 import jakarta.transaction.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Period;
 import java.time.YearMonth;
 import java.util.ArrayList;
-import java.time.Period;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -190,25 +190,47 @@ public class TransactionRecordServiceImpl implements TransactionRecordService {
         }
 
         List<TransactionRecord> records = transactionRecordRepository
-            .findByMemberIdAndCreatedAtBetweenAndDeletedAtIsNull(
-                memberId,
-                startDate.atStartOfDay(),
-                today.plusDays(1).atStartOfDay()
-            );
+                .findByMemberIdAndCreatedAtBetweenAndDeletedAtIsNull(
+                        memberId,
+                        startDate.atStartOfDay(),
+                        today.plusDays(1).atStartOfDay()
+                );
 
         double averageScore = records.stream()
-            .map(TransactionRecord::getRating)
-            .filter(Objects::nonNull)
-            .mapToInt(Integer::intValue)
-            .average()
-            .orElse(0.0);
+                .map(TransactionRecord::getRating)
+                .filter(Objects::nonNull)
+                .mapToInt(Integer::intValue)
+                .average()
+                .orElse(0.0);
 
         return TransactionInfoResponse.of(
-            (float) (Math.round(averageScore * 10) / 10.0),
-            records.stream()
-                .map(TransactionRecordDto::from)
-                .toList()
+                (float) (Math.round(averageScore * 10) / 10.0),
+                records.stream()
+                        .map(TransactionRecordDto::from)
+                        .toList()
         );
+    }
+
+    @Override
+    public void saveWithdrawTransaction(Long memberId, String displayName, Long amount) {
+        TransactionRecord transactionRecord = TransactionRecord.builder()
+                .memberId(memberId)
+                .displayName(displayName)
+                .type(TransactionType.WITHDRAW)
+                .amount(amount)
+                .build();
+        transactionRecordRepository.save(transactionRecord);
+    }
+
+    @Override
+    public void saveDepositTransaction(Long memberId, String displayName, Long amount) {
+        TransactionRecord transactionRecord = TransactionRecord.builder()
+                .memberId(memberId)
+                .displayName(displayName)
+                .type(TransactionType.DEPOSIT)
+                .amount(amount)
+                .build();
+        transactionRecordRepository.save(transactionRecord);
     }
 
     private Period getPeriodByInterval(Interval interval) {
