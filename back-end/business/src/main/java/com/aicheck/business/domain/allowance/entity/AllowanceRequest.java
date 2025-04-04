@@ -61,6 +61,10 @@ public class AllowanceRequest extends BaseEntity {
 		this.description = description;
 	}
 
+	public void updateStatus(Status status) {
+		this.status = status;
+	}
+
 	public enum Status {
 		ACCEPTED, REJECTED, WAITING
 	}

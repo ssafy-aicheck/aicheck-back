@@ -3,7 +3,6 @@ package com.aicheck.business.domain.allowance.presentation.dto.request;
 import jakarta.validation.constraints.NotNull;
 
 public record SaveAllowanceRequest(
-
 	@NotNull(message = "childId가 없습니다.")
 	Long childId,
 	@NotNull(message = "parentId가 없습니다.")

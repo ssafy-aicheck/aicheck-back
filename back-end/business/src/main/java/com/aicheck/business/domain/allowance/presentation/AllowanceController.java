@@ -1,47 +1,45 @@
 package com.aicheck.business.domain.allowance.presentation;
 
-import com.aicheck.business.domain.allowance.application.service.AllowanceService;
-import com.aicheck.business.domain.allowance.dto.AllowanceIncreaseDecisionRequest;
-import com.aicheck.business.domain.allowance.dto.AllowanceIncreaseRequestDetailResponse;
-import com.aicheck.business.domain.allowance.dto.CreateAllowanceIncreaseRequest;
-import com.aicheck.business.global.auth.annotation.CurrentMemberId;
-import lombok.RequiredArgsConstructor;
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.aicheck.business.domain.allowance.application.service.AllowanceService;
+import com.aicheck.business.domain.allowance.presentation.dto.request.UpdateAllowanceRequestResponse;
+import com.aicheck.business.domain.allowance.presentation.dto.response.AllowanceResponse;
+import com.aicheck.business.global.auth.annotation.CurrentMemberId;
+
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/allowance")
 public class AllowanceController {
 
-    private final AllowanceService allowanceService;
+	private final AllowanceService allowanceService;
 
-    // 인상 요청
-    @PostMapping("/increase")
-    public ResponseEntity<Void> requestAllowanceIncrease(@CurrentMemberId Long childId,
-                                                         @RequestBody CreateAllowanceIncreaseRequest request) {
-        allowanceService.requestIncrease(childId, request);
-        return ResponseEntity.ok().build();
-    }
+	@GetMapping
+	public ResponseEntity<List<AllowanceResponse>> getAllowanceRequests(@CurrentMemberId Long memberId){
+		return ResponseEntity.ok(allowanceService.getAllowanceRequests(memberId));
+	}
 
-    // 인상 요청 응답
-    @PostMapping("/increase/{requestId}")
-    public ResponseEntity<Void> respondAllowanceIncrease(@PathVariable Long requestId,
-                                                         @RequestBody AllowanceIncreaseDecisionRequest request) {
-        allowanceService.respondToRequest(requestId, request);
-        return ResponseEntity.ok().build();
-    }
+	@PatchMapping
+	public ResponseEntity<Void> updateAllowanceRequestResponse(
+		@CurrentMemberId Long parentId,
+		@Valid @RequestBody UpdateAllowanceRequestResponse updateAllowanceRequestResponse){
+		allowanceService.updateAllowanceRequestResponse(parentId, updateAllowanceRequestResponse);
+		return ResponseEntity.ok().build();
+	}
 
-    // 인상 요청 디테일
-    @GetMapping("/increase/details/{id}")
-    public ResponseEntity<AllowanceIncreaseRequestDetailResponse> findAllowanceIncreaseRequestDetails(
-            @PathVariable Long id) {
-        return ResponseEntity.ok(allowanceService.getAllowanceIncreaseRequestDetail(id));
-    }
-
+	@GetMapping("/detail/{id}")
+	public ResponseEntity<AllowanceResponse> getAllowanceRequest(@PathVariable Long id){
+		return ResponseEntity.ok(allowanceService.getAllowanceRequest(id));
+	}
 }
