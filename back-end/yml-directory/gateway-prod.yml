@@ -20,41 +20,52 @@ spring:
           predicates:
             - Path=/alarm/**
           filters:
-            - RewritePath=/alarm/(?<segment>/.*)?, /$\{segment}
+            - RewritePath=/alarm/(?<segment>.*), /${segment}
 
         - id: bank
           uri: lb://BANK
           predicates:
             - Path=/bank/**
           filters:
-            - RewritePath=/bank/(?<segment>/.*)?, /$\{segment}
+            - RewritePath=/bank/(?<segment>.*), /${segment}
 
         - id: batch
           uri: lb://BATCH
           predicates:
             - Path=/batch/**
           filters:
-            - RewritePath=/batch/(?<segment>/.*)?, /$\{segment}
+            - RewritePath=/batch/(?<segment>.*), /${segment}
 
         - id: business
           uri: lb://BUSINESS
           predicates:
             - Path=/aicheck/**
           filters:
-            - RewritePath=/aicheck/(?<segment>/.*)?, /$\{segment}
+            - RewritePath=/aicheck/(?<segment>.*), /${segment}
 
         - id: chatbot
           uri: lb://CHATBOT
           predicates:
             - Path=/chatbot/**
           filters:
-            - RewritePath=/chatbot/(?<segment>/.*)?, /$\{segment}
+            - RewritePath=/chatbot/(?<segment>.*), /${segment}
+
+      globalcors:
+        add-to-simple-url-handler-mapping: true
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins:
+              - "http://localhost:3000"
+              - "https://j12a603.p.ssafy.io"
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+              - OPTIONS
+            allowedHeaders:
+              - "*"
+            allowCredentials: true
 
 jwt:
   secretKey: ${TOKEN_SECRET}
-
-trusted:
-  origins:
-    - ${CLOUD_FRONT_URL}
-    - "http://localhost:8888"
-    - "http://localhost:8761"

@@ -13,8 +13,11 @@ import com.aicheck.business.domain.transaction_record.application.dto.CalendarRe
 import com.aicheck.business.domain.transaction_record.entity.TransactionRecord;
 import com.aicheck.business.domain.transaction_record.entity.TransactionType;
 import com.aicheck.business.domain.transaction_record.presentation.dto.MemberTransactionRecords;
+import com.aicheck.business.domain.transaction_record.presentation.dto.Interval;
 import com.aicheck.business.domain.transaction_record.presentation.dto.RatingRequest;
+import com.aicheck.business.domain.transaction_record.presentation.dto.TransactionInfoResponse;
 import com.aicheck.business.domain.transaction_record.presentation.dto.TransactionRecordDetailResponse;
+import com.aicheck.business.domain.transaction_record.presentation.dto.TransactionRecordDto;
 import com.aicheck.business.domain.transaction_record.presentation.dto.TransactionRecordListResponse;
 import com.aicheck.business.domain.transaction_record.presentation.dto.UpdateTransactionRecordRequest;
 import com.aicheck.business.domain.transaction_record.repository.TransactionRecordQueryRepository;
@@ -25,9 +28,11 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.util.ArrayList;
+import java.time.Period;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -176,4 +181,41 @@ public class TransactionRecordServiceImpl implements TransactionRecordService {
         return memberTransactionRecords;
     }
 
+    public TransactionInfoResponse getTransactionInfo(Long memberId, LocalDate startDate, Interval interval) {
+        LocalDate today = LocalDate.now();
+        Period period = getPeriodByInterval(interval);
+
+        while (!startDate.plus(period).isAfter(today)) {
+            startDate = startDate.plus(period);
+        }
+
+        List<TransactionRecord> records = transactionRecordRepository
+            .findByMemberIdAndCreatedAtBetweenAndDeletedAtIsNull(
+                memberId,
+                startDate.atStartOfDay(),
+                today.plusDays(1).atStartOfDay()
+            );
+
+        double averageScore = records.stream()
+            .map(TransactionRecord::getRating)
+            .filter(Objects::nonNull)
+            .mapToInt(Integer::intValue)
+            .average()
+            .orElse(0.0);
+
+        return TransactionInfoResponse.of(
+            (float) (Math.round(averageScore * 10) / 10.0),
+            records.stream()
+                .map(TransactionRecordDto::from)
+                .toList()
+        );
+    }
+
+    private Period getPeriodByInterval(Interval interval) {
+        return switch (interval) {
+            case WEEKLY -> Period.ofWeeks(1);
+            case BIWEEKLY -> Period.ofWeeks(2);
+            case MONTHLY -> Period.ofMonths(1);
+        };
+    }
 }

@@ -1,6 +1,8 @@
 package com.aicheck.business.domain.transaction_record.repository;
 
 import com.aicheck.business.domain.transaction_record.entity.TransactionRecord;
+
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;

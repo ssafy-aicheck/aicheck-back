@@ -27,7 +27,7 @@ public class AlarmRetryEventListener {
 	)
 	public void onRetryMessage(final AlarmRetryEventMessage message, final Acknowledgment ack) {
 		if (message.retryCount() >= MAX_RETRY_COUNT) {
-			log.error("최대 재시도 초과 - token={}, title={}, retryCount={}",
+			log.error("[최대 재시도 초과] token={}, title={}, retryCount={}",
 				message.token(), message.title(), message.retryCount());
 			ack.acknowledge();
 			return;

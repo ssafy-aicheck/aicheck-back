@@ -20,35 +20,35 @@ spring:
           predicates:
             - Path=/alarm/**
           filters:
-            - RewritePath=/alarm/(?<segment>/.*)?, /$\{segment}
+            - RewritePath=/alarm/(?<segment>.*), /${segment}
 
         - id: bank
           uri: lb://BANK
           predicates:
             - Path=/bank/**
           filters:
-            - RewritePath=/bank/(?<segment>/.*)?, /$\{segment}
+            - RewritePath=/bank/(?<segment>.*), /${segment}
 
         - id: batch
           uri: lb://BATCH
           predicates:
             - Path=/batch/**
           filters:
-            - RewritePath=/batch/(?<segment>/.*)?, /$\{segment}
+            - RewritePath=/batch/(?<segment>.*), /${segment}
 
         - id: business
           uri: lb://BUSINESS
           predicates:
             - Path=/aicheck/**
           filters:
-            - RewritePath=/aicheck/(?<segment>/.*)?, /$\{segment}
+            - RewritePath=/aicheck/(?<segment>.*), /${segment}
 
         - id: chatbot
           uri: lb://CHATBOT
           predicates:
             - Path=/chatbot/**
           filters:
-            - RewritePath=/chatbot/(?<segment>/.*)?, /$\{segment}
+            - RewritePath=/chatbot/(?<segment>.*), /${segment}
 
 jwt:
   secretKey: ${TOKEN_SECRET}
