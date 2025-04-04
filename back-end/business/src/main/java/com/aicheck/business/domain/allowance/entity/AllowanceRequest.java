@@ -1,10 +1,13 @@
 package com.aicheck.business.domain.allowance.entity;
 
+import static com.aicheck.business.domain.allowance.entity.AllowanceRequest.Status.*;
 import static com.aicheck.business.domain.allowance.entity.AllowanceRequest.Status.WAITING;
 import static jakarta.persistence.EnumType.STRING;
+import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.*;
 import static lombok.AccessLevel.PROTECTED;
 
+import com.aicheck.business.domain.auth.domain.entity.Member;
 import com.aicheck.business.global.entity.BaseEntity;
 
 import jakarta.persistence.Column;
@@ -12,6 +15,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Builder;
 import lombok.Getter;
@@ -27,11 +32,13 @@ public class AllowanceRequest extends BaseEntity {
 	@GeneratedValue(strategy = IDENTITY)
 	private Long id;
 
-	@Column(name = "parent_id", nullable = false)
-	private Long parentId;
+	@ManyToOne(fetch = LAZY)
+	@JoinColumn(name = "parent_id")
+	private Member parent;
 
-	@Column(name = "child_id", nullable = false)
-	private Long childId;
+	@ManyToOne(fetch = LAZY)
+	@JoinColumn(name = "child_id")
+	private Member child;
 
 	@Column(name = "amount", nullable = false)
 	private Integer amount;
@@ -44,21 +51,32 @@ public class AllowanceRequest extends BaseEntity {
 
 	@Enumerated(STRING)
 	@Column(nullable = false)
-	private Status status;
+	private Status status = WAITING;
 
 	@Column(name = "description")
 	private String description;
 
 	@Builder
-	private AllowanceRequest(Long parentId, Long childId, Integer amount, String firstCategoryName,
+	private AllowanceRequest(Member parent, Member child, Integer amount, String firstCategoryName,
 		String secondCategoryName, String description) {
-		this.parentId = parentId;
-		this.childId = childId;
+		this.parent = parent;
+		this.child = child;
 		this.amount = amount;
 		this.firstCategoryName = firstCategoryName;
 		this.secondCategoryName = secondCategoryName;
-		this.status = WAITING;
 		this.description = description;
+	}
+
+	public void accept() {
+		this.status = ACCEPTED;
+	}
+
+	public void reject() {
+		this.status = REJECTED;
+	}
+
+	public boolean isAlreadyDecided() {
+		return !this.status.equals(WAITING);
 	}
 
 	public enum Status {

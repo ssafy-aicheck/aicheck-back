@@ -1,17 +1,15 @@
 package com.aicheck.business.domain.allowance.application.service;
 
-import com.aicheck.business.domain.allowance.dto.AllowanceIncreaseDecisionRequest;
-import com.aicheck.business.domain.allowance.dto.AllowanceIncreaseRequestDetailResponse;
-import com.aicheck.business.domain.allowance.dto.CreateAllowanceIncreaseRequest;
-import com.aicheck.business.domain.allowance.entity.AllowanceIncreaseRequest;
+import java.util.List;
+
+import com.aicheck.business.domain.allowance.dto.AllowanceRequestDto;
 import com.aicheck.business.domain.allowance.presentation.dto.request.SaveAllowanceRequest;
+import com.aicheck.business.domain.allowance.presentation.dto.request.UpdateAllowanceRequestResponse;
+import com.aicheck.business.domain.allowance.presentation.dto.response.AllowanceResponse;
 
 public interface AllowanceService {
-    void requestIncrease(Long childId, CreateAllowanceIncreaseRequest request);
-
-    void respondToRequest(Long requestId, AllowanceIncreaseDecisionRequest request);
-
-    AllowanceIncreaseRequestDetailResponse getAllowanceIncreaseRequestDetail(Long requestId);
-
-    Long saveAllowanceRequest(SaveAllowanceRequest request);
+	Long saveAllowanceRequest(SaveAllowanceRequest request);
+	List<AllowanceResponse> getAllowanceRequests(Long memberId);
+	void updateAllowanceRequestResponse(Long parentId, UpdateAllowanceRequestResponse updateAllowanceRequestResponse);
+	AllowanceRequestDto getAllowanceRequest(Long id);
 }

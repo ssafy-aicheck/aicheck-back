@@ -13,7 +13,7 @@ public class AllowanceIncreaseRequestDetailResponse {
     private Long id;
     private String type;
     private String status;
-    private Long reportId;
+    private String reportId;
     private Long childId;
     private String childName;
     private String image;

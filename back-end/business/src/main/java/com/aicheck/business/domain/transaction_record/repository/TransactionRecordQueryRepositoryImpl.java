@@ -6,7 +6,8 @@ import com.aicheck.business.domain.transaction_record.presentation.dto.Transacti
 import com.aicheck.business.domain.transaction_record.entity.TransactionType;
 import com.aicheck.business.domain.transaction_record.presentation.dto.DailyTransactionRecords;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import jakarta.persistence.EntityManager;
+import lombok.RequiredArgsConstructor;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -14,16 +15,13 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Repository;
 
+@RequiredArgsConstructor
 @Repository
 public class TransactionRecordQueryRepositoryImpl implements TransactionRecordQueryRepository {
 
     private final JPAQueryFactory queryFactory;
 
     private final QTransactionRecord q = QTransactionRecord.transactionRecord;
-
-    public TransactionRecordQueryRepositoryImpl(EntityManager em) {
-        this.queryFactory = new JPAQueryFactory(em);
-    }
 
     @Override
     public TransactionRecordListResponse findTransactionRecords(Long memberId, LocalDate startDate, LocalDate endDate, TransactionType type) {

@@ -20,7 +20,7 @@ public record AlarmEventMessage(
 			.memberId(memberId)
 			.title(title)
 			.body(body)
-			.type(AR)
+			.type(ALLOWANCE)
 			.endPointId(endPointId)
 			.build();
 	}
