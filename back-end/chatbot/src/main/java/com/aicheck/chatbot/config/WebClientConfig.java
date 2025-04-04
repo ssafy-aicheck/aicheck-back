@@ -15,7 +15,7 @@ public class WebClientConfig {
 	@Bean
 	public WebClient fastApiWebClient() {
 		return WebClient.builder()
-			.baseUrl("http://fastapi-server:8000")
+			.baseUrl("https://7c54-211-192-210-7.ngrok-free.app")
 			.defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
 			.build();
 	}

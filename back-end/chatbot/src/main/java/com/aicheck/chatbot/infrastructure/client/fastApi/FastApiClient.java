@@ -24,11 +24,11 @@ public class FastApiClient {
 	private final WebClient fastApiWebClient;
 
 	public PersuadeResponse callPersuadeApi(AIRequest request) {
-		return postForObject("/ai/persuade", request, PersuadeResponse.class, PERSUADE_API_ERROR, "설득");
+		return postForObject("/allowance_request", request, PersuadeResponse.class, PERSUADE_API_ERROR, "설득");
 	}
 
 	public QuestionResponse callQuestionApi(AIRequest request) {
-		return postForObject("/ai/question", request, QuestionResponse.class, QUESTION_API_ERROR, "질문");
+		return postForObject("/purchase_advice", request, QuestionResponse.class, QUESTION_API_ERROR, "질문");
 	}
 
 	private <T> T postForObject(String uri, Object body, Class<T> responseType, FastApiErrorCodes errorCode,
