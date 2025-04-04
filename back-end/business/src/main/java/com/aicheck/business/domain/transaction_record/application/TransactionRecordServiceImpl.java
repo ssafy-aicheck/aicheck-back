@@ -1,6 +1,7 @@
 package com.aicheck.business.domain.transaction_record.application;
 
 import com.aicheck.business.domain.auth.domain.entity.Member;
+import com.aicheck.business.domain.auth.domain.entity.MemberType;
 import com.aicheck.business.domain.auth.domain.repository.MemberRepository;
 import com.aicheck.business.domain.auth.exception.BusinessException;
 import com.aicheck.business.domain.category.entity.FirstCategory;
@@ -11,8 +12,12 @@ import com.aicheck.business.domain.transaction_record.application.dto.CalendarRe
 import com.aicheck.business.domain.transaction_record.application.dto.CalendarRecordListResponse;
 import com.aicheck.business.domain.transaction_record.entity.TransactionRecord;
 import com.aicheck.business.domain.transaction_record.entity.TransactionType;
+import com.aicheck.business.domain.transaction_record.presentation.dto.Interval;
+import com.aicheck.business.domain.transaction_record.presentation.dto.MemberTransactionRecords;
 import com.aicheck.business.domain.transaction_record.presentation.dto.RatingRequest;
+import com.aicheck.business.domain.transaction_record.presentation.dto.TransactionInfoResponse;
 import com.aicheck.business.domain.transaction_record.presentation.dto.TransactionRecordDetailResponse;
+import com.aicheck.business.domain.transaction_record.presentation.dto.TransactionRecordDto;
 import com.aicheck.business.domain.transaction_record.presentation.dto.TransactionRecordListResponse;
 import com.aicheck.business.domain.transaction_record.presentation.dto.UpdateTransactionRecordRequest;
 import com.aicheck.business.domain.transaction_record.repository.TransactionRecordQueryRepository;
@@ -21,9 +26,13 @@ import com.aicheck.business.global.error.BusinessErrorCodes;
 import jakarta.transaction.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Period;
+import java.time.YearMonth;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -145,4 +154,90 @@ public class TransactionRecordServiceImpl implements TransactionRecordService {
         record.updateRating(request.getRating());
     }
 
+    @Override
+    public List<MemberTransactionRecords> getTransactionRecords() {
+        List<Member> children = memberRepository.findMembersByTypeAndDeletedAtIsNull(MemberType.CHILD);
+
+        LocalDate now = LocalDate.now();
+        YearMonth lastMonth = YearMonth.from(now.minusMonths(1));
+
+        int year = lastMonth.getYear();
+        int month = lastMonth.getMonthValue();
+
+        List<TransactionRecord> records = transactionRecordRepository.findByYearAndMonth(year, month);
+
+        List<MemberTransactionRecords> memberTransactionRecords = new ArrayList<>();
+        for (Member child : children) {
+            List<TransactionRecordDetailResponse> transactionDetails = new ArrayList<>();
+            records.stream().filter(record -> record.getMemberId() == child.getId())
+                    .forEach(record -> transactionDetails.add(TransactionRecordDetailResponse.from(record)));
+            memberTransactionRecords.add(MemberTransactionRecords.builder()
+                    .memberId(child.getId())
+                    .birth(child.getBirth())
+                    .records(transactionDetails)
+                    .build());
+        }
+
+        return memberTransactionRecords;
+    }
+
+    public TransactionInfoResponse getTransactionInfo(Long memberId, LocalDate startDate, Interval interval) {
+        LocalDate today = LocalDate.now();
+        Period period = getPeriodByInterval(interval);
+
+        while (!startDate.plus(period).isAfter(today)) {
+            startDate = startDate.plus(period);
+        }
+
+        List<TransactionRecord> records = transactionRecordRepository
+                .findByMemberIdAndCreatedAtBetweenAndDeletedAtIsNull(
+                        memberId,
+                        startDate.atStartOfDay(),
+                        today.plusDays(1).atStartOfDay()
+                );
+
+        double averageScore = records.stream()
+                .map(TransactionRecord::getRating)
+                .filter(Objects::nonNull)
+                .mapToInt(Integer::intValue)
+                .average()
+                .orElse(0.0);
+
+        return TransactionInfoResponse.of(
+                (float) (Math.round(averageScore * 10) / 10.0),
+                records.stream()
+                        .map(TransactionRecordDto::from)
+                        .toList()
+        );
+    }
+
+    @Override
+    public void saveWithdrawTransaction(Long memberId, String displayName, Long amount) {
+        TransactionRecord transactionRecord = TransactionRecord.builder()
+                .memberId(memberId)
+                .displayName(displayName)
+                .type(TransactionType.WITHDRAW)
+                .amount(amount)
+                .build();
+        transactionRecordRepository.save(transactionRecord);
+    }
+
+    @Override
+    public void saveDepositTransaction(Long memberId, String displayName, Long amount) {
+        TransactionRecord transactionRecord = TransactionRecord.builder()
+                .memberId(memberId)
+                .displayName(displayName)
+                .type(TransactionType.DEPOSIT)
+                .amount(amount)
+                .build();
+        transactionRecordRepository.save(transactionRecord);
+    }
+
+    private Period getPeriodByInterval(Interval interval) {
+        return switch (interval) {
+            case WEEKLY -> Period.ofWeeks(1);
+            case BIWEEKLY -> Period.ofWeeks(2);
+            case MONTHLY -> Period.ofMonths(1);
+        };
+    }
 }

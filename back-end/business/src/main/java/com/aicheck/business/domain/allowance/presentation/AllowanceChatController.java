@@ -1,5 +1,7 @@
 package com.aicheck.business.domain.allowance.presentation;
 
+import static org.springframework.http.HttpStatus.*;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,8 +20,8 @@ public class AllowanceChatController {
 
 	private final AllowanceService allowanceService;
 
-	// @PostMapping("/allowance")
-	// ResponseEntity<Long> saveAllowanceRequest(@RequestBody SaveAllowanceRequest request){
-	//
-	// }
+	@PostMapping("/allowance")
+	ResponseEntity<Long> saveAllowanceRequest(@RequestBody SaveAllowanceRequest request){
+		return ResponseEntity.status(CREATED).body(allowanceService.saveAllowanceRequest(request));
+	}
 }

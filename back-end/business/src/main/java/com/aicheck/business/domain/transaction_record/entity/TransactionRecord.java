@@ -50,9 +50,6 @@ public class TransactionRecord {
     @JoinColumn(name = "second_category_id")
     private SecondCategory secondCategory;
 
-    @Column(name = "is_dutch_pay", nullable = false)
-    private Boolean isDutchPay;
-
     @Column(name = "display_name", length = 20, nullable = false)
     private String displayName;
 
@@ -61,7 +58,7 @@ public class TransactionRecord {
     private TransactionType type;
 
     @Column(nullable = false)
-    private Integer amount;
+    private Long amount;
 
     @Column(length = 60)
     private String description;
