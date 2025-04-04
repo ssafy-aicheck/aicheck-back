@@ -8,9 +8,8 @@ import com.aicheck.batch.domain.report.repository.PeerReportRepository;
 import com.aicheck.batch.domain.report.repository.ReportRepository;
 import com.aicheck.batch.domain.report.summary.dto.CategorySummary;
 import com.aicheck.batch.domain.report.summary.dto.SubCategorySummary;
-import java.time.LocalDate;
+import com.aicheck.batch.domain.report.util.PeerGroupUtils;
 import java.time.LocalDateTime;
-import java.time.Period;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -103,7 +102,7 @@ public class TransactionStatisticsService {
         log.info("👥 총 자녀 수: {}", records.size());
 
         for (MemberTransactionRecords memberRecord : records) {
-            String peerGroup = getPeerGroup(memberRecord.getBirth());
+            String peerGroup = PeerGroupUtils.getPeerGroup(memberRecord.getBirth(), year, month);
 
             log.debug("🧒 memberId: {}, 생일: {}, peerGroup: {}", memberRecord.getMemberId(), memberRecord.getBirth(),
                     peerGroup);
@@ -230,23 +229,6 @@ public class TransactionStatisticsService {
             peerReportRepository.save(peerReport);
             log.info("✅ 또래 평균 저장 완료 - peerGroup: {}, 평균 소비: {}원", peerGroup, avgTotalAmount);
         }
-    }
-
-    private String getPeerGroup(LocalDate birth) {
-        int age = Period.between(birth, LocalDate.now()).getYears();
-        if (age >= 8 && age <= 10) {
-            return "8-10";
-        }
-        if (age >= 11 && age <= 13) {
-            return "11-13";
-        }
-        if (age >= 14 && age <= 16) {
-            return "14-16";
-        }
-        if (age >= 17 && age <= 19) {
-            return "17-19";
-        }
-        return null;
     }
 
 }

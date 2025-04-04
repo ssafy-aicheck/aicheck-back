@@ -16,7 +16,6 @@ public class ReportScheduler {
     private final BusinessClient businessClient;
     private final TransactionStatisticsService transactionStatisticsService;
 
-
     /**
      * 매월 1일 00시 10분에 실행
      */
