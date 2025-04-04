@@ -1,5 +1,8 @@
 package com.aicheck.business.domain.allowance.application.service;
 
+import static com.aicheck.business.domain.allowance.entity.AllowanceIncreaseRequest.Status.*;
+import static com.aicheck.business.global.infrastructure.event.Type.*;
+
 import com.aicheck.business.domain.allowance.application.client.BatchClient;
 import com.aicheck.business.domain.allowance.application.client.dto.ChildScheduleResponse;
 import com.aicheck.business.domain.allowance.dto.AllowanceIncreaseDecisionRequest;
@@ -7,14 +10,13 @@ import com.aicheck.business.domain.allowance.dto.AllowanceIncreaseRequestDetailR
 import com.aicheck.business.domain.allowance.dto.CreateAllowanceIncreaseRequest;
 import com.aicheck.business.domain.allowance.entity.AllowanceIncreaseRequest;
 import com.aicheck.business.domain.allowance.entity.AllowanceIncreaseRequest.Status;
-import com.aicheck.business.domain.allowance.entity.AllowanceRequest;
-import com.aicheck.business.domain.allowance.presentation.dto.request.SaveAllowanceRequest;
 import com.aicheck.business.domain.allowance.repository.AllowanceIncreaseRequestRepository;
-import com.aicheck.business.domain.allowance.repository.AllowanceRequestRepository;
 import com.aicheck.business.domain.auth.domain.entity.Member;
 import com.aicheck.business.domain.auth.domain.repository.MemberRepository;
 import com.aicheck.business.domain.auth.exception.BusinessException;
 import com.aicheck.business.global.error.BusinessErrorCodes;
+import com.aicheck.business.global.infrastructure.event.AlarmEventProducer;
+import com.aicheck.business.global.infrastructure.event.dto.request.AlarmEventMessage;
 
 import lombok.RequiredArgsConstructor;
 
@@ -27,9 +29,9 @@ import org.springframework.transaction.annotation.Transactional;
 public class AllowanceIncreaseServiceImpl implements AllowanceIncreaseService {
 
 	private final AllowanceIncreaseRequestRepository allowanceIncreaseRequestRepository;
-	private final AllowanceRequestRepository allowanceRequestRepository;
 	private final BatchClient batchClient;
 	private final MemberRepository memberRepository;
+	private final AlarmEventProducer alarmEventProducer;
 
 	@Override
 	@Transactional
@@ -37,14 +39,14 @@ public class AllowanceIncreaseServiceImpl implements AllowanceIncreaseService {
 		Member member = memberRepository.findById(childId)
 			.orElseThrow(() -> new BusinessException(BusinessErrorCodes.BUSINESS_MEMBER_NOT_FOUND));
 
-		if (allowanceIncreaseRequestRepository.findByChildIdAndStatus(childId, Status.WAITING) != null) {
+		if (allowanceIncreaseRequestRepository.findByChildIdAndStatus(childId, WAITING) != null) {
 			throw new BusinessException(BusinessErrorCodes.ALLOWANCE_REQUEST_ALREADY_EXIST);
 		}
 
 		ChildScheduleResponse childScheduleResponse = batchClient.getChildSchedule(childId);
 		AllowanceIncreaseRequest allowanceIncreaseRequest = AllowanceIncreaseRequest.builder()
-			.childId(childId)
-			.parentId(member.getManagerId())
+			.child(member)
+			.parent(Member.withId(member.getManagerId()))
 			.reportId(request.getReportId())
 			.beforeAmount(childScheduleResponse.getAmount())
 			.afterAmount(childScheduleResponse.getAmount() + request.getIncreaseAmount())
@@ -68,17 +70,25 @@ public class AllowanceIncreaseServiceImpl implements AllowanceIncreaseService {
 			throw new BusinessException(BusinessErrorCodes.INVALID_RESPOND_STATUS);
 		}
 
-		if (decision.equals(Status.ACCEPTED)) {
+		if (decision.equals(ACCEPTED)) {
 			allowanceIncreaseRequest.accept();
             /*
-            TODO : 자녀에게 승인 푸시알림, 정기 송금 금액 변경
+            TODO : 정기 송금 금액 변경
              */
+			alarmEventProducer.sendEvent(AlarmEventMessage.of(
+				allowanceIncreaseRequest.getChild().getId(),
+				getTitle(ACCEPTED),
+				getBody(allowanceIncreaseRequest, ACCEPTED),
+				ALLOWANCE_INCREASE_RESPONSE, allowanceIncreaseRequest.getId()));
 		}
-		if (decision.equals(Status.REJECTED)) {
+		if (decision.equals(REJECTED)) {
 			allowanceIncreaseRequest.reject();
-            /*
-            TODO : 자녀에게 거절 푸시알림
-             */
+
+			alarmEventProducer.sendEvent(AlarmEventMessage.of(
+				allowanceIncreaseRequest.getChild().getId(),
+				getTitle(REJECTED),
+				getBody(allowanceIncreaseRequest, REJECTED),
+				ALLOWANCE_INCREASE_RESPONSE, allowanceIncreaseRequest.getId()));
 		}
 	}
 
@@ -87,9 +97,18 @@ public class AllowanceIncreaseServiceImpl implements AllowanceIncreaseService {
 		AllowanceIncreaseRequest allowanceIncreaseRequest = allowanceIncreaseRequestRepository.findById(requestId)
 			.orElseThrow(() -> new BusinessException(BusinessErrorCodes.ALLOWANCE_REQUEST_NOT_FOUND));
 
-		Member child = memberRepository.findById(allowanceIncreaseRequest.getChildId())
+		Member child = memberRepository.findById(allowanceIncreaseRequest.getChild().getId())
 			.orElseThrow(() -> new BusinessException(BusinessErrorCodes.BUSINESS_MEMBER_NOT_FOUND));
 
 		return AllowanceIncreaseRequestDetailResponse.from(child, allowanceIncreaseRequest);
+	}
+
+	private String getTitle(Status status) {
+		return String.format("부모님이 정기 용돈 인상 요청을 {}했습니다.", status.equals(ACCEPTED) ? "수락" : "거절");
+	}
+
+	private String getBody(AllowanceIncreaseRequest request, Status status) {
+		return String.format("부모님이 {}원에서 {}원으로의 정기 용돈 인상 요청을 {}했습니다.",
+			request.getBeforeAmount(), request.getAfterAmount(), status.equals(ACCEPTED) ? "수락" : "거절");
 	}
 }

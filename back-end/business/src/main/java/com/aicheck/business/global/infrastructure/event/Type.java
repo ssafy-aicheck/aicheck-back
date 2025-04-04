@@ -1,6 +1,7 @@
-package com.aicheck.alarm.domain;
+package com.aicheck.business.global.infrastructure.event;
 
 public enum Type{
 	VOICE, URL, ALLOWANCE_INCREASE, ALLOWANCE_INCREASE_RESPONSE,
 	ALLOWANCE, ALLOWANCE_RESPONSE, REPORT, SCHEDULED_TRANSFER, TRANSFER
 }
+

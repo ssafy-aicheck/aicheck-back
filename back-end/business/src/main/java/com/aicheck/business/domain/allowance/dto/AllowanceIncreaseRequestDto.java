@@ -2,17 +2,25 @@ package com.aicheck.business.domain.allowance.dto;
 
 import java.time.LocalDateTime;
 
+import com.aicheck.business.domain.allowance.entity.AllowanceIncreaseRequest;
+import com.querydsl.core.annotations.QueryProjection;
+
 public record AllowanceIncreaseRequestDto(
 	Long id,
-	String type,
-	String status,
-	Long reportId,
+	Long parentId,
 	Long childId,
 	String childName,
 	String image,
-	Integer prevAmount,
+	Integer beforeAmount,
 	Integer afterAmount,
+	String reportId,
+	AllowanceIncreaseRequest.Status status,
+	String summary,
 	String description,
 	LocalDateTime createdAt
 ) {
+
+	@QueryProjection
+	public AllowanceIncreaseRequestDto{
+	}
 }

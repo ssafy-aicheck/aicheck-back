@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.aicheck.business.domain.allowance.application.service.AllowanceService;
+import com.aicheck.business.domain.allowance.dto.AllowanceRequestDto;
 import com.aicheck.business.domain.allowance.presentation.dto.request.UpdateAllowanceRequestResponse;
 import com.aicheck.business.domain.allowance.presentation.dto.response.AllowanceResponse;
 import com.aicheck.business.global.auth.annotation.CurrentMemberId;
@@ -39,7 +40,7 @@ public class AllowanceController {
 	}
 
 	@GetMapping("/detail/{id}")
-	public ResponseEntity<AllowanceResponse> getAllowanceRequest(@PathVariable Long id){
+	public ResponseEntity<AllowanceRequestDto> getAllowanceRequest(@PathVariable Long id){
 		return ResponseEntity.ok(allowanceService.getAllowanceRequest(id));
 	}
 }

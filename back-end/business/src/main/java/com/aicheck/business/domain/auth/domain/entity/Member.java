@@ -75,5 +75,10 @@ public class Member {
         this.accountNo = accountNo;
     }
 
+    public static Member withId(Long id) {
+        Member member = new Member();
+        member.id = id;
+        return member;
+    }
 }
 
