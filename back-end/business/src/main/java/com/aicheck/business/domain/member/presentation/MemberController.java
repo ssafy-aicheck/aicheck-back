@@ -1,13 +1,15 @@
 package com.aicheck.business.domain.member.presentation;
 
-import com.aicheck.business.domain.member.presentation.dto.ChildrenProfileResponse;
 import com.aicheck.business.domain.member.application.MemberService;
+import com.aicheck.business.domain.member.dto.MemberInfoResponse;
+import com.aicheck.business.domain.member.presentation.dto.ChildrenProfileResponse;
 import com.aicheck.business.domain.member.presentation.dto.ProfileResponse;
 import com.aicheck.business.global.auth.annotation.CurrentMemberId;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -26,6 +28,11 @@ public class MemberController {
     @GetMapping("/children/profiles")
     public ResponseEntity<List<ChildrenProfileResponse>> getChildrenProfiles(@CurrentMemberId Long memberId) {
         return ResponseEntity.ok(memberService.getChildrenProfile(memberId));
+    }
+
+    @GetMapping("/internal/info/{memberId}")
+    public ResponseEntity<MemberInfoResponse> getMemberInfo(@PathVariable Long memberId) {
+        return ResponseEntity.ok(memberService.getMemberInfo(memberId));
     }
 
 }
