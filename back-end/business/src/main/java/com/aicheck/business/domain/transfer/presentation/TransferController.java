@@ -31,7 +31,7 @@ public class TransferController {
     public ResponseEntity<?> transfer(@CurrentMemberId Long memberId,
                                       @RequestBody TransferRequest transferRequest) {
         transferService.executeTransfer(memberId, transferRequest);
-        return null;
+        return ResponseEntity.ok().build();
     }
 
 }

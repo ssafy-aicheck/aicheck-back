@@ -13,9 +13,11 @@ import com.aicheck.business.domain.transfer.presentation.dto.TransferRequest;
 import com.aicheck.business.global.error.BusinessErrorCodes;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class TransferServiceImpl implements TransferService {
 
     private final MemberRepository memberRepository;
@@ -38,10 +40,13 @@ public class TransferServiceImpl implements TransferService {
     }
 
     @Override
+    @Transactional
     public void executeTransfer(Long memberId, TransferRequest transferRequest) {
-        Member member = memberRepository.findById(memberId)
+        Member sender = memberRepository.findById(memberId)
                 .orElseThrow(() -> new BusinessException(BusinessErrorCodes.BUSINESS_MEMBER_NOT_FOUND));
-        String fromAccountNo = member.getAccountNo();
+        String fromAccountNo = sender.getAccountNo();
+
+        Member receiver = memberRepository.findMemberByAccountNo(transferRequest.getReceiverAccountNo());
 
         TransferExecuteRequest request = TransferExecuteRequest.builder()
                 .fromAccountNo(fromAccountNo)
@@ -51,5 +56,9 @@ public class TransferServiceImpl implements TransferService {
 
         bankClient.executeTransfer(request);
 
+        transactionRecordService.saveWithdrawTransaction(
+                sender.getId(), receiver.getName(), transferRequest.getAmount());
+        transactionRecordService.saveDepositTransaction(
+                receiver.getId(), sender.getName(), transferRequest.getAmount());
     }
 }
