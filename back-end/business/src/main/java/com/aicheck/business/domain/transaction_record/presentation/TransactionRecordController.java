@@ -2,6 +2,7 @@ package com.aicheck.business.domain.transaction_record.presentation;
 
 import com.aicheck.business.domain.transaction_record.application.TransactionRecordService;
 import com.aicheck.business.domain.transaction_record.application.dto.CalendarRecordListResponse;
+import com.aicheck.business.domain.transaction_record.presentation.dto.MemberTransactionRecords;
 import com.aicheck.business.domain.transaction_record.presentation.dto.RatingRequest;
 import com.aicheck.business.domain.transaction_record.presentation.dto.TransactionRecordDetailResponse;
 import com.aicheck.business.domain.transaction_record.presentation.dto.TransactionRecordListResponse;
@@ -9,6 +10,7 @@ import com.aicheck.business.domain.transaction_record.presentation.dto.UpdateTra
 import com.aicheck.business.global.auth.annotation.CurrentMemberId;
 import jakarta.validation.Valid;
 import java.time.LocalDate;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -78,5 +80,9 @@ public class TransactionRecordController {
         return ResponseEntity.ok().build();
     }
 
+    @GetMapping("/statistics")
+    public ResponseEntity<List<MemberTransactionRecords>> getSatisfyingTransactionRecords() {
+        return ResponseEntity.ok(transactionRecordService.getTransactionRecords());
+    }
 
 }

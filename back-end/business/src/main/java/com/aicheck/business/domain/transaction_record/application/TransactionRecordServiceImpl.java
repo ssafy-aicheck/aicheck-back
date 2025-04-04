@@ -1,6 +1,7 @@
 package com.aicheck.business.domain.transaction_record.application;
 
 import com.aicheck.business.domain.auth.domain.entity.Member;
+import com.aicheck.business.domain.auth.domain.entity.MemberType;
 import com.aicheck.business.domain.auth.domain.repository.MemberRepository;
 import com.aicheck.business.domain.auth.exception.BusinessException;
 import com.aicheck.business.domain.category.entity.FirstCategory;
@@ -11,6 +12,7 @@ import com.aicheck.business.domain.transaction_record.application.dto.CalendarRe
 import com.aicheck.business.domain.transaction_record.application.dto.CalendarRecordListResponse;
 import com.aicheck.business.domain.transaction_record.entity.TransactionRecord;
 import com.aicheck.business.domain.transaction_record.entity.TransactionType;
+import com.aicheck.business.domain.transaction_record.presentation.dto.MemberTransactionRecords;
 import com.aicheck.business.domain.transaction_record.presentation.dto.Interval;
 import com.aicheck.business.domain.transaction_record.presentation.dto.RatingRequest;
 import com.aicheck.business.domain.transaction_record.presentation.dto.TransactionInfoResponse;
@@ -24,6 +26,8 @@ import com.aicheck.business.global.error.BusinessErrorCodes;
 import jakarta.transaction.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.YearMonth;
+import java.util.ArrayList;
 import java.time.Period;
 import java.util.Comparator;
 import java.util.List;
@@ -151,6 +155,32 @@ public class TransactionRecordServiceImpl implements TransactionRecordService {
     }
 
     @Override
+    public List<MemberTransactionRecords> getTransactionRecords() {
+        List<Member> children = memberRepository.findMembersByTypeAndDeletedAtIsNull(MemberType.CHILD);
+
+        LocalDate now = LocalDate.now();
+        YearMonth lastMonth = YearMonth.from(now.minusMonths(1));
+
+        int year = lastMonth.getYear();
+        int month = lastMonth.getMonthValue();
+
+        List<TransactionRecord> records = transactionRecordRepository.findByYearAndMonth(year, month);
+
+        List<MemberTransactionRecords> memberTransactionRecords = new ArrayList<>();
+        for (Member child : children) {
+            List<TransactionRecordDetailResponse> transactionDetails = new ArrayList<>();
+            records.stream().filter(record -> record.getMemberId() == child.getId())
+                    .forEach(record -> transactionDetails.add(TransactionRecordDetailResponse.from(record)));
+            memberTransactionRecords.add(MemberTransactionRecords.builder()
+                    .memberId(child.getId())
+                    .birth(child.getBirth())
+                    .records(transactionDetails)
+                    .build());
+        }
+
+        return memberTransactionRecords;
+    }
+
     public TransactionInfoResponse getTransactionInfo(Long memberId, LocalDate startDate, Interval interval) {
         LocalDate today = LocalDate.now();
         Period period = getPeriodByInterval(interval);

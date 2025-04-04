@@ -1,6 +1,6 @@
 package com.aicheck.batch.domain.schedule.application.service;
 
-import com.aicheck.batch.domain.report.ReportRepository;
+import com.aicheck.batch.domain.report.repository.ReportRepository;
 import com.aicheck.batch.domain.schedule.application.client.BusinessClient;
 import com.aicheck.batch.domain.schedule.application.client.dto.ChildAccountInfoResponse;
 import com.aicheck.batch.domain.schedule.application.client.dto.ChildScheduleGroup;

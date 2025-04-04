@@ -23,7 +23,9 @@ public enum ScheduleErrorCodes implements ErrorCode {
     SCHEDULE_NOT_FOUND(HttpStatus.NOT_FOUND, "SCHEDULE_NOT_FOUND_URL_404", "용돈이 존재하지 않습니다"),
     METHOD_NOT_ALLOWED(HttpStatus.METHOD_NOT_ALLOWED, "SCHEDULE_METHOD_NOT_ALLOWED_405", "지원하지 않는 HTTP 메서드입니다"),
     NOT_FOUND_URL(HttpStatus.NOT_FOUND, "SCHEDULE_NOT_FOUND_URL_404", "존재하지 않는 URL입니다"),
-    ;
+
+    REPORT_NOT_FOUND(HttpStatus.NOT_FOUND, "REPORT_NOT_FOUND_404", "리포트가 존재하지 않습니다"),
+    PEER_REPORT_NOT_FOUND(HttpStatus.NOT_FOUND, "PEER_REPORT_NOT_FOUND_404", "또래 리포트가 존재하지 않습니다");
 
     private final HttpStatus httpStatus;
     private final String code;
