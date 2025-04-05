@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class MailService {
-    private String FROM_MAIL;
+    private String FROM_MAIL = "aicheck603@gmail.com";
     private static final String MAIL_SEND_EXCEPTION_MESSAGE = "메일 전송 중 오류";
 
     private final JavaMailSender mailSender;

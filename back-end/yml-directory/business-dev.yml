@@ -28,7 +28,7 @@ spring:
   data:
     redis:
       host: mail-redis
-      port: 6377
+      port: 6379
 
 jwt:
   secretKey: ${TOKEN_SECRET}

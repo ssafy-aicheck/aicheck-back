@@ -6,16 +6,19 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 @Configuration
 public class RedisConfig {
-    @Value("${spring.data.redis.host}")
-    private String host;
+    private final String host;
+    private final int port;
 
-    @Value("${spring.data.redis.port}")
-    private int port;
+    public RedisConfig(@Value("${spring.data.redis.port}") int port,
+                       @Value("${spring.data.redis.host}") String host) {
+        this.port = port;
+        this.host = host;
+    }
 
     @Bean
     public RedisConnectionFactory redisConnectionFactory() {
@@ -23,13 +26,16 @@ public class RedisConfig {
     }
 
     @Bean
-    public RedisTemplate<String, ?> redisTemplate() {
-        RedisTemplate<String, ?> redisTemplate = new RedisTemplate<>();
+    public RedisTemplate<String, String> redisTemplate() {
+        RedisTemplate<String, String> redisTemplate = new RedisTemplate<>();
         redisTemplate.setConnectionFactory(redisConnectionFactory());
         redisTemplate.setKeySerializer(new StringRedisSerializer());
-        redisTemplate.setHashKeySerializer(new StringRedisSerializer());
-        redisTemplate.setValueSerializer(new GenericJackson2JsonRedisSerializer());
-
+        redisTemplate.setValueSerializer(new StringRedisSerializer());
         return redisTemplate;
+    }
+
+    @Bean
+    public ValueOperations<String, String> valueOperations(RedisTemplate<String, String> redisTemplate) {
+        return redisTemplate.opsForValue();
     }
 }

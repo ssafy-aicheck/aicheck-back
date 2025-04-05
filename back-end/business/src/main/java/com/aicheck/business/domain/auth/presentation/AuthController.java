@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/auth")
 public class AuthController {
     private static final String MAIL_AUTH_SUCCESS_MESSAGE = "인증되었습니다";
-    private static final String AUTH_MAIL_SUBJECT = "Drivel 가입 인증번호";
+    private static final String AUTH_MAIL_SUBJECT = "AICHECK 가입 인증번호";
 
     private final AuthService authService;
     private final MailService mailService;
@@ -38,7 +38,7 @@ public class AuthController {
         return new ResponseEntity<>(signInResponse, HttpStatus.OK);
     }
 
-    @PostMapping("/mail")
+    @PostMapping("/email")
     public ResponseEntity<Void> sendAuthenticationCode(
             @Valid @RequestBody SendAuthCodeRequest sendAuthCodeRequest) {
         mailService.sendAuthenticationCode(AUTH_MAIL_SUBJECT, sendAuthCodeRequest.getEmail());
