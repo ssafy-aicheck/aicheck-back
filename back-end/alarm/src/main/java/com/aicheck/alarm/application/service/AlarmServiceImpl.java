@@ -49,12 +49,6 @@ public class AlarmServiceImpl implements AlarmService {
 	@Transactional
 	@Override
 	public void saveAlarm(final AlarmEventMessage message) {
-		alarmRepository.save(Alarm.builder()
-			.memberId(message.memberId())
-			.title(message.title())
-			.body(message.body())
-			.type(message.type())
-			.endPointId(message.endPointId())
-			.build());
+		alarmRepository.save(message.toEntity());
 	}
 }

@@ -1,9 +1,10 @@
 package com.aicheck.alarm.application.listener;
 
 import com.aicheck.alarm.application.dto.AlarmRetryEventMessage;
-import com.aicheck.alarm.application.service.FCMServiceImpl;
 import com.aicheck.alarm.common.exception.FCMException;
 import com.aicheck.alarm.infrastructure.AlarmRetryEventProducer;
+import com.aicheck.alarm.infrastructure.fcm.NotificationSender;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -17,7 +18,7 @@ public class AlarmRetryEventListener {
 
 	private static final int MAX_RETRY_COUNT = 3;
 
-	private final FCMServiceImpl fcmServiceImpl;
+	private final NotificationSender notificationSender;
 	private final AlarmRetryEventProducer retryEventProducer;
 
 	@KafkaListener(
@@ -34,7 +35,7 @@ public class AlarmRetryEventListener {
 		}
 
 		try {
-			fcmServiceImpl.sendNotification(message.token(), message.title(), message.body());
+			notificationSender.send(message.token(), message.title(), message.body());
 			ack.acknowledge();
 		} catch (FCMException e) {
 			log.warn("[FCM 재시도 실패] token={}, retryCount={}, reason={}",
