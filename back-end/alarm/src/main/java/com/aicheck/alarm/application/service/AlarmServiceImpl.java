@@ -23,7 +23,7 @@ public class AlarmServiceImpl implements AlarmService {
 	private final AlarmRepository alarmRepository;
 
 	@Override
-	public List<AlarmResponse> getAlarms(Long memberId) {
+	public List<AlarmResponse> getAlarms(final Long memberId) {
 		return alarmRepository.findAllByMemberIdAndDeletedAtIsNull(memberId)
 			.stream()
 			.map(AlarmResponse::from)
@@ -32,23 +32,23 @@ public class AlarmServiceImpl implements AlarmService {
 
 	@Transactional
 	@Override
-	public void readAlarm(Long alarmId, Long memberId) {
-		Alarm alarm = alarmRepository.findByIdAndMemberIdAndDeletedAtIsNull(alarmId, memberId)
+	public void readAlarm(final Long alarmId, final Long memberId) {
+		final Alarm alarm = alarmRepository.findByIdAndMemberIdAndDeletedAtIsNull(alarmId, memberId)
 			.orElseThrow(() -> new AlarmException(NOT_FOUND_ALARM));
 		alarm.changeRead(true);
 	}
 
 	@Transactional
 	@Override
-	public void deleteAlarm(Long memberId, Long alarmId) {
-		Alarm alarm = alarmRepository.findByIdAndMemberIdAndDeletedAtIsNull(alarmId, memberId)
+	public void deleteAlarm(final Long memberId, final Long alarmId) {
+		final Alarm alarm = alarmRepository.findByIdAndMemberIdAndDeletedAtIsNull(alarmId, memberId)
 			.orElseThrow(() -> new AlarmException(NOT_FOUND_ALARM));
 		alarmRepository.delete(alarm);
 	}
 
 	@Transactional
 	@Override
-	public void saveAlarm(AlarmEventMessage message) {
+	public void saveAlarm(final AlarmEventMessage message) {
 		alarmRepository.save(Alarm.builder()
 			.memberId(message.memberId())
 			.title(message.title())

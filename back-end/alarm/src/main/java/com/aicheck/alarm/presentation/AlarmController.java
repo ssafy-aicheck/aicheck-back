@@ -31,26 +31,26 @@ public class AlarmController {
 	private final FCMTokenService fcmTokenService;
 
 	@GetMapping
-	public ResponseEntity<List<AlarmResponse>> getAlarms(@CurrentMemberId Long memberId) {
+	public ResponseEntity<List<AlarmResponse>> getAlarms(@CurrentMemberId final Long memberId) {
 		return ResponseEntity.ok(alarmService.getAlarms(memberId));
 	}
 
 	@PostMapping
-	public ResponseEntity<Void> saveFCMToken(@Valid @RequestBody SaveFCMTokenRequest request){
+	public ResponseEntity<Void> saveFCMToken(@Valid @RequestBody final SaveFCMTokenRequest request){
 		fcmTokenService.saveFCMToken(request.memberId(), request.token());
 		return ResponseEntity.ok().build();
 	}
 
 	@PatchMapping
-	public ResponseEntity<Void> readAlarm(@CurrentMemberId Long memberId,
-		@Valid @RequestBody ReadAlarmRequest request) {
+	public ResponseEntity<Void> readAlarm(@CurrentMemberId final Long memberId,
+		@Valid @RequestBody final ReadAlarmRequest request) {
 		alarmService.readAlarm(request.alarmId(), memberId);
 		return ResponseEntity.ok().build();
 	}
 
 	@DeleteMapping
-	public ResponseEntity<Void> deleteAlarm(@CurrentMemberId Long memberId,
-		@Valid @RequestBody DeleteAlarmRequest request) {
+	public ResponseEntity<Void> deleteAlarm(@CurrentMemberId final Long memberId,
+		@Valid @RequestBody final DeleteAlarmRequest request) {
 		alarmService.deleteAlarm(request.alarmId(), memberId);
 		return ResponseEntity.noContent().build();
 	}

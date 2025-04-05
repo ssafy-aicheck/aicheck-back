@@ -7,7 +7,7 @@ public record ErrorResponse(
         String message,
         LocalDateTime serverDateTime) {
 
-    public ErrorResponse(ErrorCode errorCode) {
+    public ErrorResponse(final ErrorCode errorCode) {
         this(errorCode.getCode(), errorCode.getMessage(), LocalDateTime.now());
     }
 }

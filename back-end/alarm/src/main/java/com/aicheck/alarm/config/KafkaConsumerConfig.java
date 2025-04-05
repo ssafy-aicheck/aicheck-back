@@ -28,11 +28,11 @@ public class KafkaConsumerConfig {
 
 	private static final String TRUSTED_PACKAGES = "com.aicheck.*";
 
-	private <T> ConsumerFactory<String, T> consumerFactory(String groupId, Class<T> clazz) {
-		JsonDeserializer<T> deserializer = new JsonDeserializer<>(clazz);
+	private <T> ConsumerFactory<String, T> consumerFactory(final String groupId, final Class<T> clazz) {
+		final JsonDeserializer<T> deserializer = new JsonDeserializer<>(clazz);
 		deserializer.addTrustedPackages(TRUSTED_PACKAGES);
 
-		Map<String, Object> config = new HashMap<>();
+		final Map<String, Object> config = new HashMap<>();
 		config.put(BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
 		config.put(GROUP_ID_CONFIG, groupId);
 		config.put(KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
@@ -44,8 +44,8 @@ public class KafkaConsumerConfig {
 		return new DefaultKafkaConsumerFactory<>(config, new StringDeserializer(), deserializer);
 	}
 
-	private <T> ConcurrentKafkaListenerContainerFactory<String, T> factory(String groupId, Class<T> clazz) {
-		var factory = new ConcurrentKafkaListenerContainerFactory<String, T>();
+	private <T> ConcurrentKafkaListenerContainerFactory<String, T> factory(final String groupId, final Class<T> clazz) {
+		final var factory = new ConcurrentKafkaListenerContainerFactory<String, T>();
 		factory.setConsumerFactory(consumerFactory(groupId, clazz));
 		factory.getContainerProperties().setAckMode(ContainerProperties.AckMode.MANUAL);
 		return factory;
