@@ -8,7 +8,7 @@ import lombok.Getter;
 public class ChatbotException extends RuntimeException {
 	private final ErrorCode errorCode;
 
-	public ChatbotException(ErrorCode errorCode) {
+	public ChatbotException(final ErrorCode errorCode) {
 		super(errorCode.getMessage());
 		this.errorCode = errorCode;
 	}

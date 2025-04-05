@@ -14,7 +14,7 @@ public record AlarmResponse(
 	String createdAt
 ) {
 
-	public static AlarmResponse from(Alarm alarm) {
+	public static AlarmResponse from(final Alarm alarm) {
 		return AlarmResponse.builder()
 			.alarmId(alarm.getId())
 			.body(alarm.getBody())

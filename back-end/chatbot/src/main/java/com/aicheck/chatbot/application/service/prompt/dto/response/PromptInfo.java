@@ -20,7 +20,7 @@ public record PromptInfo(
 	List<CategoryDifficulty> categoryDifficulties
 ) {
 
-	public static PromptInfo of(Prompt prompt, List<CategoryDifficulty> categoryDifficulties){
+	public static PromptInfo from(final Prompt prompt, final List<CategoryDifficulty> categoryDifficulties){
 		return PromptInfo.builder()
 			.childId(prompt.getChildId())
 			.managerId(prompt.getManagerId())

@@ -9,7 +9,7 @@ public record AlarmRetryEventMessage(
 	String body,
 	int retryCount
 ) {
-	public static AlarmRetryEventMessage of(final AlarmEventMessage message, final String token) {
+	public static AlarmRetryEventMessage from(final AlarmEventMessage message, final String token) {
 		return AlarmRetryEventMessage.builder()
 			.token(token)
 			.title(message.title())

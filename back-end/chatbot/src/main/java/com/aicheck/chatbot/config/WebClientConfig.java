@@ -12,7 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 @Configuration
 public class WebClientConfig {
 
-	@Bean
+	@Bean(name = "fastApiWebClient")
 	public WebClient fastApiWebClient() {
 		return WebClient.builder()
 			.baseUrl("https://7c54-211-192-210-7.ngrok-free.app")

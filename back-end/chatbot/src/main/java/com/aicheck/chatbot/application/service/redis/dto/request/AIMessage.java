@@ -12,7 +12,7 @@ public record AIMessage(
 	String message
 ) {
 
-	public static AIMessage of(String message) {
+	public static AIMessage of(final String message) {
 		return AIMessage.builder()
 			.role(AI)
 			.message(message)

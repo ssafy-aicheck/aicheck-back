@@ -19,17 +19,17 @@ public class JsonMapper {
 
 	private final ObjectMapper objectMapper;
 
-	public <T> String toJson(T obj) {
+	public <T> String toJson(final T object) {
 		try {
-			return objectMapper.writeValueAsString(obj);
+			return objectMapper.writeValueAsString(object);
 		} catch (JsonProcessingException e) {
 			throw new ChatbotException(TYPE_MISMATCH);
 		}
 	}
 
-	public <T> List<T> fromJsonList(String json, Class<T> clazz) {
+	public <T> List<T> fromJsonList(final String json, final Class<T> clazz) {
 		try {
-			JavaType listType = objectMapper.getTypeFactory().constructCollectionType(List.class, clazz);
+			final JavaType listType = objectMapper.getTypeFactory().constructCollectionType(List.class, clazz);
 			return objectMapper.readValue(json, listType);
 		} catch (JsonProcessingException e) {
 			throw new ChatbotException(TYPE_MISMATCH);

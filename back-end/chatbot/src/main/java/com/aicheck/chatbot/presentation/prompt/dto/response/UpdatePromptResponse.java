@@ -14,7 +14,7 @@ public record UpdatePromptResponse(
 	String content
 ) {
 
-	public static UpdatePromptResponse from(PromptInfo promptInfo) {
+	public static UpdatePromptResponse from(final PromptInfo promptInfo) {
 		return UpdatePromptResponse.builder()
 			.childId(promptInfo.childId())
 			.categoryDifficulties(promptInfo.categoryDifficulties())

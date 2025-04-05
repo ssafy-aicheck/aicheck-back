@@ -14,7 +14,7 @@ public class AlarmEventProducer {
 	private static final String TOPIC = "alarm";
 	private final KafkaTemplate<String, AlarmEventMessage> kafkaTemplate;
 
-	public void sendEvent(AlarmEventMessage message) {
+	public void sendEvent(final AlarmEventMessage message) {
 		kafkaTemplate.send(TOPIC, message);
 	}
 }

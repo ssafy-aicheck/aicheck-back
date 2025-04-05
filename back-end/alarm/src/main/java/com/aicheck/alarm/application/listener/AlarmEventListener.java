@@ -42,7 +42,7 @@ public class AlarmEventListener {
 		} catch (FCMException e) {
 			log.warn("[FCM 전송 실패 - 재시도 요청] memberId={}, title={}, reason={}",
 				message.memberId(), message.title(), e.getMessage(), e);
-			producer.sendRetryMessage(AlarmRetryEventMessage.of(message, token));
+			producer.sendRetryMessage(AlarmRetryEventMessage.from(message, token));
 			ack.acknowledge();
 		} catch (Exception e) {
 			log.error("[Unknown Error] message={}, error={}", message, e.getMessage(), e);

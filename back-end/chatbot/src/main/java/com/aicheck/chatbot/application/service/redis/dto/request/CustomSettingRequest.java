@@ -25,8 +25,9 @@ public record CustomSettingRequest(
 	List<TransactionRecord> transactionRecords
 ) {
 
-	public static CustomSettingRequest of(
-		PromptInfo promptInfo, ScheduledAllowance scheduledAllowance, TransactionInfoResponse transactionInfoResponse) {
+	public static CustomSettingRequest from(
+		final PromptInfo promptInfo, final ScheduledAllowance scheduledAllowance,
+		final TransactionInfoResponse transactionInfoResponse) {
 
 		return CustomSettingRequest.builder()
 			.childId(promptInfo.childId())

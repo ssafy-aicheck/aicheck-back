@@ -20,7 +20,6 @@ public enum ChatbotErrorCodes implements ErrorCode {
 	NOT_FOUND_MANAGER_ID(INTERNAL_SERVER_ERROR, "CHATBOT_NOT_FOUND_MANAGER_ID_500", "childId에 해당하는 managerId가 없습니다."),
 
 	;
-
 	private final HttpStatus httpStatus;
 	private final String code;
 	private final String message;

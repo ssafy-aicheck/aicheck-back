@@ -27,8 +27,8 @@ public class RedisConfig {
 	}
 
 	@Bean
-	public RedisTemplate<String, CustomSetting> customSettingsRedisTemplate(LettuceConnectionFactory factory) {
-		RedisTemplate<String, CustomSetting> template = new RedisTemplate<>();
+	public RedisTemplate<String, CustomSetting> customSettingsRedisTemplate(final LettuceConnectionFactory factory) {
+		final RedisTemplate<String, CustomSetting> template = new RedisTemplate<>();
 		template.setConnectionFactory(factory);
 		template.setKeySerializer(new StringRedisSerializer());
 		template.setValueSerializer(new GenericJackson2JsonRedisSerializer());
@@ -36,8 +36,8 @@ public class RedisConfig {
 	}
 
 	@Bean
-	public RedisTemplate<String, ChatNode> chatNodeRedisTemplate(LettuceConnectionFactory factory) {
-		RedisTemplate<String, ChatNode> template = new RedisTemplate<>();
+	public RedisTemplate<String, ChatNode> chatNodeRedisTemplate(final LettuceConnectionFactory factory) {
+		final RedisTemplate<String, ChatNode> template = new RedisTemplate<>();
 		template.setConnectionFactory(factory);
 		template.setKeySerializer(new StringRedisSerializer());
 		template.setValueSerializer(new GenericJackson2JsonRedisSerializer());
