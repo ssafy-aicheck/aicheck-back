@@ -57,6 +57,17 @@ services:
     healthcheck:
       test: [ "CMD", "redis-cli", "ping" ]
 
+  mail-redis:
+    image: redis:7.0
+    container_name: mail-redis
+    restart: always
+    ports:
+      - "6377:6379"
+    networks:
+      - aicheck-network
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+
   rabbitmq:
     image: rabbitmq:3-management
     container_name: rabbitmq
