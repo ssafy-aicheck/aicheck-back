@@ -52,7 +52,7 @@ public class ChatbotServiceImpl implements ChatbotService {
 		if (persuadeResponse.isPersuaded()) {
 			final Long managerId = promptService.getPrompt(childId).managerId();
 			final Long endPointId = businessFeignClient.saveAllowanceRequest(
-				SaveAllowanceRequest.of(childId, managerId, persuadeResponse.result()));
+				SaveAllowanceRequest.from(childId, managerId, persuadeResponse.result()));
 
 			alarmEventProducer.sendEvent(AlarmEventMessage.of(managerId, persuadeResponse.result().title(),
 				persuadeResponse.result().description(), endPointId));
@@ -83,20 +83,20 @@ public class ChatbotServiceImpl implements ChatbotService {
 	}
 
 	@Override
-	public void startChat(final Long childId, final ChatType chatType) {
+	public void startChat(Long childId, ChatType chatType) {
 		final PromptInfo promptInfo = promptService.getPrompt(childId);
 		final ScheduledAllowance scheduledAllowance = batchFeignClient.getScheduledAllowance(childId);
 		final TransactionInfoResponse transactionInfo = businessFeignClient
 			.getTransactionInfo(childId, scheduledAllowance.startDate(), scheduledAllowance.interval());
 
-		redisService.storeCustomSetting(
-			CustomSettingRequest.of(promptInfo, scheduledAllowance, transactionInfo));
-		redisService.initChatHistory(childId, chatType);
+		final CustomSetting setting = CustomSetting.from(
+			CustomSettingRequest.from(promptInfo, scheduledAllowance, transactionInfo)
+		);
+		redisService.prepareChatSession(childId, chatType, setting);
 	}
 
 	@Override
-	public void endChat(final Long childId, final ChatType chatType) {
-		redisService.removeCustomSetting(childId);
-		redisService.removeChatHistory(childId, chatType);
+	public void endChat(Long childId, ChatType chatType) {
+		redisService.clearChatSession(childId, chatType);
 	}
 }

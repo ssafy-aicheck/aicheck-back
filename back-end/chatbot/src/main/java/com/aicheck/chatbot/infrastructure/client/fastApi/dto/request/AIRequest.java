@@ -25,7 +25,8 @@ public record AIRequest(
 	String message
 ) {
 
-	public static AIRequest of(CustomSetting customSetting, List<ChatNode> chatHistories, String message){
+	public static AIRequest from(final CustomSetting customSetting, final List<ChatNode> chatHistories,
+		final String message) {
 		return AIRequest.builder()
 			.originalAllowance(customSetting.originalAllowance())
 			.conversationStyle(customSetting.conversationStyle())

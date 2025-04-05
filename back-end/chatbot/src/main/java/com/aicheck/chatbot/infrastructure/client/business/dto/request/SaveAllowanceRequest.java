@@ -14,7 +14,7 @@ public record SaveAllowanceRequest(
 	String description
 ) {
 
-	public static SaveAllowanceRequest of(Long childId, Long parentId, Result result) {
+	public static SaveAllowanceRequest from(final Long childId, final Long parentId, final Result result) {
 		return SaveAllowanceRequest.builder()
 			.childId(childId)
 			.parentId(parentId)

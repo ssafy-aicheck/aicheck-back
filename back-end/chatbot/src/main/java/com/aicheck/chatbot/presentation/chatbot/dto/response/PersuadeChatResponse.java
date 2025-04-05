@@ -13,7 +13,7 @@ public record PersuadeChatResponse(
 	LocalDateTime createdAt
 ) {
 
-	public static PersuadeChatResponse from(PersuadeResponse response) {
+	public static PersuadeChatResponse from(final PersuadeResponse response) {
 		return PersuadeChatResponse.builder()
 			.message(response.message())
 			.isPersuaded(response.isPersuaded())

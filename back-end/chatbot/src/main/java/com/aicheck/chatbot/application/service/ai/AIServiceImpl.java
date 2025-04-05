@@ -17,17 +17,17 @@ import lombok.RequiredArgsConstructor;
 @Service
 public class AIServiceImpl implements AIService {
 
-	private FastApiClient fastApiClient;
+	private final FastApiClient fastApiClient;
 
 	@Override
 	public PersuadeResponse sendPersuadeChat(final CustomSetting customSetting, final List<ChatNode> chatHistories,
 		final String message) {
-		return fastApiClient.callPersuadeApi(AIRequest.of(customSetting, chatHistories, message));
+		return fastApiClient.callPersuadeApi(AIRequest.from(customSetting, chatHistories, message));
 	}
 
 	@Override
 	public QuestionResponse sendQuestionChat(final CustomSetting customSetting, final List<ChatNode> chatHistories,
 		final String message) {
-		return fastApiClient.callQuestionApi(AIRequest.of(customSetting, chatHistories, message));
+		return fastApiClient.callQuestionApi(AIRequest.from(customSetting, chatHistories, message));
 	}
 }

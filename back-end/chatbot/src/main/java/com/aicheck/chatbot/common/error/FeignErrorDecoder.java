@@ -20,11 +20,11 @@ public class FeignErrorDecoder implements ErrorDecoder {
     @Override
     public Exception decode(String methodKey, Response response) {
         try {
-            String body = new String(response.body().asInputStream().readAllBytes());
+            final String body = new String(response.body().asInputStream().readAllBytes());
 
-            FeignErrorResponse errorResponse = objectMapper.readValue(body, FeignErrorResponse.class);
+            final FeignErrorResponse errorResponse = objectMapper.readValue(body, FeignErrorResponse.class);
 
-            ErrorCode errorCode = createErrorCode(errorResponse, response.status());
+            final ErrorCode errorCode = createErrorCode(errorResponse, response.status());
             return new ChatbotException(errorCode);
 
         } catch (IOException e) {
@@ -32,7 +32,7 @@ public class FeignErrorDecoder implements ErrorDecoder {
         }
     }
 
-    private ErrorCode createErrorCode(FeignErrorResponse errorResponse, int status) {
+    private ErrorCode createErrorCode(final FeignErrorResponse errorResponse, final int status) {
         return new ErrorCode() {
             @Override
             public HttpStatus getHttpStatus() {

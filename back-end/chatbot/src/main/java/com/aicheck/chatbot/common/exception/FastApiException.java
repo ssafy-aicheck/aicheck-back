@@ -8,7 +8,7 @@ import lombok.Getter;
 public class FastApiException extends RuntimeException {
 	private final ErrorCode errorCode;
 
-	public FastApiException(ErrorCode errorCode) {
+	public FastApiException(final ErrorCode errorCode) {
 		super(errorCode.getMessage());
 		this.errorCode = errorCode;
 	}
