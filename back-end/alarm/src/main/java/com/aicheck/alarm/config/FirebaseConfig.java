@@ -22,9 +22,9 @@ public class FirebaseConfig {
 	@PostConstruct
 	public void initializeFirebase() {
 		try {
-			InputStream serviceAccount = new ClassPathResource(firebaseConfigPath).getInputStream();
+			final InputStream serviceAccount = new ClassPathResource(firebaseConfigPath).getInputStream();
 
-			FirebaseOptions options = FirebaseOptions.builder()
+			final FirebaseOptions options = FirebaseOptions.builder()
 				.setCredentials(GoogleCredentials.fromStream(serviceAccount))
 				.build();
 

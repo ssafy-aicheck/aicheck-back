@@ -12,7 +12,7 @@ public class AlarmRetryEventProducer {
 	private static final String RETRY_TOPIC = "alarm-retry";
 	private final KafkaTemplate<String, AlarmRetryEventMessage> kafkaTemplate;
 
-	public void sendRetryMessage(AlarmRetryEventMessage message) {
+	public void sendRetryMessage(final AlarmRetryEventMessage message) {
 		kafkaTemplate.send(RETRY_TOPIC, message.nextRetry());
 	}
 }

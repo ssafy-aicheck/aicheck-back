@@ -26,7 +26,7 @@ public class FCMTokenServiceImpl implements FCMTokenService {
 
 	@Transactional
 	@Override
-	public void saveFCMToken(Long memberId, String token) {
+	public void saveFCMToken(final Long memberId, final String token) {
 		fcmTokenRepository.findByMemberIdAndDeletedAtIsNull(memberId)
 			.ifPresentOrElse(
 				fcm -> fcm.changeToken(token),

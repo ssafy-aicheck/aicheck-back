@@ -3,11 +3,12 @@ package com.aicheck.alarm.application.listener;
 import com.aicheck.alarm.application.dto.AlarmEventMessage;
 import com.aicheck.alarm.application.dto.AlarmRetryEventMessage;
 import com.aicheck.alarm.application.service.AlarmService;
-import com.aicheck.alarm.application.service.FCMService;
 import com.aicheck.alarm.application.service.FCMTokenService;
 import com.aicheck.alarm.common.exception.AlarmException;
 import com.aicheck.alarm.common.exception.FCMException;
 import com.aicheck.alarm.infrastructure.AlarmRetryEventProducer;
+import com.aicheck.alarm.infrastructure.fcm.NotificationSender;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -21,7 +22,7 @@ public class AlarmEventListener {
 
 	private final AlarmService alarmService;
 	private final FCMTokenService fcmTokenService;
-	private final FCMService fcmService;
+	private final NotificationSender notificationSender;
 	private final AlarmRetryEventProducer producer;
 
 	@KafkaListener(
@@ -34,7 +35,7 @@ public class AlarmEventListener {
 		try {
 			token = fcmTokenService.getFCMToken(message.memberId());
 			alarmService.saveAlarm(message);
-			fcmService.sendNotification(token, message.title(), message.body());
+			notificationSender.send(token, message.title(), message.body());
 			ack.acknowledge();
 		} catch (AlarmException e) {
 			log.error("[Alarm 저장 실패] memberId={}, reason={}", message.memberId(), e.getMessage(), e);
