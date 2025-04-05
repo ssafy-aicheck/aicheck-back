@@ -25,6 +25,10 @@ spring:
           auth: true
           starttls:
             enable: true
+  data:
+    redis:
+      host: mail-redis
+      port: 6377
 
 jwt:
   secretKey: ${TOKEN_SECRET}
