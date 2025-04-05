@@ -1,6 +1,9 @@
 package com.aicheck.business.global.error;
 
-import static org.springframework.http.HttpStatus.*;
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.CONFLICT;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
+import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -40,9 +43,11 @@ public enum BusinessErrorCodes implements ErrorCode {
             "해당 소분류 카테고리가 존재하지 않거나 대분류에 속하지 않습니다"),
 
     NOT_FOUND_ALLOWANCE_REQUEST(NOT_FOUND, "BUSINESS_NOT_FOUND_ALLOWANCE_REQUEST_404", "해당하는 용돈 요청을 찾을 수 없습니다."),
-    UNAUTHORIZED_UPDATE_ALLOWANCE_REQUEST_STATUS(UNAUTHORIZED, "BUSINESS_UNAUTHORIZED_UPDATE_ALLOWANCE_REQUEST_STATUS_401", "용돈 요청을 응답할 권한이 없습니다.")
+    UNAUTHORIZED_UPDATE_ALLOWANCE_REQUEST_STATUS(UNAUTHORIZED,
+            "BUSINESS_UNAUTHORIZED_UPDATE_ALLOWANCE_REQUEST_STATUS_401", "용돈 요청을 응답할 권한이 없습니다."),
 
-    ;
+    MAIL_EXCEPTION(HttpStatus.SERVICE_UNAVAILABLE, "MAIL_SERVER_EXCEPTION_503", "메일 서버가 불안정합니다"),
+    WRONG_MAIL_CODE(BAD_REQUEST, "WRONG_AUTHENTICATION_MAIL_CODE_400", "인증번호가 일치하지 않습니다");
     private final HttpStatus httpStatus;
     private final String code;
     private final String message;
