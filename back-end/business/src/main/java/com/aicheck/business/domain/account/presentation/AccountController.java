@@ -1,15 +1,21 @@
 package com.aicheck.business.domain.account.presentation;
 
+import static java.time.YearMonth.*;
+
 import com.aicheck.business.domain.account.application.service.AccountService;
 import com.aicheck.business.domain.account.dto.AccountInfoResponse;
 import com.aicheck.business.domain.account.dto.AccountNoResponse;
 import com.aicheck.business.domain.account.dto.ChildAccountInfoResponse;
 import com.aicheck.business.domain.account.dto.ChildrenAccountsResponse;
+import com.aicheck.business.domain.account.dto.DescriptionRatioResponse;
 import com.aicheck.business.domain.account.dto.FindAccountFeignResponse;
 import com.aicheck.business.domain.account.dto.RegisterMainAccountRequest;
 import com.aicheck.business.domain.account.dto.VerifyAccountPasswordRequest;
 import com.aicheck.business.domain.account.dto.VerifyAccountResponse;
+import com.aicheck.business.domain.transaction_record.application.TransactionRecordService;
 import com.aicheck.business.global.auth.annotation.CurrentMemberId;
+
+import java.time.YearMonth;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +32,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class AccountController {
 
     private final AccountService accountService;
+    private final TransactionRecordService transactionRecordService;
 
     @GetMapping
     public ResponseEntity<List<FindAccountFeignResponse>> findMyAccounts(@CurrentMemberId Long memberId) {
@@ -79,4 +86,8 @@ public class AccountController {
         return ResponseEntity.ok(children);
     }
 
+    @GetMapping("/description-ratio")
+    public ResponseEntity<DescriptionRatioResponse> getDescriptionRatio(@CurrentMemberId Long memberId){
+        return ResponseEntity.ok(transactionRecordService.getDescriptionRatio(memberId, now()));
+    }
 }

@@ -1,8 +1,11 @@
 package com.aicheck.business.domain.account.application.service;
 
+import static java.time.LocalDate.*;
+
 import com.aicheck.business.domain.account.dto.AccountInfoResponse;
 import com.aicheck.business.domain.account.dto.AccountNoResponse;
 import com.aicheck.business.domain.account.dto.ChildAccountInfoResponse;
+import com.aicheck.business.domain.account.dto.DescriptionRatioResponse;
 import com.aicheck.business.domain.account.dto.FindAccountFeignResponse;
 import com.aicheck.business.domain.account.dto.RegisterMainAccountRequest;
 import com.aicheck.business.domain.account.dto.VerifyAccountPasswordRequest;
@@ -13,7 +16,11 @@ import com.aicheck.business.domain.auth.domain.entity.Member;
 import com.aicheck.business.domain.auth.domain.entity.MemberType;
 import com.aicheck.business.domain.auth.domain.repository.MemberRepository;
 import com.aicheck.business.domain.auth.exception.BusinessException;
+import com.aicheck.business.domain.transaction_record.repository.TransactionRecordRepository;
 import com.aicheck.business.global.error.BusinessErrorCodes;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -108,5 +115,4 @@ public class AccountServiceImpl implements AccountService {
                 .accountNo(member.getAccountNo())
                 .build();
     }
-
 }

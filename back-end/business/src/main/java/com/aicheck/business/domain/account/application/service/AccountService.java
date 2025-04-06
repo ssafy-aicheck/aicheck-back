@@ -3,6 +3,7 @@ package com.aicheck.business.domain.account.application.service;
 import com.aicheck.business.domain.account.dto.AccountInfoResponse;
 import com.aicheck.business.domain.account.dto.AccountNoResponse;
 import com.aicheck.business.domain.account.dto.ChildAccountInfoResponse;
+import com.aicheck.business.domain.account.dto.DescriptionRatioResponse;
 import com.aicheck.business.domain.account.dto.FindAccountFeignResponse;
 import com.aicheck.business.domain.account.dto.RegisterMainAccountRequest;
 import com.aicheck.business.domain.account.dto.VerifyAccountPasswordRequest;
