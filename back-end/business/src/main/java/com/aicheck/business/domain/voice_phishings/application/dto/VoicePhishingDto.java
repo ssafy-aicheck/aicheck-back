@@ -1,4 +1,12 @@
 package com.aicheck.business.domain.voice_phishings.application.dto;
 
-public record VoicePhishingDto() {
+import java.time.LocalDateTime;
+
+public record VoicePhishingDto(
+	Long id,
+	String displayName,
+	String phoneNumber,
+	Float score,
+	LocalDateTime createdAt
+) {
 }

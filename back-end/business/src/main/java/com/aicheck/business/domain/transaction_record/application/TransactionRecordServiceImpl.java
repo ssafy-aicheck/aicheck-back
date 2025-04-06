@@ -1,5 +1,8 @@
 package com.aicheck.business.domain.transaction_record.application;
 
+import static java.time.LocalDate.now;
+
+import com.aicheck.business.domain.account.dto.DescriptionRatioResponse;
 import com.aicheck.business.domain.auth.domain.entity.Member;
 import com.aicheck.business.domain.auth.domain.entity.MemberType;
 import com.aicheck.business.domain.auth.domain.repository.MemberRepository;
@@ -240,6 +243,17 @@ public class TransactionRecordServiceImpl implements TransactionRecordService {
                 .amount(amount)
                 .build();
         transactionRecordRepository.save(transactionRecord);
+    }
+
+    @Override
+    public DescriptionRatioResponse getDescriptionRatio(final Long memberId, final YearMonth targetMonth) {
+        LocalDateTime startOfMonth = targetMonth.atDay(1).atStartOfDay();
+        Object[] result = transactionRecordRepository.countTotalAndDescribed(memberId, startOfMonth);
+
+        return DescriptionRatioResponse.builder()
+            .totalCount(((Number) result[0]).intValue())
+            .memoCount(((Number) result[1]).intValue())
+            .build();
     }
 
     private Period getPeriodByInterval(Interval interval) {

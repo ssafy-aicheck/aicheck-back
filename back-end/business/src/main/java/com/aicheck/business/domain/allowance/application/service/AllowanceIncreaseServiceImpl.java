@@ -53,6 +53,16 @@ public class AllowanceIncreaseServiceImpl implements AllowanceIncreaseService {
 			.description(request.getReason())
 			.build();
 		allowanceIncreaseRequestRepository.save(allowanceIncreaseRequest);
+		alarmEventProducer.sendEvent(AlarmEventMessage.of(
+			member.getManagerId(),
+			getRequestTitle(member.getName()),
+			getRequestBody(
+				member.getName(),
+				allowanceIncreaseRequest.getBeforeAmount(),
+				allowanceIncreaseRequest.getAfterAmount()),
+			ALLOWANCE_INCREASE,
+			allowanceIncreaseRequest.getId()
+		));
 	}
 
 	@Override
@@ -77,18 +87,20 @@ public class AllowanceIncreaseServiceImpl implements AllowanceIncreaseService {
              */
 			alarmEventProducer.sendEvent(AlarmEventMessage.of(
 				allowanceIncreaseRequest.getChild().getId(),
-				getTitle(ACCEPTED),
-				getBody(allowanceIncreaseRequest, ACCEPTED),
-				ALLOWANCE_INCREASE_RESPONSE, allowanceIncreaseRequest.getId()));
+				getResponseTitle(ACCEPTED),
+				getResponseBody(allowanceIncreaseRequest, ACCEPTED),
+				ALLOWANCE_INCREASE_RESPONSE,
+				allowanceIncreaseRequest.getId()));
 		}
 		if (decision.equals(REJECTED)) {
 			allowanceIncreaseRequest.reject();
 
 			alarmEventProducer.sendEvent(AlarmEventMessage.of(
 				allowanceIncreaseRequest.getChild().getId(),
-				getTitle(REJECTED),
-				getBody(allowanceIncreaseRequest, REJECTED),
-				ALLOWANCE_INCREASE_RESPONSE, allowanceIncreaseRequest.getId()));
+				getResponseTitle(REJECTED),
+				getResponseBody(allowanceIncreaseRequest, REJECTED),
+				ALLOWANCE_INCREASE_RESPONSE,
+				allowanceIncreaseRequest.getId()));
 		}
 	}
 
@@ -103,12 +115,21 @@ public class AllowanceIncreaseServiceImpl implements AllowanceIncreaseService {
 		return AllowanceIncreaseRequestDetailResponse.from(child, allowanceIncreaseRequest);
 	}
 
-	private String getTitle(Status status) {
+	private String getResponseTitle(Status status) {
 		return String.format("부모님이 정기 용돈 인상 요청을 {}했습니다.", status.equals(ACCEPTED) ? "수락" : "거절");
 	}
 
-	private String getBody(AllowanceIncreaseRequest request, Status status) {
+	private String getResponseBody(AllowanceIncreaseRequest request, Status status) {
 		return String.format("부모님이 {}원에서 {}원으로의 정기 용돈 인상 요청을 {}했습니다.",
 			request.getBeforeAmount(), request.getAfterAmount(), status.equals(ACCEPTED) ? "수락" : "거절");
+	}
+
+	private String getRequestTitle(String name) {
+		return String.format("{}님이 정기 용돈 인상을 요청했습니다.", name);
+	}
+
+	private String getRequestBody(String name, Integer beforeAmount, Integer afterAmount) {
+		return String.format("{}님이 {}원에서 {}원으로의 정기 용돈 인상을 요청했습니다.",
+			name, beforeAmount, afterAmount);
 	}
 }
