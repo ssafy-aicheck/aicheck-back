@@ -2,7 +2,6 @@ package com.aicheck.business.global.service;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.AmazonS3Exception;
-import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.util.IOUtils;
@@ -39,8 +38,7 @@ public class S3Service {
         ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes);
         try {
             PutObjectRequest putObjectRequest =
-                    new PutObjectRequest(bucketName, uploadFileName, byteArrayInputStream, metadata)
-                            .withCannedAcl(CannedAccessControlList.PublicRead);
+                    new PutObjectRequest(bucketName, uploadFileName, byteArrayInputStream, metadata);
             // 실제 업로드 동작하는 부분
             amazonS3.putObject(putObjectRequest);
             return amazonS3.getUrl(bucketName, uploadFileName).toString();
