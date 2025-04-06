@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.aicheck.business.domain.allowance.dto.AllowanceRequestDto;
+import com.aicheck.business.domain.allowance.entity.AllowanceIncreaseRequest;
 import com.aicheck.business.domain.allowance.entity.AllowanceRequest;
 import com.aicheck.business.domain.allowance.infrastructure.AllowanceQueryDslRepository;
 import com.aicheck.business.domain.allowance.presentation.dto.request.SaveAllowanceRequest;
@@ -23,6 +24,8 @@ import com.aicheck.business.domain.auth.domain.entity.Member;
 import com.aicheck.business.domain.auth.domain.entity.MemberType;
 import com.aicheck.business.domain.auth.domain.repository.MemberRepository;
 import com.aicheck.business.domain.auth.exception.BusinessException;
+import com.aicheck.business.global.infrastructure.event.AlarmEventProducer;
+import com.aicheck.business.global.infrastructure.event.dto.request.AlarmEventMessage;
 
 import lombok.RequiredArgsConstructor;
 
@@ -34,6 +37,7 @@ public class AllowanceServiceImpl implements AllowanceService {
 	private final AllowanceRequestRepository allowanceRequestRepository;
 	private final AllowanceQueryDslRepository allowanceQueryDslRepository;
 	private final MemberRepository memberRepository;
+	private final AlarmEventProducer alarmEventProducer;
 
 	@Transactional
 	@Override
@@ -81,6 +85,7 @@ public class AllowanceServiceImpl implements AllowanceService {
 
 		if(updateAllowanceRequestResponse.status().equals(ACCEPTED)){
 			allowanceRequest.accept();
+			alarmEventProducer.sendEvent(AlarmEventMessage.of(allowanceRequest.getChild(), ));
 		}else allowanceRequest.reject();
 	}
 
@@ -88,5 +93,14 @@ public class AllowanceServiceImpl implements AllowanceService {
 	public AllowanceRequestDto getAllowanceRequest(Long id) {
 		return allowanceQueryDslRepository.findById(id)
 			.orElseThrow(() -> new BusinessException(NOT_FOUND_ALLOWANCE_REQUEST));
+	}
+
+	private String getTitle(AllowanceIncreaseRequest.Status status) {
+		return String.format("부모님이 정기 용돈 인상 요청을 {}했습니다.", status.equals(AllowanceIncreaseRequest.Status.ACCEPTED) ? "수락" : "거절");
+	}
+
+	private String getBody(AllowanceIncreaseRequest request, AllowanceIncreaseRequest.Status status) {
+		return String.format("부모님이 {}원에서 {}원으로의 정기 용돈 인상 요청을 {}했습니다.",
+			request.getBeforeAmount(), request.getAfterAmount(), status.equals(AllowanceIncreaseRequest.Status.ACCEPTED) ? "수락" : "거절");
 	}
 }

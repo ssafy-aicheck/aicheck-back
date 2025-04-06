@@ -49,6 +49,8 @@ public class AuthServiceImpl implements AuthService {
         } catch (DataIntegrityViolationException e) {
             throw new BusinessException(BusinessErrorCodes.DUPLICATED_SIGNUP);
         }
+
+        // TODO chatbot SavePrompt 호출 필요
     }
 
     @Override
