@@ -3,6 +3,7 @@ package com.aicheck.business.global.error;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.CONFLICT;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
+import static org.springframework.http.HttpStatus.SERVICE_UNAVAILABLE;
 import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 
 import lombok.AllArgsConstructor;
@@ -47,7 +48,9 @@ public enum BusinessErrorCodes implements ErrorCode {
             "BUSINESS_UNAUTHORIZED_UPDATE_ALLOWANCE_REQUEST_STATUS_401", "용돈 요청을 응답할 권한이 없습니다."),
 
     MAIL_EXCEPTION(HttpStatus.SERVICE_UNAVAILABLE, "MAIL_SERVER_EXCEPTION_503", "메일 서버가 불안정합니다"),
-    WRONG_MAIL_CODE(BAD_REQUEST, "WRONG_AUTHENTICATION_MAIL_CODE_400", "인증번호가 일치하지 않습니다");
+    WRONG_MAIL_CODE(BAD_REQUEST, "WRONG_AUTHENTICATION_MAIL_CODE_400", "인증번호가 일치하지 않습니다"),
+
+    FILE_UPLOAD_FAILED(SERVICE_UNAVAILABLE, "BUSINESS_S3_SERVICE_UNAVAILBABLE", "S3 서비스 오류");
     private final HttpStatus httpStatus;
     private final String code;
     private final String message;

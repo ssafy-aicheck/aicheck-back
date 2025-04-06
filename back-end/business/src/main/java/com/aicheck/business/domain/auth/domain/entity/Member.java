@@ -80,5 +80,9 @@ public class Member {
         member.id = id;
         return member;
     }
+
+    public void updateProfileUrl(String profileUrl) {
+        this.profileUrl = profileUrl;
+    }
 }
 
