@@ -2,7 +2,6 @@ package com.aicheck.alarm.infrastructure.fcm;
 
 import static com.aicheck.alarm.common.error.FCMErrorCodes.FCM_SEND_FAILED;
 
-import com.aicheck.alarm.application.port.NotificationSender;
 import com.aicheck.alarm.common.exception.FCMException;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingException;
@@ -16,7 +15,7 @@ import org.springframework.stereotype.Component;
 public class FCMNotificationSender implements NotificationSender {
 
 	@Override
-	public void send(String token, String title, String body) {
+	public void send(final String token, final String title, final String body) {
 		final Notification notification = Notification.builder()
 			.setTitle(title)
 			.setBody(body)

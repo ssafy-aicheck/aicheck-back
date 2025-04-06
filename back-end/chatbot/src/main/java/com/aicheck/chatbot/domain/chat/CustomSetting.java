@@ -20,7 +20,7 @@ public record CustomSetting(
 	List<TransactionRecord> transactionRecords
 ) {
 
-	public static CustomSetting from(CustomSettingRequest request) {
+	public static CustomSetting from(final CustomSettingRequest request) {
 		return CustomSetting.builder()
 			.originalAllowance(request.originalAllowance())
 			.conversationStyle(request.conversationStyle())

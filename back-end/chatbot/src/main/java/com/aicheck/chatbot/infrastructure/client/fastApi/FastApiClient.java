@@ -23,17 +23,17 @@ public class FastApiClient {
 
 	private final WebClient fastApiWebClient;
 
-	public PersuadeResponse callPersuadeApi(AIRequest request) {
+	public PersuadeResponse callPersuadeApi(final AIRequest request) {
 		return postForObject("/allowance_request", request, PersuadeResponse.class, PERSUADE_API_ERROR, "설득");
 	}
 
-	public QuestionResponse callQuestionApi(AIRequest request) {
+	public QuestionResponse callQuestionApi(final AIRequest request) {
 		return postForObject("/purchase_advice", request, QuestionResponse.class, QUESTION_API_ERROR, "질문");
 	}
 
-	private <T> T postForObject(String uri, Object body, Class<T> responseType, FastApiErrorCodes errorCode,
-		String logPrefix) {
-		final String logTag = logPrefix;
+	private <T> T postForObject(final String uri, final Object body, final Class<T> responseType,
+		final FastApiErrorCodes errorCode,
+		final String logTag) {
 
 		try {
 			return fastApiWebClient.post()
@@ -52,7 +52,8 @@ public class FastApiClient {
 		}
 	}
 
-	private Mono<? extends Throwable> handleError(ClientResponse response, String logTag, FastApiErrorCodes errorCode) {
+	private Mono<? extends Throwable> handleError(final ClientResponse response, final String logTag,
+		final FastApiErrorCodes errorCode) {
 		return response.bodyToMono(String.class)
 			.defaultIfEmpty("응답 본문 없음")
 			.flatMap(errorBody -> {

@@ -26,7 +26,7 @@ public class KafkaProducerConfig {
 
 	@Bean
 	public ProducerFactory<String, AlarmRetryEventMessage> alarmRetryProducerFactory() {
-		Map<String, Object> config = new HashMap<>();
+		final Map<String, Object> config = new HashMap<>();
 		config.put(BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
 		config.put(KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
 		config.put(VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);

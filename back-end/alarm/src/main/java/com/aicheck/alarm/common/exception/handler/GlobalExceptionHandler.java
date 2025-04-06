@@ -26,18 +26,18 @@ import lombok.extern.slf4j.Slf4j;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(AlarmException.class)
-    public ResponseEntity<ErrorResponse> handleAlarmException(AlarmException e) {
+    public ResponseEntity<ErrorResponse> handleAlarmException(final AlarmException e) {
         return buildResponse(e.getErrorCode());
     }
 
     @ExceptionHandler(FCMException.class)
-    public ResponseEntity<ErrorResponse> handleFCMException(FCMException e) {
+    public ResponseEntity<ErrorResponse> handleFCMException(final FCMException e) {
         return buildResponse(e.getErrorCode());
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
-        String errorMessage = e.getBindingResult().getFieldErrors().stream()
+    public ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(final MethodArgumentNotValidException e) {
+        final String errorMessage = e.getBindingResult().getFieldErrors().stream()
             .map(fieldError -> fieldError.getDefaultMessage())
             .findFirst()
             .orElseThrow(() -> new AlarmException(MESSAGE_EXTRACTION_FAILED));
@@ -47,7 +47,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<ErrorResponse> handleConstraintViolationException(final ConstraintViolationException e) {
-        String errorMessage = e.getConstraintViolations().stream()
+        final String errorMessage = e.getConstraintViolations().stream()
             .map(ConstraintViolation::getMessage)
             .findFirst()
             .orElseThrow(() -> new AlarmException(MESSAGE_EXTRACTION_FAILED));
@@ -56,11 +56,11 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorResponse> handleUnexpectedException(Exception e) {
+    public ResponseEntity<ErrorResponse> handleUnexpectedException(final Exception e) {
         return buildResponse(SERVER_ERROR);
     }
 
-    private ResponseEntity<ErrorResponse> buildResponse(ErrorCode errorCode) {
+    private ResponseEntity<ErrorResponse> buildResponse(final ErrorCode errorCode) {
         return ResponseEntity.status(errorCode.getHttpStatus())
             .body(new ErrorResponse(errorCode));
     }

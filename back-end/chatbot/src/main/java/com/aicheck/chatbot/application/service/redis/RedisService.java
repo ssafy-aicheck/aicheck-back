@@ -10,12 +10,9 @@ import com.aicheck.chatbot.domain.chat.CustomSetting;
 import com.aicheck.chatbot.domain.chat.ChatType;
 
 public interface RedisService {
-	void storeCustomSetting(CustomSettingRequest customSettingRequest);
-	void removeCustomSetting(Long childId);
-	CustomSetting loadCustomSetting(Long childId);
-
-	void initChatHistory(Long childId, ChatType chatType);
+	void prepareChatSession(Long childId, ChatType chatType, CustomSetting setting);
+	void clearChatSession(Long childId, ChatType chatType);
 	void appendChatHistory(Long childId, ChatType chatType, AIMessage aiMessage, MemberMessage memberMessage);
-	void removeChatHistory(Long childId, ChatType chatType);
+	CustomSetting loadCustomSetting(Long childId);
 	List<ChatNode> loadChatHistory(Long childId, ChatType chatType);
 }

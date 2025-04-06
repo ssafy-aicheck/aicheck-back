@@ -1,6 +1,9 @@
 package com.aicheck.business.domain.auth.presentation;
 
 import com.aicheck.business.domain.auth.application.service.AuthService;
+import com.aicheck.business.domain.auth.application.service.MailService;
+import com.aicheck.business.domain.auth.dto.CheckCodeDto;
+import com.aicheck.business.domain.auth.dto.SendAuthCodeRequest;
 import com.aicheck.business.domain.auth.dto.SignInRequest;
 import com.aicheck.business.domain.auth.dto.SignInResponse;
 import com.aicheck.business.domain.auth.dto.SignupRequest;
@@ -17,8 +20,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RequestMapping("/auth")
 public class AuthController {
+    private static final String MAIL_AUTH_SUCCESS_MESSAGE = "인증되었습니다";
+    private static final String AUTH_MAIL_SUBJECT = "AICHECK 가입 인증번호";
 
     private final AuthService authService;
+    private final MailService mailService;
 
     @PostMapping("/signup")
     public ResponseEntity<Void> signup(@RequestBody @Valid SignupRequest request) {
@@ -30,6 +36,19 @@ public class AuthController {
     public ResponseEntity<SignInResponse> signIn(@RequestBody @Valid SignInRequest request) {
         SignInResponse signInResponse = authService.signIn(request);
         return new ResponseEntity<>(signInResponse, HttpStatus.OK);
+    }
+
+    @PostMapping("/email")
+    public ResponseEntity<Void> sendAuthenticationCode(
+            @Valid @RequestBody SendAuthCodeRequest sendAuthCodeRequest) {
+        mailService.sendAuthenticationCode(AUTH_MAIL_SUBJECT, sendAuthCodeRequest.getEmail());
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/check")
+    public ResponseEntity<?> checkAuthenticationCode(@Valid @RequestBody CheckCodeDto checkCodeDTO) {
+        mailService.checkCode(checkCodeDTO);
+        return ResponseEntity.ok().build();
     }
 
 }

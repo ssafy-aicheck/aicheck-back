@@ -15,7 +15,8 @@ public record AlarmEventMessage(
 	Long endPointId
 ) {
 
-	public static AlarmEventMessage of(Long memberId, String title, String body, Long endPointId) {
+	public static AlarmEventMessage of(final Long memberId, final String title, final String body,
+		final Long endPointId) {
 		return AlarmEventMessage.builder()
 			.memberId(memberId)
 			.title(title)

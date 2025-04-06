@@ -14,7 +14,6 @@ public enum FastApiErrorCodes implements ErrorCode {
 	QUESTION_API_ERROR(INTERNAL_SERVER_ERROR, "FAST_API_QUESTION_API_ERROR_500", "question api에서 에러가 발생했습니다."),
 
 	;
-
 	private final HttpStatus httpStatus;
 	private final String code;
 	private final String message;

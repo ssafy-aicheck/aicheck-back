@@ -30,20 +30,20 @@ public class ChatPromptController {
 	private final PromptService promptService;
 
 	@PostMapping("/")
-	public ResponseEntity<Void> savePrompt(@Valid @RequestBody SavePromptRequest request) {
+	public ResponseEntity<Void> savePrompt(@Valid @RequestBody final SavePromptRequest request) {
 		promptService.savePrompt(request);
 		return ResponseEntity.status(CREATED).build();
 	}
 
 	@GetMapping("/{childId}")
-	public ResponseEntity<FindPromptResponse> getPrompt(@PathVariable(name = "childId") @NotNull Long childId) {
+	public ResponseEntity<FindPromptResponse> getPrompt(@PathVariable(name = "childId") @NotNull final Long childId) {
 		return ResponseEntity.ok(FindPromptResponse.from(promptService.getPrompt(childId)));
 	}
 
 	@PatchMapping("/")
 	public ResponseEntity<UpdatePromptResponse> updatePrompt(
-		@CurrentMemberId Long managerId,
-		@Valid @RequestBody UpdatePromptRequest request) {
+		@CurrentMemberId final Long managerId,
+		@Valid @RequestBody final UpdatePromptRequest request) {
 		return ResponseEntity.ok(UpdatePromptResponse.from(promptService.updatePrompt(managerId, request)));
 	}
 }

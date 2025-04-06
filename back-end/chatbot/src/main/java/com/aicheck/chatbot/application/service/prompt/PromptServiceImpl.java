@@ -54,7 +54,7 @@ public class PromptServiceImpl implements PromptService {
 			CategoryDifficulty.class
 		);
 
-		return PromptInfo.of(prompt, categoryDifficulties);
+		return PromptInfo.from(prompt, categoryDifficulties);
 	}
 
 	@Transactional
@@ -70,6 +70,6 @@ public class PromptServiceImpl implements PromptService {
 		final String categoryDifficulty = jsonMapper.toJson(request.categoryDifficulties());
 
 		prompt.updatePrompt(categoryDifficulty, request.content());
-		return PromptInfo.of(prompt, request.categoryDifficulties());
+		return PromptInfo.from(prompt, request.categoryDifficulties());
 	}
 }

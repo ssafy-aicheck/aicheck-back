@@ -14,7 +14,7 @@ public record FindPromptResponse(
 	String content
 ) {
 
-	public static FindPromptResponse from(PromptInfo promptInfo) {
+	public static FindPromptResponse from(final PromptInfo promptInfo) {
 		return FindPromptResponse.builder()
 			.childId(promptInfo.childId())
 			.categoryDifficulties(promptInfo.categoryDifficulties())
