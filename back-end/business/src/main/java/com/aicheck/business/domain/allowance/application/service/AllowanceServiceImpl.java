@@ -90,3 +90,4 @@ public class AllowanceServiceImpl implements AllowanceService {
 			.orElseThrow(() -> new BusinessException(NOT_FOUND_ALLOWANCE_REQUEST));
 	}
 }
+출
