@@ -2,17 +2,16 @@ package com.aicheck.business.domain.transaction_record.repository;
 
 import com.aicheck.business.domain.transaction_record.application.dto.TransactionRecordItem;
 import com.aicheck.business.domain.transaction_record.entity.QTransactionRecord;
-import com.aicheck.business.domain.transaction_record.presentation.dto.TransactionRecordListResponse;
 import com.aicheck.business.domain.transaction_record.entity.TransactionType;
 import com.aicheck.business.domain.transaction_record.presentation.dto.DailyTransactionRecords;
+import com.aicheck.business.domain.transaction_record.presentation.dto.TransactionRecordListResponse;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import lombok.RequiredArgsConstructor;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 @RequiredArgsConstructor
@@ -23,9 +22,8 @@ public class TransactionRecordQueryRepositoryImpl implements TransactionRecordQu
 
     private final QTransactionRecord q = QTransactionRecord.transactionRecord;
 
-    @Override
-    public TransactionRecordListResponse findTransactionRecords(Long memberId, LocalDate startDate, LocalDate endDate, TransactionType type) {
-
+    public TransactionRecordListResponse findTransactionRecords(Long memberId, LocalDate startDate, LocalDate endDate,
+                                                                List<TransactionType> types) {
         LocalDateTime start = startDate.atStartOfDay();
         LocalDateTime end = endDate.atTime(23, 59, 59);
 
@@ -34,7 +32,7 @@ public class TransactionRecordQueryRepositoryImpl implements TransactionRecordQu
                         q.memberId.eq(memberId),
                         q.createdAt.between(start, end),
                         q.deletedAt.isNull(),
-                        type != null ? q.type.eq(type) : null
+                        types != null ? q.type.in(types) : null
                 )
                 .orderBy(q.createdAt.asc());
 
