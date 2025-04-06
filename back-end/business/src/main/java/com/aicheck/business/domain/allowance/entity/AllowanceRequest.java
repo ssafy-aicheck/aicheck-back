@@ -33,11 +33,11 @@ public class AllowanceRequest extends BaseEntity {
 	private Long id;
 
 	@ManyToOne(fetch = LAZY)
-	@JoinColumn(name = "parent_id")
+	@JoinColumn(name = "parent_id", nullable = false)
 	private Member parent;
 
 	@ManyToOne(fetch = LAZY)
-	@JoinColumn(name = "child_id")
+	@JoinColumn(name = "child_id", nullable = false)
 	private Member child;
 
 	@Column(name = "amount", nullable = false)
