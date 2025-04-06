@@ -9,9 +9,12 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequiredArgsConstructor
@@ -23,6 +26,13 @@ public class MemberController {
     @GetMapping("/details")
     public ResponseEntity<ProfileResponse> getProfile(@CurrentMemberId Long memberId) {
         return ResponseEntity.ok(memberService.getMyProfile(memberId));
+    }
+
+    @PatchMapping("/details")
+    public ResponseEntity<Void> updateProfile(@CurrentMemberId Long memberId,
+                                              @RequestPart("image") MultipartFile image) {
+        memberService.updateMemberInfo(memberId, image);
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/children/profiles")
