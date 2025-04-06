@@ -1,5 +1,6 @@
 #!/bin/bash
-set -e
+set -euo pipefail
+
 # 초기화 대상 DB 리스트
 DATABASES=(alarm bank batch business chatbot)
 
@@ -13,6 +14,7 @@ for DB in "${DATABASES[@]}"; do
 done
 
 # 2. 사용자 생성 및 권한 부여
+echo "[Init] 사용자 생성 및 권한 부여"
 mysql -u root -p"${MYSQL_ROOT_PASSWORD}" -e "
   CREATE USER IF NOT EXISTS '${MYSQL_USER}'@'%' IDENTIFIED BY '${MYSQL_PASSWORD}';"
 
@@ -30,6 +32,14 @@ for DB in "${DATABASES[@]}"; do
   SQL_FILE="/docker-entrypoint-initdb.d/${DB}.sql"
   if [ -f "$SQL_FILE" ]; then
     echo "[Init] Importing: ${SQL_FILE} → ${DB}"
-    mysql -u root -p"${MYSQL_ROOT_PASSWORD}" "$DB" < "$SQL_FILE"
+
+    # ✅ 에러 메시지를 캡처해서 로그 출력
+    if mysql -u root -p"${MYSQL_ROOT_PASSWORD}" "$DB" < "$SQL_FILE"; then
+      echo "[OK] ${DB}.sql import 성공"
+    else
+      echo "[ERROR] ❌ ${DB}.sql import 실패" >&2
+    fi
+  else
+    echo "[Skip] ${SQL_FILE} 없음"
   fi
 done
