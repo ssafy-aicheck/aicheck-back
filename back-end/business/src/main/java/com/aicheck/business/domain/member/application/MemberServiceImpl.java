@@ -10,15 +10,20 @@ import com.aicheck.business.domain.member.dto.MemberInfoResponse;
 import com.aicheck.business.domain.member.presentation.dto.ChildrenProfileResponse;
 import com.aicheck.business.domain.member.presentation.dto.ProfileResponse;
 import com.aicheck.business.global.error.BusinessErrorCodes;
+import com.aicheck.business.global.service.S3Service;
+import java.io.IOException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RequiredArgsConstructor
 public class MemberServiceImpl implements MemberService {
 
     private final MemberRepository memberRepository;
+    private final S3Service s3Service;
     private final BankClient bankClient;
 
     @Override
@@ -47,5 +52,22 @@ public class MemberServiceImpl implements MemberService {
                 .orElseThrow(() -> new BusinessException(BusinessErrorCodes.BUSINESS_MEMBER_NOT_FOUND));
         return MemberInfoResponse.from(member);
     }
+
+    @Override
+    @Transactional
+    public void updateMemberInfo(Long memberId, MultipartFile image) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new BusinessException(BusinessErrorCodes.BUSINESS_MEMBER_NOT_FOUND));
+
+        String profileImageUrl;
+        try {
+            profileImageUrl = s3Service.uploadImageFile(image);
+        } catch (IOException e) {
+            throw new BusinessException(BusinessErrorCodes.FILE_UPLOAD_FAILED);
+        }
+
+        member.updateProfileUrl(profileImageUrl);
+    }
+
 
 }
