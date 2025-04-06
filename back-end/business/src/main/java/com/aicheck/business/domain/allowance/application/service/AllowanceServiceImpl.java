@@ -105,3 +105,4 @@ public class AllowanceServiceImpl implements AllowanceService {
 	// 		request.getBeforeAmount(), request.getAfterAmount(), status.equals(AllowanceRequest.Status.ACCEPTED) ? "수락" : "거절");
 	// }
 }
+출
