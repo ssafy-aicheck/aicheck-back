@@ -13,5 +13,5 @@ CREATE TABLE `schedule`
     `interval`          ENUM('MONTHLY', 'WEEKLY', 'BIWEEKLY') NOT NULL,
     `created_at`        DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `modified_at`       DATETIME NULL DEFAULT NULL,
-    `deleted_at`        DATETIME NULL DEFAULT NULL,
+    `deleted_at`        DATETIME NULL DEFAULT NULL
 );
