@@ -85,6 +85,7 @@ public class AllowanceServiceImpl implements AllowanceService {
 
 		if(updateAllowanceRequestResponse.status().equals(ACCEPTED)){
 			allowanceRequest.accept();
+			// TODO 알림 이벤트 호출
 			alarmEventProducer.sendEvent(AlarmEventMessage.of(allowanceRequest.getChild(), ));
 		}else allowanceRequest.reject();
 	}
@@ -95,12 +96,12 @@ public class AllowanceServiceImpl implements AllowanceService {
 			.orElseThrow(() -> new BusinessException(NOT_FOUND_ALLOWANCE_REQUEST));
 	}
 
-	private String getTitle(AllowanceIncreaseRequest.Status status) {
-		return String.format("부모님이 정기 용돈 인상 요청을 {}했습니다.", status.equals(AllowanceIncreaseRequest.Status.ACCEPTED) ? "수락" : "거절");
-	}
-
-	private String getBody(AllowanceIncreaseRequest request, AllowanceIncreaseRequest.Status status) {
-		return String.format("부모님이 {}원에서 {}원으로의 정기 용돈 인상 요청을 {}했습니다.",
-			request.getBeforeAmount(), request.getAfterAmount(), status.equals(AllowanceIncreaseRequest.Status.ACCEPTED) ? "수락" : "거절");
-	}
+	// private String getTitle(AllowanceRequest.Status status) {
+	// 	return String.format("부모님이 정기 용돈 인상 요청을 {}했습니다.", status.equals(AllowanceRequest.Status.ACCEPTED) ? "수락" : "거절");
+	// }
+	//
+	// private String getBody(AllowanceRequest request, AllowanceRequest.Status status) {
+	// 	return String.format("부모님이 {}원에서 {}원으로의 정기 용돈 인상 요청을 {}했습니다.",
+	// 		request.getBeforeAmount(), request.getAfterAmount(), status.equals(AllowanceRequest.Status.ACCEPTED) ? "수락" : "거절");
+	// }
 }
