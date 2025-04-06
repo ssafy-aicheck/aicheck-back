@@ -1,4 +1,4 @@
-package com.aicheck.business.domain.voice_phishings;
+package com.aicheck.business.domain.voice_phishings.presentation.dto.request;
 
 import lombok.Getter;
 

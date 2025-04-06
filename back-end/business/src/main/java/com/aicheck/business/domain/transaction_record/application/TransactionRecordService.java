@@ -1,5 +1,6 @@
 package com.aicheck.business.domain.transaction_record.application;
 
+import com.aicheck.business.domain.account.dto.DescriptionRatioResponse;
 import com.aicheck.business.domain.transaction_record.application.dto.CalendarRecordListResponse;
 import com.aicheck.business.domain.transaction_record.presentation.dto.Interval;
 import com.aicheck.business.domain.transaction_record.presentation.dto.MemberTransactionRecords;
@@ -9,6 +10,7 @@ import com.aicheck.business.domain.transaction_record.presentation.dto.Transacti
 import com.aicheck.business.domain.transaction_record.presentation.dto.TransactionRecordListResponse;
 import com.aicheck.business.domain.transaction_record.presentation.dto.UpdateTransactionRecordRequest;
 import java.time.LocalDate;
+import java.time.YearMonth;
 import java.util.List;
 
 public interface TransactionRecordService {
@@ -33,5 +35,7 @@ public interface TransactionRecordService {
     void saveWithdrawTransaction(Long memberId, String displayName, Long amount);
 
     void saveDepositTransaction(Long memberId, String displayName, Long amount);
+
+    DescriptionRatioResponse getDescriptionRatio(Long memberId, YearMonth targetMonth);
 }
 

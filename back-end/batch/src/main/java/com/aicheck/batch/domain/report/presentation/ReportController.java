@@ -4,11 +4,13 @@ import com.aicheck.batch.domain.report.application.ReportScheduler;
 import com.aicheck.batch.domain.report.application.ReportService;
 import com.aicheck.batch.domain.report.presentation.dto.MonthlyPeerReportResponse;
 import com.aicheck.batch.domain.report.presentation.dto.MonthlyReportResponse;
+import com.aicheck.batch.domain.report.presentation.dto.ReportSummaryResponse;
 import com.aicheck.batch.global.auth.annotation.CurrentMemberId;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -63,4 +65,8 @@ public class ReportController {
         return ResponseEntity.ok(reportService.findMonthlyPeerReport(childId, year, month));
     }
 
+    @GetMapping("/summary/{reportId}")
+    public ResponseEntity<ReportSummaryResponse> getReportSummaryResponse(@PathVariable("reportId") String reportId){
+        return ResponseEntity.ok(reportService.getReportSummaryResponse(reportId));
+    }
 }

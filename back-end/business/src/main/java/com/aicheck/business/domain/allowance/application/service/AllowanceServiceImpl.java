@@ -6,6 +6,7 @@ import static com.aicheck.business.global.error.BusinessErrorCodes.ALREADY_DECID
 import static com.aicheck.business.global.error.BusinessErrorCodes.BUSINESS_MEMBER_NOT_FOUND;
 import static com.aicheck.business.global.error.BusinessErrorCodes.NOT_FOUND_ALLOWANCE_REQUEST;
 import static com.aicheck.business.global.error.BusinessErrorCodes.UNAUTHORIZED_UPDATE_ALLOWANCE_REQUEST_STATUS;
+import static com.aicheck.business.global.infrastructure.event.Type.ALLOWANCE_RESPONSE;
 
 import java.util.List;
 
@@ -23,6 +24,9 @@ import com.aicheck.business.domain.auth.domain.entity.Member;
 import com.aicheck.business.domain.auth.domain.entity.MemberType;
 import com.aicheck.business.domain.auth.domain.repository.MemberRepository;
 import com.aicheck.business.domain.auth.exception.BusinessException;
+import com.aicheck.business.global.infrastructure.event.AlarmEventProducer;
+import com.aicheck.business.global.infrastructure.event.Type;
+import com.aicheck.business.global.infrastructure.event.dto.request.AlarmEventMessage;
 
 import lombok.RequiredArgsConstructor;
 
@@ -34,6 +38,7 @@ public class AllowanceServiceImpl implements AllowanceService {
 	private final AllowanceRequestRepository allowanceRequestRepository;
 	private final AllowanceQueryDslRepository allowanceQueryDslRepository;
 	private final MemberRepository memberRepository;
+	private final AlarmEventProducer alarmEventProducer;
 
 	@Transactional
 	@Override
@@ -75,18 +80,37 @@ public class AllowanceServiceImpl implements AllowanceService {
 			throw new BusinessException(UNAUTHORIZED_UPDATE_ALLOWANCE_REQUEST_STATUS);
 		}
 
-		if(allowanceRequest.isAlreadyDecided()){
+		if (allowanceRequest.isAlreadyDecided()) {
 			throw new BusinessException(ALREADY_DECIDED_ALLOWANCE_REQUEST);
 		}
 
-		if(updateAllowanceRequestResponse.status().equals(ACCEPTED)){
+		if (updateAllowanceRequestResponse.status().equals(ACCEPTED)) {
 			allowanceRequest.accept();
-		}else allowanceRequest.reject();
+		} else
+			allowanceRequest.reject();
+
+		alarmEventProducer.sendEvent(AlarmEventMessage.of(
+			allowanceRequest.getChild().getId(),
+			getResponseTitle(updateAllowanceRequestResponse.status()),
+			getResponseBody(updateAllowanceRequestResponse.status()),
+			ALLOWANCE_RESPONSE,
+			allowanceRequest.getId()
+		));
 	}
 
 	@Override
 	public AllowanceRequestDto getAllowanceRequest(Long id) {
 		return allowanceQueryDslRepository.findById(id)
 			.orElseThrow(() -> new BusinessException(NOT_FOUND_ALLOWANCE_REQUEST));
+	}
+
+	private String getResponseTitle(AllowanceRequest.Status status) {
+		return String.format("부모님이 용돈 요청을 {}했습니다.",
+			status.equals(AllowanceRequest.Status.ACCEPTED) ? "수락" : "거절");
+	}
+
+	private String getResponseBody(AllowanceRequest.Status status) {
+		return String.format("부모님이 용돈 요청을 {}했습니다.",
+			status.equals(AllowanceRequest.Status.ACCEPTED) ? "수락" : "거절");
 	}
 }
