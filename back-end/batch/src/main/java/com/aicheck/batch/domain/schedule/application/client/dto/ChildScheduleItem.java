@@ -19,9 +19,16 @@ public class ChildScheduleItem {
                 .scheduleId(schedule.getId())
                 .amount(schedule.getAmount())
                 .interval(schedule.getInterval().name())
+                .day(calculateDay(schedule))
                 .startDate(schedule.getStartDate())
                 .build();
     }
 
+    private static String calculateDay(Schedule schedule) {
+        return switch (schedule.getInterval()) {
+            case MONTHLY -> String.valueOf(schedule.getStartDate().getDayOfMonth());
+            case WEEKLY, BIWEEKLY -> schedule.getStartDate().getDayOfWeek().name();
+        };
+    }
 }
 
