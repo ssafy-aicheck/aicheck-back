@@ -50,20 +50,20 @@ public class TransactionRecordServiceImpl implements TransactionRecordService {
     @Override
     public TransactionRecordListResponse getTransactionRecords(Long memberId, LocalDate startDate, LocalDate endDate,
                                                                String type) {
-        TransactionType transactionType = getTransactionType(type);
-        return transactionRecordQueryRepository.findTransactionRecords(memberId, startDate, endDate, transactionType);
+        List<TransactionType> transactionTypes = getTransactionTypes(type);
+        return transactionRecordQueryRepository.findTransactionRecords(memberId, startDate, endDate, transactionTypes);
     }
 
     @Override
     public TransactionRecordListResponse getChildTransactionRecords(Long memberId, Long childId, LocalDate startDate,
                                                                     LocalDate endDate, String type) {
-        TransactionType transactionType = getTransactionType(type);
         Member child = memberRepository.findById(childId)
                 .orElseThrow(() -> new BusinessException(BusinessErrorCodes.BUSINESS_MEMBER_NOT_FOUND));
         if (!memberId.equals(child.getManagerId())) {
             throw new BusinessException(BusinessErrorCodes.NOT_YOUR_CHILD);
         }
-        return transactionRecordQueryRepository.findTransactionRecords(childId, startDate, endDate, transactionType);
+        List<TransactionType> transactionTypes = getTransactionTypes(type);
+        return transactionRecordQueryRepository.findTransactionRecords(memberId, startDate, endDate, transactionTypes);
     }
 
     @Override
@@ -136,16 +136,25 @@ public class TransactionRecordServiceImpl implements TransactionRecordService {
         );
     }
 
-    public TransactionType getTransactionType(String type) {
-        if (type != null && !type.isBlank()) {
-            try {
-                return TransactionType.valueOf(type.toUpperCase());
-            } catch (IllegalArgumentException e) {
-                throw new IllegalArgumentException("올바르지 않은 거래 타입입니다: " + type);
-            }
+    public List<TransactionType> getTransactionTypes(String type) {
+        if (type == null || type.isBlank()) {
+            return null;
         }
-        return null;
+
+        return switch (type.toUpperCase()) {
+            case "EXPENSE" -> List.of(
+                    TransactionType.PAYMENT,
+                    TransactionType.WITHDRAW,
+                    TransactionType.OUTBOUND_TRANSFER
+            );
+            case "INCOME" -> List.of(
+                    TransactionType.DEPOSIT,
+                    TransactionType.INBOUND_TRANSFER
+            );
+            default -> throw new IllegalArgumentException("올바르지 않은 거래 타입입니다: " + type);
+        };
     }
+
 
     @Transactional
     public void rateTransaction(RatingRequest request) {
