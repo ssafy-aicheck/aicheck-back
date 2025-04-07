@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -69,7 +70,9 @@ public class PhishingService {
 		LocalDateTime startOfMonth = LocalDate.now().withDayOfMonth(1).atStartOfDay();
 		LocalDateTime now = LocalDateTime.now();
 
-		List<PhishingResponse> result = phishingQueryDslRepository.findFamilyPhishingLogs(familyIds, startOfMonth, now);
+		List<PhishingResponse> result = new ArrayList<>(
+			phishingQueryDslRepository.findFamilyPhishingLogs(familyIds, startOfMonth, now)
+		);
 		Collections.sort(result);
 		return result;
 	}
