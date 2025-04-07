@@ -11,7 +11,4 @@ public class SignupRequest {
 
     @NotNull
     private String password;
-
-    @NotNull
-    private Boolean isParent;
 }

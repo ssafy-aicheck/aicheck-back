@@ -1,11 +1,13 @@
 package com.aicheck.business.domain.auth.application.service;
 
+import static com.aicheck.business.domain.auth.domain.entity.MemberType.CHILD;
+import static com.aicheck.business.domain.auth.domain.entity.MemberType.PARENT;
+
 import com.aicheck.business.domain.account.infrastructure.client.BankClient;
 import com.aicheck.business.domain.auth.application.client.ChatbotClient;
 import com.aicheck.business.domain.auth.application.client.dto.request.SavePromptRequest;
 import com.aicheck.business.domain.auth.domain.entity.Gender;
 import com.aicheck.business.domain.auth.domain.entity.Member;
-import com.aicheck.business.domain.auth.domain.entity.MemberType;
 import com.aicheck.business.domain.auth.domain.repository.MemberRepository;
 import com.aicheck.business.domain.auth.dto.BankMemberFeignResponse;
 import com.aicheck.business.domain.auth.dto.SignInRequest;
@@ -39,7 +41,29 @@ public class AuthServiceImpl implements AuthService {
 	private final PasswordEncoder passwordEncoder;
 
 	@Transactional
-	public void signUp(SignupRequest request, Long managerId) {
+	public void signUp(SignupRequest request) {
+		BankMemberFeignResponse response = bankClient.findBankMemberByEmail(request.getEmail());
+
+		Member member = Member.builder()
+			.email(request.getEmail())
+			.password(passwordEncoder.encode(request.getPassword()))
+			.bankMemberId(response.getId())
+			.name(response.getName())
+			.birth(response.getBirth())
+			.type(PARENT)
+			.build();
+
+		try {
+			memberRepository.save(member);
+		} catch (DataIntegrityViolationException e) {
+			throw new BusinessException(BusinessErrorCodes.DUPLICATED_SIGNUP);
+		}
+
+		member.updateManagerId(member.getId());
+	}
+
+	@Override
+	public void signUpChild(SignupRequest request, Long managerId) {
 		BankMemberFeignResponse response = bankClient.findBankMemberByEmail(request.getEmail());
 
 		Member member = Member.builder()
@@ -49,7 +73,7 @@ public class AuthServiceImpl implements AuthService {
 			.bankMemberId(response.getId())
 			.name(response.getName())
 			.birth(response.getBirth())
-			.type(request.getIsParent() ? MemberType.PARENT : MemberType.CHILD)
+			.type(CHILD)
 			.build();
 
 		try {
@@ -58,14 +82,8 @@ public class AuthServiceImpl implements AuthService {
 			throw new BusinessException(BusinessErrorCodes.DUPLICATED_SIGNUP);
 		}
 
-		if (request.getIsParent()) {
-			member.updateManagerId(member.getId());
-		}
-
-		if (request.getIsParent()) {
-			chatbotClient.savePrompt(SavePromptRequest.of(
-				member.getId(), member.getManagerId(), response.getBirth(), Gender.valueOf(response.getGender())));
-		}
+		chatbotClient.savePrompt(SavePromptRequest.of(
+			member.getId(), member.getManagerId(), response.getBirth(), Gender.valueOf(response.getGender())));
 	}
 
 	@Override
@@ -84,7 +102,7 @@ public class AuthServiceImpl implements AuthService {
 		return SignInResponse.builder()
 			.accessToken(accessToken)
 			.refreshToken(refreshToken)
-			.isParent(member.getType().equals(MemberType.PARENT))
+			.isParent(member.getType().equals(PARENT))
 			.accountConnected(member.getAccountNo() != null)
 			.build();
 	}

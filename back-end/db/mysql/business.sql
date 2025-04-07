@@ -3,7 +3,7 @@ USE business;
 CREATE TABLE `members`
 (
     `id`             INT UNSIGNED             NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    `manager_id`     INT UNSIGNED             NOT NULL,
+    `manager_id`     INT UNSIGNED             NULL,
     `bank_member_id` INT UNSIGNED             NOT NULL,
     `account_no`     VARCHAR(20)              NULL     DEFAULT NULL,
     `email`          VARCHAR(255)             NOT NULL,
