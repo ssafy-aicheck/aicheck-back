@@ -41,6 +41,7 @@ public class AuthServiceImpl implements AuthService {
 	@Transactional
 	public void signUp(SignupRequest request, Long managerId) {
 		BankMemberFeignResponse response = bankClient.findBankMemberByEmail(request.getEmail());
+
 		Member member = Member.builder()
 			.email(request.getEmail())
 			.password(passwordEncoder.encode(request.getPassword()))
@@ -58,8 +59,12 @@ public class AuthServiceImpl implements AuthService {
 		}
 
 		if (request.getIsParent()) {
-			chatbotClient.savePrompt(SavePromptRequest.of(member.getId(), managerId, response.getBirth(),
-				Gender.valueOf(response.getGender())));
+			member.updateManagerId(member.getId());
+		}
+
+		if (request.getIsParent()) {
+			chatbotClient.savePrompt(SavePromptRequest.of(
+				member.getId(), member.getManagerId(), response.getBirth(), Gender.valueOf(response.getGender())));
 		}
 	}
 
