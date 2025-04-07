@@ -3,11 +3,13 @@ package com.aicheck.business.domain.transaction_record.entity;
 import com.aicheck.business.domain.category.entity.FirstCategory;
 import com.aicheck.business.domain.category.entity.SecondCategory;
 import jakarta.persistence.Column;
+import jakarta.persistence.ConstraintMode;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
+import jakarta.persistence.ForeignKey;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -43,11 +45,11 @@ public class TransactionRecord {
     private Long storeId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "first_category_id")
+    @JoinColumn(name = "first_category_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private FirstCategory firstCategory;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "second_category_id")
+    @JoinColumn(name = "second_category_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private SecondCategory secondCategory;
 
     @Column(name = "display_name", length = 20, nullable = false)
