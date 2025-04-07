@@ -32,7 +32,7 @@ public class Member {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "manager_id", nullable = false)
+    @Column(name = "manager_id")
     private Long managerId;
 
     @Column(name = "bank_member_id")
@@ -83,6 +83,10 @@ public class Member {
 
     public void updateProfileUrl(String profileUrl) {
         this.profileUrl = profileUrl;
+    }
+
+    public void updateManagerId(Long managerId) {
+        this.managerId = managerId;
     }
 }
 

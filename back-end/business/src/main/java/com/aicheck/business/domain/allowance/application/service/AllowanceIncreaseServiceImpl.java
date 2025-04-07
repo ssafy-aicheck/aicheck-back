@@ -88,9 +88,7 @@ public class AllowanceIncreaseServiceImpl implements AllowanceIncreaseService {
                     UpdateAllowanceFeignRequest.builder()
                             .amount(allowanceIncreaseRequest.getAfterAmount())
                             .build());
-            /*
-            TODO: 알림 전송
-             */
+
             alarmEventProducer.sendEvent(AlarmEventMessage.of(
                     allowanceIncreaseRequest.getChild().getId(),
                     getResponseTitle(ACCEPTED),
@@ -100,9 +98,7 @@ public class AllowanceIncreaseServiceImpl implements AllowanceIncreaseService {
         }
         if (decision.equals(REJECTED)) {
             allowanceIncreaseRequest.reject();
-            /*
-            TODO: 알림 전송
-             */
+
             alarmEventProducer.sendEvent(AlarmEventMessage.of(
                     allowanceIncreaseRequest.getChild().getId(),
                     getResponseTitle(REJECTED),
