@@ -62,6 +62,7 @@ public class AuthServiceImpl implements AuthService {
 		member.updateManagerId(member.getId());
 	}
 
+	@Transactional
 	@Override
 	public void signUpChild(SignupRequest request, Long managerId) {
 		BankMemberFeignResponse response = bankClient.findBankMemberByEmail(request.getEmail());
