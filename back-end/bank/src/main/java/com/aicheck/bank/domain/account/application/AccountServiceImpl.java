@@ -55,7 +55,7 @@ public class AccountServiceImpl implements AccountService {
     public VerifyAccountFeignResponse verifyAccount(VerifyAccountFeignRequest request) {
         Account account = accountRepository.findById(request.getAccountId())
                 .orElseThrow(() -> new BankException(BankErrorCodes.ACCOUNT_NOT_FOUND));
-        if(account.getMember().getId() != request.getBankMemberId()) {
+        if(!account.getMember().getId().equals(request.getBankMemberId())) {
             throw new BankException(BankErrorCodes.NOT_YOUR_ACCOUNT);
         }
         return VerifyAccountFeignResponse.builder()
