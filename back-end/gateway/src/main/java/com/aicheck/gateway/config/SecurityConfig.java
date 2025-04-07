@@ -123,7 +123,7 @@ public class SecurityConfig {
 				.pathMatchers(POST, "/chatbot/question").hasRole(Role.CHILD)
 				.pathMatchers(DELETE, "/chatbot/end").hasRole(Role.CHILD)
 				.pathMatchers(PATCH, "/chatbot/prompts").hasRole(Role.PARENT)
-				.pathMatchers(GET, "/chatbot/prompts/{childId}").hasRole(Role.PARENT)
+				.pathMatchers(GET, "/chatbot/prompts/**").hasRole(Role.PARENT)
 
 				// 피싱
 				.pathMatchers(POST, "/aicheck/phishings").authenticated()

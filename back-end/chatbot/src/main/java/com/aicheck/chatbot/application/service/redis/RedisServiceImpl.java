@@ -1,7 +1,5 @@
 package com.aicheck.chatbot.application.service.redis;
 
-import static java.lang.Boolean.*;
-
 import java.util.List;
 
 import org.springframework.data.redis.core.RedisTemplate;
@@ -14,7 +12,9 @@ import com.aicheck.chatbot.domain.chat.ChatType;
 import com.aicheck.chatbot.domain.chat.CustomSetting;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class RedisServiceImpl implements RedisService {
@@ -26,10 +26,11 @@ public class RedisServiceImpl implements RedisService {
 
 	@Override
 	public void prepareChatSession(Long childId, ChatType chatType, CustomSetting setting) {
-		customSettingRedisTemplate.opsForValue().set(settingKey(childId), setting);
-		final String key = historyKey(chatType, childId);
-		if (FALSE.equals(chatNodeRedisTemplate.hasKey(key))) {
-			chatNodeRedisTemplate.opsForList().rightPushAll(key);
+		try{
+			customSettingRedisTemplate.opsForValue().set(settingKey(childId), setting);
+		}catch (Exception e) {
+			log.error(e.getMessage(), e);
+			throw e;
 		}
 	}
 

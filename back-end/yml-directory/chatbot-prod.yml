@@ -17,4 +17,4 @@ spring:
   data:
     redis:
       host: chatbot-redis
-      port: 6378
+      port: 6379
