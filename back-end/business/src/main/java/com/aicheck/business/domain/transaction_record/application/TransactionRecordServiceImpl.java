@@ -185,6 +185,8 @@ public class TransactionRecordServiceImpl implements TransactionRecordService {
                     .forEach(record -> transactionDetails.add(TransactionRecordDetailResponse.from(record)));
             memberTransactionRecords.add(MemberTransactionRecords.builder()
                     .memberId(child.getId())
+                    .name(child.getName())
+                    .managerId(child.getManagerId())
                     .birth(child.getBirth())
                     .records(transactionDetails)
                     .build());
@@ -224,7 +226,7 @@ public class TransactionRecordServiceImpl implements TransactionRecordService {
     }
 
     @Override
-    public void saveWithdrawTransaction(Long memberId, String displayName, Long amount) {
+    public Long saveWithdrawTransaction(Long memberId, String displayName, Long amount) {
         TransactionRecord transactionRecord = TransactionRecord.builder()
                 .memberId(memberId)
                 .displayName(displayName)
@@ -232,10 +234,11 @@ public class TransactionRecordServiceImpl implements TransactionRecordService {
                 .amount(amount)
                 .build();
         transactionRecordRepository.save(transactionRecord);
+        return transactionRecord.getId();
     }
 
     @Override
-    public void saveDepositTransaction(Long memberId, String displayName, Long amount) {
+    public Long saveDepositTransaction(Long memberId, String displayName, Long amount) {
         TransactionRecord transactionRecord = TransactionRecord.builder()
                 .memberId(memberId)
                 .displayName(displayName)
@@ -243,6 +246,7 @@ public class TransactionRecordServiceImpl implements TransactionRecordService {
                 .amount(amount)
                 .build();
         transactionRecordRepository.save(transactionRecord);
+        return transactionRecord.getId();
     }
 
     @Override
