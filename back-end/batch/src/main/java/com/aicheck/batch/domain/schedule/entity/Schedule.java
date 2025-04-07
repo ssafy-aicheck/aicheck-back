@@ -70,5 +70,10 @@ public class Schedule {
     public enum Interval {
         MONTHLY, WEEKLY, BIWEEKLY
     }
+
+    public void updateAmount(Integer afterAmount) {
+        this.amount = afterAmount;
+    }
+
 }
 
