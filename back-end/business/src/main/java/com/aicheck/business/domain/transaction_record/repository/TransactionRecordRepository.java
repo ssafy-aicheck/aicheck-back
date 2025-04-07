@@ -2,7 +2,6 @@ package com.aicheck.business.domain.transaction_record.repository;
 
 import com.aicheck.business.domain.transaction_record.entity.TransactionRecord;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -27,12 +26,16 @@ public interface TransactionRecordRepository extends JpaRepository<TransactionRe
 	List<TransactionRecord> findByYearAndMonth(@Param("year") int year, @Param("month") int month);
 
 	@Query("""
-		    SELECT COUNT(tr),
+		    SELECT COUNT(tr), 
 		           COUNT(CASE WHEN tr.description IS NOT NULL THEN 1 END)
 		    FROM TransactionRecord tr
 		    WHERE tr.memberId = :memberId
 		      AND tr.createdAt >= :startOfMonth
+		      AND tr.createdAt < :endOfMonth
 		""")
-	Object[] countTotalAndDescribed(@Param("memberId") Long memberId,
-		@Param("startOfMonth") LocalDateTime startOfMonth);
+	Object countTotalAndDescribed(
+		@Param("memberId") Long memberId,
+		@Param("startOfMonth") LocalDateTime startOfMonth,
+		@Param("endOfMonth") LocalDateTime endOfMonth
+	);
 }

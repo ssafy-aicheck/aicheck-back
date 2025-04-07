@@ -17,7 +17,7 @@ public interface BusinessFeignClient {
 
 	@GetMapping("chatbot/transaction_records")
 	TransactionInfoResponse getTransactionInfo(
-		@RequestParam Long childId, @RequestParam LocalDate startDate, @RequestParam Interval interval);
+		@RequestParam Long childId, @RequestParam LocalDate startDate, @RequestParam String interval);
 
 	@PostMapping("chatbot/allowance")
 	Long saveAllowanceRequest(@RequestBody SaveAllowanceRequest request);
