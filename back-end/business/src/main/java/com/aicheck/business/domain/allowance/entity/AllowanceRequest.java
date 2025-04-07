@@ -11,8 +11,10 @@ import com.aicheck.business.domain.auth.domain.entity.Member;
 import com.aicheck.business.global.entity.BaseEntity;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.ConstraintMode;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.ForeignKey;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
@@ -33,11 +35,11 @@ public class AllowanceRequest extends BaseEntity {
 	private Long id;
 
 	@ManyToOne(fetch = LAZY)
-	@JoinColumn(name = "parent_id", nullable = false)
+	@JoinColumn(name = "parent_id", nullable = false, foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
 	private Member parent;
 
 	@ManyToOne(fetch = LAZY)
-	@JoinColumn(name = "child_id", nullable = false)
+	@JoinColumn(name = "child_id", nullable = false, foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
 	private Member child;
 
 	@Column(name = "amount", nullable = false)
