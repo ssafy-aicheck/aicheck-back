@@ -23,7 +23,7 @@ public class TransactionRecordChatbotController {
 
 	@GetMapping("/transaction_records")
 	ResponseEntity<TransactionInfoResponse> getTransactionInfo(
-		@RequestParam Long childId, @RequestParam LocalDate startDate, @RequestParam Interval interval){
-		return ResponseEntity.ok(transactionRecordService.getTransactionInfo(childId, startDate, interval));
+		@RequestParam Long childId, @RequestParam LocalDate startDate, @RequestParam String interval){
+		return ResponseEntity.ok(transactionRecordService.getTransactionInfo(childId, startDate, Interval.valueOf(interval)));
 	}
 }

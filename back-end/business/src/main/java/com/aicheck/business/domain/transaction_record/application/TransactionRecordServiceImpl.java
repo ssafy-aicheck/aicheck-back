@@ -1,7 +1,5 @@
 package com.aicheck.business.domain.transaction_record.application;
 
-import static java.time.LocalDate.now;
-
 import com.aicheck.business.domain.account.dto.DescriptionRatioResponse;
 import com.aicheck.business.domain.auth.domain.entity.Member;
 import com.aicheck.business.domain.auth.domain.entity.MemberType;
@@ -252,11 +250,16 @@ public class TransactionRecordServiceImpl implements TransactionRecordService {
     @Override
     public DescriptionRatioResponse getDescriptionRatio(final Long memberId, final YearMonth targetMonth) {
         LocalDateTime startOfMonth = targetMonth.atDay(1).atStartOfDay();
-        Object[] result = transactionRecordRepository.countTotalAndDescribed(memberId, startOfMonth);
+        LocalDateTime endOfMonth = targetMonth.atEndOfMonth().plusDays(1).atStartOfDay();
+
+        Object[] result = (Object[]) transactionRecordRepository.countTotalAndDescribed(memberId, startOfMonth, endOfMonth);
+
+        Number totalCount = (Number) result[0];
+        Number memoCount = (Number) result[1];
 
         return DescriptionRatioResponse.builder()
-            .totalCount(((Number) result[0]).intValue())
-            .memoCount(((Number) result[1]).intValue())
+            .totalCount(totalCount != null ? totalCount.intValue() : 0)
+            .memoCount(memoCount != null ? memoCount.intValue() : 0)
             .build();
     }
 

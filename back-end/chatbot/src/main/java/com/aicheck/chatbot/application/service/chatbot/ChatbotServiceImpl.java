@@ -87,7 +87,7 @@ public class ChatbotServiceImpl implements ChatbotService {
 		final PromptInfo promptInfo = promptService.getPrompt(childId);
 		final ScheduledAllowance scheduledAllowance = batchFeignClient.getScheduledAllowance(childId);
 		final TransactionInfoResponse transactionInfo = businessFeignClient
-			.getTransactionInfo(childId, scheduledAllowance.startDate(), scheduledAllowance.interval());
+			.getTransactionInfo(childId, scheduledAllowance.startDate(), scheduledAllowance.interval().name());
 
 		final CustomSetting setting = CustomSetting.from(
 			CustomSettingRequest.from(promptInfo, scheduledAllowance, transactionInfo)
