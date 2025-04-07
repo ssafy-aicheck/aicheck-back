@@ -49,7 +49,7 @@ public class AuthController {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/check")
+    @PostMapping("/email/check")
     public ResponseEntity<?> checkAuthenticationCode(@Valid @RequestBody CheckCodeDto checkCodeDTO) {
         mailService.checkCode(checkCodeDTO);
         return ResponseEntity.ok().build();
