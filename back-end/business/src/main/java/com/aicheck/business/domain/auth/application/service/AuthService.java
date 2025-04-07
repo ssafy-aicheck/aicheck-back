@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public interface AuthService {
-    void signUp(SignupRequest request);
+    void signUp(SignupRequest request, Long managerId);
 
     SignInResponse signIn(SignInRequest request);
 }

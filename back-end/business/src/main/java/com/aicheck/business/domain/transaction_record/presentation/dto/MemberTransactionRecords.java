@@ -11,6 +11,8 @@ import lombok.ToString;
 @ToString
 public class MemberTransactionRecords {
     private Long memberId;
+    private String name;
+    private Long managerId;
     private LocalDate birth;
     private List<TransactionRecordDetailResponse> records;
 }
