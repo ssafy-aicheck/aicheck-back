@@ -5,6 +5,7 @@ import com.aicheck.batch.domain.schedule.application.client.dto.ScheduleListResp
 import com.aicheck.batch.domain.schedule.application.service.ScheduleService;
 import com.aicheck.batch.domain.schedule.dto.RegisterScheduledTransferRequest;
 import com.aicheck.batch.domain.schedule.presentation.dto.AllowanceRegisteredResponse;
+import com.aicheck.batch.domain.schedule.presentation.dto.UpdateAllowanceFeignRequest;
 import com.aicheck.batch.global.auth.annotation.CurrentMemberId;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -63,6 +64,13 @@ public class ScheduleController {
                                                                               @RequestParam String reportId) {
         AllowanceRegisteredResponse response = scheduleService.checkAllowanceRegistered(memberId, reportId);
         return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/internal/{childId}")
+    public ResponseEntity<Void> updateScheduleByChildId(@PathVariable Long childId,
+                                                        @RequestBody UpdateAllowanceFeignRequest request) {
+        scheduleService.updateScheduleByChildId(childId, request);
+        return ResponseEntity.ok().build();
     }
 
 }

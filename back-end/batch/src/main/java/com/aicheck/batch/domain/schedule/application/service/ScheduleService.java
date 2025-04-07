@@ -5,6 +5,7 @@ import com.aicheck.batch.domain.schedule.application.client.dto.ScheduleListResp
 import com.aicheck.batch.domain.schedule.dto.RegisterScheduledTransferRequest;
 import com.aicheck.batch.domain.schedule.dto.ScheduleDto;
 import com.aicheck.batch.domain.schedule.presentation.dto.AllowanceRegisteredResponse;
+import com.aicheck.batch.domain.schedule.presentation.dto.UpdateAllowanceFeignRequest;
 
 public interface ScheduleService {
     void createSchedule(Long memberId, RegisterScheduledTransferRequest request);
@@ -20,4 +21,6 @@ public interface ScheduleService {
     AllowanceRegisteredResponse checkAllowanceRegistered(Long childId, String reportId);
 
     ScheduleDto getSchedule(Long childId);
+
+    void updateScheduleByChildId(Long childId, UpdateAllowanceFeignRequest request);
 }
