@@ -114,6 +114,7 @@ services:
       BUCKET: ${BUCKET}
       AWS_S3_ACCESS_KEY: ${AWS_S3_ACCESS_KEY}
       AWS_S3_SECRET_KEY: ${AWS_S3_SECRET_KEY}
+      FAST_API_BASE_URL: ${FAST_API_BASE_URL}
     networks:
       - aicheck-network
     depends_on:
