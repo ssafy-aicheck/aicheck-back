@@ -10,6 +10,7 @@ import com.aicheck.batch.domain.schedule.dto.RegisterScheduledTransferRequest;
 import com.aicheck.batch.domain.schedule.dto.ScheduleDto;
 import com.aicheck.batch.domain.schedule.entity.Schedule;
 import com.aicheck.batch.domain.schedule.presentation.dto.AllowanceRegisteredResponse;
+import com.aicheck.batch.domain.schedule.presentation.dto.UpdateAllowanceFeignRequest;
 import com.aicheck.batch.domain.schedule.repository.ScheduleRepository;
 import com.aicheck.batch.global.error.BatchException;
 import com.aicheck.batch.global.error.ScheduleErrorCodes;
@@ -98,5 +99,13 @@ public class ScheduleServiceImpl implements ScheduleService {
     public ScheduleDto getSchedule(Long childId) {
         return ScheduleDto.from(scheduleRepository.findByChildIdAndDeletedAtIsNull(childId)
             .orElseThrow(() -> new BatchException(ScheduleErrorCodes.SCHEDULE_NOT_FOUND)));
+    }
+
+    @Override
+    @Transactional
+    public void updateScheduleByChildId(Long childId, UpdateAllowanceFeignRequest request) {
+        Schedule schedule = scheduleRepository.findByChildIdAndDeletedAtIsNull(childId)
+                .orElseThrow(() -> new BatchException(ScheduleErrorCodes.SCHEDULE_NOT_FOUND));
+        schedule.updateAmount(request.getAmount());
     }
 }
