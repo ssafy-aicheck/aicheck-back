@@ -2,10 +2,8 @@ package com.aicheck.business.domain.voice_phishings.infrastructure;
 
 import com.aicheck.business.domain.voice_phishings.application.dto.PhishingSimpleDto;
 import com.aicheck.business.domain.voice_phishings.application.dto.QPhishingSimpleDto;
-import com.aicheck.business.domain.voice_phishings.entity.PhishingType;
 import com.aicheck.business.domain.voice_phishings.presentation.dto.response.QPhishingResponse;
 import com.aicheck.business.domain.voice_phishings.presentation.dto.response.PhishingResponse;
-import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -14,7 +12,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static com.aicheck.business.domain.voice_phishings.entity.PhishingType.*;
 import static com.aicheck.business.domain.voice_phishings.entity.PhishingType.VOICE;
 import static com.aicheck.business.domain.voice_phishings.entity.PhishingType.URL;
 import static com.aicheck.business.domain.voice_phishings.entity.QVoicePhishing.voicePhishing;
