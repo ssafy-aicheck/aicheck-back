@@ -32,9 +32,9 @@ public interface TransactionRecordService {
 
     TransactionInfoResponse getTransactionInfo(Long memberId, LocalDate startDate, Interval interval);
 
-    void saveWithdrawTransaction(Long memberId, String displayName, Long amount);
+    Long saveWithdrawTransaction(Long memberId, String displayName, Long amount);
 
-    void saveDepositTransaction(Long memberId, String displayName, Long amount);
+    Long saveDepositTransaction(Long memberId, String displayName, Long amount);
 
     DescriptionRatioResponse getDescriptionRatio(Long memberId, YearMonth targetMonth);
 }

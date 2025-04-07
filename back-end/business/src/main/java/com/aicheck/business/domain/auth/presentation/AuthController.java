@@ -7,6 +7,8 @@ import com.aicheck.business.domain.auth.dto.SendAuthCodeRequest;
 import com.aicheck.business.domain.auth.dto.SignInRequest;
 import com.aicheck.business.domain.auth.dto.SignInResponse;
 import com.aicheck.business.domain.auth.dto.SignupRequest;
+import com.aicheck.business.global.auth.annotation.ManagerId;
+
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -27,8 +29,10 @@ public class AuthController {
     private final MailService mailService;
 
     @PostMapping("/signup")
-    public ResponseEntity<Void> signup(@RequestBody @Valid SignupRequest request) {
-        authService.signUp(request);
+    public ResponseEntity<Void> signup(
+        @ManagerId Long managerId,
+        @RequestBody @Valid SignupRequest request) {
+        authService.signUp(request, managerId);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 

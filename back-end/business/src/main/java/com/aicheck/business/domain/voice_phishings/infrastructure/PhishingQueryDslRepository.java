@@ -57,7 +57,7 @@ public class PhishingQueryDslRepository {
 				voicePhishing.id,
 				voicePhishing.member.name,
 				constant(VOICE),
-				null,
+				nullExpression(String.class),
 				voicePhishing.phoneNumber,
 				voicePhishing.score,
 				voicePhishing.createdAt))
@@ -73,7 +73,7 @@ public class PhishingQueryDslRepository {
 				badUrl.member.name,
 				constant(URL),
 				badUrl.url,
-				null,
+				nullExpression(String.class),
 				badUrl.score,
 				badUrl.createdAt))
 			.from(badUrl)
