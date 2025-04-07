@@ -84,7 +84,7 @@ public class AuthServiceImpl implements AuthService {
 		}
 
 		chatbotClient.savePrompt(SavePromptRequest.of(
-			member.getId(), member.getManagerId(), response.getBirth(), Gender.valueOf(response.getGender())));
+			member.getId(), member.getManagerId(), response.getBirth(), response.getGender()));
 	}
 
 	@Override
