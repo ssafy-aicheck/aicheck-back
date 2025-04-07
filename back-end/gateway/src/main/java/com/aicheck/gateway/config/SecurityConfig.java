@@ -71,7 +71,7 @@ public class SecurityConfig {
 				.pathMatchers(POST, "/aicheck/auth/reissue").authenticated()
 
 				// 회원
-				.pathMatchers(GET, "/aicheck/auth/signup/child").hasRole(Role.PARENT)
+				.pathMatchers(POST, "/aicheck/auth/signup/child").hasRole(Role.PARENT)
 				.pathMatchers(GET, "/aicheck/members/children/profiles").hasRole(Role.PARENT)
 				.pathMatchers(GET, "/aicheck/members/details").authenticated()
 				.pathMatchers(PATCH, "/aicheck/members/details").authenticated()
