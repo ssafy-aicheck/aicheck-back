@@ -19,8 +19,6 @@ spring:
           uri: lb://ALARM
           predicates:
             - Path=/alarm/**
-          filters:
-            - RewritePath=/alarm/(?<segment>.*), /${segment}
 
         - id: bank
           uri: lb://BANK

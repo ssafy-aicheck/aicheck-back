@@ -12,13 +12,13 @@ public class CurrentMemberIdArgumentResolver implements HandlerMethodArgumentRes
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
         return parameter.hasParameterAnnotation(CurrentMemberId.class)
-                && parameter.getParameterType().equals(Long.class);
+            && parameter.getParameterType().equals(Long.class);
     }
 
     @Override
     public Object resolveArgument(
-            MethodParameter parameter, ModelAndViewContainer mavContainer,
-            NativeWebRequest webRequest, WebDataBinderFactory binderFactory
+        MethodParameter parameter, ModelAndViewContainer mavContainer,
+        NativeWebRequest webRequest, WebDataBinderFactory binderFactory
     ) throws MissingRequestHeaderException {
         String header = webRequest.getHeader("X-User-ID");
         if (header == null) {

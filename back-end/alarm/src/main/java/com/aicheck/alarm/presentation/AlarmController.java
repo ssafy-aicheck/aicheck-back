@@ -23,7 +23,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-@RequestMapping("/")
+@RequestMapping("/alarm")
 @RestController
 public class AlarmController {
 
