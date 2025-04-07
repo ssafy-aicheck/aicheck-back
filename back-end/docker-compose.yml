@@ -122,7 +122,7 @@ services:
     healthcheck:
       test: [ "CMD-SHELL", "curl -f -u ${CONFIG_SPRING_SECURITY_USER_NAME}:${CONFIG_SPRING_SECURITY_USER_PASSWORD} http://localhost:8888/actuator/health || exit 1" ]
       interval: 10s
-      timeout: 100s
+      timeout: 5s
       retries: 5
 
   discovery:
