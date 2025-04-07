@@ -1,7 +1,6 @@
 package com.aicheck.business.config;
 
 import com.aicheck.business.global.auth.resolver.CurrentMemberIdArgumentResolver;
-import com.aicheck.business.global.auth.resolver.ManagerIdAndArgumentResolver;
 
 import java.util.List;
 import org.springframework.context.annotation.Configuration;
@@ -13,7 +12,6 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
         resolvers.add(new CurrentMemberIdArgumentResolver());
-        resolvers.add(new ManagerIdAndArgumentResolver());
     }
 }
 
