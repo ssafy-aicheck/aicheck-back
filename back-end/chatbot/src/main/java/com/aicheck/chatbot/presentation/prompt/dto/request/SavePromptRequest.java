@@ -2,8 +2,6 @@ package com.aicheck.chatbot.presentation.prompt.dto.request;
 
 import java.time.LocalDate;
 
-import com.aicheck.chatbot.domain.Gender;
-
 import jakarta.validation.constraints.NotNull;
 
 public record SavePromptRequest(
@@ -14,6 +12,6 @@ public record SavePromptRequest(
 	@NotNull(message = "birth가 없습니다.")
 	LocalDate birth,
 	@NotNull(message = "gender가 없습니다.")
-	Gender gender
+	String gender
 ) {
 }

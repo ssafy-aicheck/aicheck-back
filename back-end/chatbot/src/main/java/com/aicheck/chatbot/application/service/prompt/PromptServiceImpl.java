@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.aicheck.chatbot.application.service.prompt.dto.response.PromptInfo;
 import com.aicheck.chatbot.common.exception.ChatbotException;
+import com.aicheck.chatbot.domain.Gender;
 import com.aicheck.chatbot.domain.Prompt;
 import com.aicheck.chatbot.domain.categoryDifficulty.CategoryDifficulty;
 import com.aicheck.chatbot.domain.repository.PromptRepository;
@@ -39,7 +40,7 @@ public class PromptServiceImpl implements PromptService {
 			.managerId(request.managerId())
 			.birth(request.birth())
 			.categoryDifficulty(categoryDifficulty)
-			.gender(request.gender())
+			.gender(Gender.valueOf(request.gender()))
 			.build()
 		);
 	}
