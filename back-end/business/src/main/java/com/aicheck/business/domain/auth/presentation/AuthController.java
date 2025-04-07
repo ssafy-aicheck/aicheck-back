@@ -8,7 +8,6 @@ import com.aicheck.business.domain.auth.dto.SignInRequest;
 import com.aicheck.business.domain.auth.dto.SignInResponse;
 import com.aicheck.business.domain.auth.dto.SignupRequest;
 import com.aicheck.business.global.auth.annotation.CurrentMemberId;
-import com.aicheck.business.global.auth.annotation.ManagerId;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
