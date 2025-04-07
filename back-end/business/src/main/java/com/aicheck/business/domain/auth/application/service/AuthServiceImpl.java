@@ -6,7 +6,6 @@ import static com.aicheck.business.domain.auth.domain.entity.MemberType.PARENT;
 import com.aicheck.business.domain.account.infrastructure.client.BankClient;
 import com.aicheck.business.domain.auth.application.client.ChatbotClient;
 import com.aicheck.business.domain.auth.application.client.dto.request.SavePromptRequest;
-import com.aicheck.business.domain.auth.domain.entity.Gender;
 import com.aicheck.business.domain.auth.domain.entity.Member;
 import com.aicheck.business.domain.auth.domain.repository.MemberRepository;
 import com.aicheck.business.domain.auth.dto.BankMemberFeignResponse;

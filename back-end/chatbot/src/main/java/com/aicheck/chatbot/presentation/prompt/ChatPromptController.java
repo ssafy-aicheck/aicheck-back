@@ -29,7 +29,7 @@ public class ChatPromptController {
 
 	private final PromptService promptService;
 
-	@PostMapping("/")
+	@PostMapping
 	public ResponseEntity<Void> savePrompt(@Valid @RequestBody final SavePromptRequest request) {
 		promptService.savePrompt(request);
 		return ResponseEntity.status(CREATED).build();
@@ -40,7 +40,7 @@ public class ChatPromptController {
 		return ResponseEntity.ok(FindPromptResponse.from(promptService.getPrompt(childId)));
 	}
 
-	@PatchMapping("/")
+	@PatchMapping
 	public ResponseEntity<UpdatePromptResponse> updatePrompt(
 		@CurrentMemberId final Long managerId,
 		@Valid @RequestBody final UpdatePromptRequest request) {
