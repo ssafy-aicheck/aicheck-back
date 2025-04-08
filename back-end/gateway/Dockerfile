@@ -11,6 +11,9 @@ WORKDIR /app
 # Install curl
 RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
 
+ENV TZ=Asia/Seoul
+RUN ln -snf /usr/share/zoneinfo/Asia/Seoul /etc/localtime && echo "Asia/Seoul" > /etc/timezone
+
 COPY --from=builder /app/build/libs/*.jar app.jar
 EXPOSE 8080
 
