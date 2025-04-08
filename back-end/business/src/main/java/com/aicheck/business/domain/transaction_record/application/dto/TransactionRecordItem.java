@@ -26,8 +26,8 @@ public class TransactionRecordItem {
     public static TransactionRecordItem from(TransactionRecord entity) {
         return TransactionRecordItem.builder()
                 .recordId(entity.getId())
-                .firstCategoryId(entity.getFirstCategory().getId())
-                .firstCategoryName(entity.getFirstCategory().getDisplayName())
+                .firstCategoryId(entity.getFirstCategory() == null ? null : entity.getFirstCategory().getId())
+                .firstCategoryName(entity.getFirstCategory() == null ? null : entity.getFirstCategory().getDisplayName())
                 .secondCategoryId(entity.getSecondCategory().getId())
                 .secondCategoryName(entity.getSecondCategory().getDisplayName())
                 .displayName(entity.getDisplayName())

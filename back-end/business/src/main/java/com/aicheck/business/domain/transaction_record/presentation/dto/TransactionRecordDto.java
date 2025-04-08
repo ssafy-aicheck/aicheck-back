@@ -15,8 +15,8 @@ public record TransactionRecordDto(
 
     public static TransactionRecordDto from(TransactionRecord transactionRecord) {
         return TransactionRecordDto.builder()
-                .firstCategoryName(String.valueOf(transactionRecord.getFirstCategory()))
-                .secondCategoryName(String.valueOf(transactionRecord.getSecondCategory()))
+                .firstCategoryName(transactionRecord.getFirstCategory() == null ? null : String.valueOf(transactionRecord.getFirstCategory()))
+                .secondCategoryName(transactionRecord.getSecondCategory() == null ? null : String.valueOf(transactionRecord.getSecondCategory()))
                 .transactionType(transactionRecord.getType())
                 .amount(transactionRecord.getAmount())
                 .rating(transactionRecord.getRating())
