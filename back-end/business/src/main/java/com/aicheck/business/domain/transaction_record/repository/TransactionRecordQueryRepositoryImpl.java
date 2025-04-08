@@ -48,7 +48,9 @@ public class TransactionRecordQueryRepositoryImpl implements TransactionRecordQu
         List<DailyTransactionRecords> dailyList = grouped.entrySet().stream()
                 .map(entry -> DailyTransactionRecords.builder()
                         .date(entry.getKey())
-                        .records(entry.getValue())
+                        .records(entry.getValue().stream()
+                                .sorted((a, b) -> b.getCreatedAt().compareTo(a.getCreatedAt()))
+                                .toList())
                         .build())
                 .sorted((a, b) -> a.getDate().compareTo(b.getDate()))
                 .toList();
