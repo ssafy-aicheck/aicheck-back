@@ -115,7 +115,7 @@ public class SecurityConfig {
 				.pathMatchers(POST, "/aicheck/allowance/increase").hasRole(Role.CHILD)
 				.pathMatchers(POST, "/aicheck/allowance/increase/{id}").hasRole(Role.PARENT)
 				.pathMatchers(GET, "/aicheck/allowance/increase/details/{id}").authenticated()
-				.pathMatchers(GET, "/aicheck/allowance/summary").hasRole(Role.CHILD)
+				.pathMatchers(GET, "/aicheck/allowance/summary").authenticated()
 
 				// 채팅
 				.pathMatchers(POST, "/chatbot/start").hasRole(Role.CHILD)
