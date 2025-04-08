@@ -104,12 +104,12 @@ public class AllowanceServiceImpl implements AllowanceService {
 	}
 
 	private String getResponseTitle(AllowanceRequest.Status status) {
-		return String.format("부모님이 용돈 요청을 {}했습니다.",
+		return String.format("부모님이 용돈 요청을 %s했습니다.",
 			status.equals(AllowanceRequest.Status.ACCEPTED) ? "수락" : "거절");
 	}
 
 	private String getResponseBody(AllowanceRequest.Status status) {
-		return String.format("부모님이 용돈 요청을 {}했습니다.",
+		return String.format("부모님이 용돈 요청을 %s했습니다.",
 			status.equals(AllowanceRequest.Status.ACCEPTED) ? "수락" : "거절");
 	}
 }
