@@ -8,6 +8,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.aicheck.alarm.domain.Alarm;
 
 public interface AlarmRepository extends JpaRepository<Alarm, Long> {
-	List<Alarm> findAllByMemberIdAndDeletedAtIsNull(Long memberId);
+	List<Alarm> findAllByMemberIdAndDeletedAtIsNullOrderByCreatedAtDesc(Long memberId);
 	Optional<Alarm> findByIdAndMemberIdAndDeletedAtIsNull(Long id, Long memberId);
 }

@@ -120,20 +120,20 @@ public class AllowanceIncreaseServiceImpl implements AllowanceIncreaseService {
     }
 
     private String getResponseTitle(Status status) {
-        return String.format("부모님이 정기 용돈 인상 요청을 {}했습니다.", status.equals(ACCEPTED) ? "수락" : "거절");
+        return String.format("부모님이 정기 용돈 인상 요청을 %s했습니다.", status.equals(ACCEPTED) ? "수락" : "거절");
     }
 
     private String getResponseBody(AllowanceIncreaseRequest request, Status status) {
-        return String.format("부모님이 {}원에서 {}원으로의 정기 용돈 인상 요청을 {}했습니다.",
+        return String.format("부모님이 %,d원에서 %,d원으로의 정기 용돈 인상 요청을 %s했습니다.",
                 request.getBeforeAmount(), request.getAfterAmount(), status.equals(ACCEPTED) ? "수락" : "거절");
     }
 
     private String getRequestTitle(String name) {
-        return String.format("{}님이 정기 용돈 인상을 요청했습니다.", name);
+        return String.format("%s님이 정기 용돈 인상을 요청했습니다.", name);
     }
 
     private String getRequestBody(String name, Integer beforeAmount, Integer afterAmount) {
-        return String.format("{}님이 {}원에서 {}원으로의 정기 용돈 인상을 요청했습니다.",
+        return String.format("%s님이 %,d원에서 %,d원으로의 정기 용돈 인상을 요청했습니다.",
                 name, beforeAmount, afterAmount);
     }
 }
