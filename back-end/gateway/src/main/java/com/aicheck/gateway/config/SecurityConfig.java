@@ -111,7 +111,7 @@ public class SecurityConfig {
 				// 용돈 요청
 				.pathMatchers(GET, "/aicheck/allowance").authenticated()
 				.pathMatchers(POST, "/aicheck/allowance").hasRole(Role.PARENT)
-				.pathMatchers(GET, "/aicheck/allowance/details/{id}").authenticated()
+				.pathMatchers(GET, "/aicheck/allowance/detail/{id}").authenticated()
 				.pathMatchers(POST, "/aicheck/allowance/increase").hasRole(Role.CHILD)
 				.pathMatchers(POST, "/aicheck/allowance/increase/{id}").hasRole(Role.PARENT)
 				.pathMatchers(GET, "/aicheck/allowance/increase/details/{id}").authenticated()
