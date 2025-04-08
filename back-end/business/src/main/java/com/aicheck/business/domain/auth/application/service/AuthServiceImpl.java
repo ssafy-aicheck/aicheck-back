@@ -13,6 +13,8 @@ import com.aicheck.business.domain.auth.dto.SignInRequest;
 import com.aicheck.business.domain.auth.dto.SignInResponse;
 import com.aicheck.business.domain.auth.dto.SignupRequest;
 import com.aicheck.business.domain.auth.exception.BusinessException;
+import com.aicheck.business.domain.auth.infrastructure.AlarmClient;
+import com.aicheck.business.domain.auth.infrastructure.dto.SaveFCMTokenRequest;
 import com.aicheck.business.global.error.BusinessErrorCodes;
 
 import java.util.Collections;
@@ -37,6 +39,7 @@ public class AuthServiceImpl implements AuthService {
 	private final JwtProvider jwtProvider;
 	private final BankClient bankClient;
 	private final ChatbotClient chatbotClient;
+	private final AlarmClient alarmClient;
 	private final PasswordEncoder passwordEncoder;
 
 	@Transactional
@@ -98,6 +101,16 @@ public class AuthServiceImpl implements AuthService {
 		Authentication authentication = authenticate(member);
 		String accessToken = jwtProvider.generateAccessToken(authentication);
 		String refreshToken = jwtProvider.generateRefreshToken(authentication);
+		System.out.println(member.getId());
+		System.out.println(request.getFcmToken());
+		if(request.getFcmToken() != null) {
+			SaveFCMTokenRequest saveFCMTokenRequest = SaveFCMTokenRequest.builder()
+					.memberId(member.getId())
+					.token(request.getFcmToken())
+					.build();
+			System.out.println("@@@@@@@@@@@@@@@@@@@@@@");
+			alarmClient.saveFcmToken(saveFCMTokenRequest);
+		}
 
 		return SignInResponse.builder()
 			.accessToken(accessToken)
