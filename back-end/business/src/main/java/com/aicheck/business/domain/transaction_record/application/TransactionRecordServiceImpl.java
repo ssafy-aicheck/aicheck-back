@@ -64,7 +64,7 @@ public class TransactionRecordServiceImpl implements TransactionRecordService {
             throw new BusinessException(BusinessErrorCodes.NOT_YOUR_CHILD);
         }
         List<TransactionType> transactionTypes = getTransactionTypes(type);
-        return transactionRecordQueryRepository.findTransactionRecords(memberId, startDate, endDate, transactionTypes);
+        return transactionRecordQueryRepository.findTransactionRecords(childId, startDate, endDate, transactionTypes);
     }
 
     @Override
