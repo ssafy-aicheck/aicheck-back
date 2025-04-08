@@ -19,8 +19,8 @@ public record SaveAllowanceRequest(
 			.childId(childId)
 			.parentId(parentId)
 			.amount(result.amount())
-			.firstCategoryName(result.firstCategoryName())
-			.secondCategoryName(result.secondCategoryName())
+			.firstCategoryName(result.firstCategoryName() == null ? "기타" : result.firstCategoryName())
+			.secondCategoryName(result.secondCategoryName() == null ? "기타" : result.secondCategoryName())
 			.description(result.description())
 			.build();
 	}
