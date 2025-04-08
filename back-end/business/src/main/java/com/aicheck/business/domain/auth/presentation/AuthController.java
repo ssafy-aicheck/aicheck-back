@@ -45,6 +45,8 @@ public class AuthController {
 
 	@PostMapping("/signin")
 	public ResponseEntity<SignInResponse> signIn(@RequestBody @Valid SignInRequest request) {
+		System.out.println("@@@@@@@@@@@@@@@@@@@");
+		System.out.println(request.getFcmToken());
 		SignInResponse signInResponse = authService.signIn(request);
 		return new ResponseEntity<>(signInResponse, HttpStatus.OK);
 	}

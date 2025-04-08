@@ -108,7 +108,7 @@ public class TransactionStatisticsService {
                     getReportTitle(memberRecord.getName(), month),
                     getReportBody(memberRecord.getName(), month),
                     REPORT,
-                    null
+                    memberRecord.getMemberId()
             ));
 
             alarmEventProducer.sendEvent(AlarmEventMessage.of(
@@ -116,7 +116,7 @@ public class TransactionStatisticsService {
                     getReportTitle(memberRecord.getName(), month),
                     getReportBody(memberRecord.getName(), month),
                     REPORT,
-                    null
+                    memberRecord.getMemberId()
             ));
         }
     }
