@@ -25,7 +25,6 @@ import com.aicheck.business.domain.auth.domain.entity.MemberType;
 import com.aicheck.business.domain.auth.domain.repository.MemberRepository;
 import com.aicheck.business.domain.auth.exception.BusinessException;
 import com.aicheck.business.global.infrastructure.event.AlarmEventProducer;
-import com.aicheck.business.global.infrastructure.event.Type;
 import com.aicheck.business.global.infrastructure.event.dto.request.AlarmEventMessage;
 
 import lombok.RequiredArgsConstructor;
