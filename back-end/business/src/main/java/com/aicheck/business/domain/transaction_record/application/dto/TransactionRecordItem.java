@@ -32,7 +32,7 @@ public class TransactionRecordItem {
                 .secondCategoryName(entity.getSecondCategory() == null ? null : entity.getSecondCategory().getDisplayName())
                 .displayName(entity.getDisplayName())
                 .type(parseType(entity.getType()))
-                .amount(entity.getAmount().longValue())
+                .amount(getSignedAmount(entity.getAmount(), entity.getType()))
                 .description(entity.getDescription())
                 .rating(entity.getRating())
                 .time(entity.getCreatedAt().toLocalTime().format(DateTimeFormatter.ofPattern("HH:mm")))
@@ -44,6 +44,13 @@ public class TransactionRecordItem {
         return switch (type) {
             case DEPOSIT, INBOUND_TRANSFER -> "INCOME";
             case PAYMENT, WITHDRAW, OUTBOUND_TRANSFER -> "EXPENSE";
+        };
+    }
+
+    private static long getSignedAmount(long amount, TransactionType type) {
+        return switch (type) {
+            case DEPOSIT, INBOUND_TRANSFER -> amount;
+            case PAYMENT, WITHDRAW, OUTBOUND_TRANSFER -> -amount;
         };
     }
 
