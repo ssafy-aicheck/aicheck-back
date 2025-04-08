@@ -15,6 +15,7 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 
     List<Member> findMembersByManagerIdAndType(Long managerId, MemberType type);
 
+    @Query("SELECT m.type FROM Member m WHERE m.id = :memberId")
     Optional<MemberType> findMemberTypeById(Long memberId);
 
     List<Member> findMembersByTypeAndDeletedAtIsNull(MemberType type);
