@@ -52,7 +52,7 @@ public class TransactionRecordQueryRepositoryImpl implements TransactionRecordQu
                                 .sorted((a, b) -> b.getCreatedAt().compareTo(a.getCreatedAt()))
                                 .toList())
                         .build())
-                .sorted((a, b) -> a.getDate().compareTo(b.getDate()))
+                .sorted((a, b) -> b.getDate().compareTo(a.getDate()))
                 .toList();
 
         return TransactionRecordListResponse.builder()
