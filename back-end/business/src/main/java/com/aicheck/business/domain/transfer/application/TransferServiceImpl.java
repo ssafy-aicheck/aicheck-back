@@ -49,6 +49,8 @@ public class TransferServiceImpl implements TransferService {
     @Override
     @Transactional
     public void executeTransfer(Long memberId, TransferRequest transferRequest) {
+        System.out.println("================= 송금 시작");
+        System.out.println(transferRequest.toString());
         Member sender = memberRepository.findById(memberId)
                 .orElseThrow(() -> new BusinessException(BusinessErrorCodes.BUSINESS_MEMBER_NOT_FOUND));
         String fromAccountNo = sender.getAccountNo();
@@ -63,6 +65,7 @@ public class TransferServiceImpl implements TransferService {
 
         try {
             bankClient.executeTransfer(request);
+            System.out.println("================= 뱅크로 송금 전달");
         } catch (Exception e) {
             alarmEventProducer.sendEvent(
                     AlarmEventMessage.of(
@@ -71,6 +74,7 @@ public class TransferServiceImpl implements TransferService {
                             getFailBody(receiver.getName(), transferRequest.getAmount()),
                             TRANSFER_FAILED,
                             null));
+            System.out.println("================= 뱅크로 송금 전달 과정에서 잔액 부족 발생");
             throw e;
         }
 
@@ -79,6 +83,7 @@ public class TransferServiceImpl implements TransferService {
         Long receiverEndPoint = transactionRecordService.saveDepositTransaction(
                 receiver.getId(), sender.getName(), transferRequest.getAmount());
 
+        System.out.println("============================= sender에게 알림 호출");
         alarmEventProducer.sendEvent(
                 AlarmEventMessage.of(
                         sender.getId(),
@@ -88,7 +93,7 @@ public class TransferServiceImpl implements TransferService {
                         senderEndPoint
                 )
         );
-
+        System.out.println("============================= receiver에게 알림 호출");
         alarmEventProducer.sendEvent(
                 AlarmEventMessage.of(
                         receiver.getId(),
@@ -98,6 +103,7 @@ public class TransferServiceImpl implements TransferService {
                         receiverEndPoint
                 )
         );
+        System.out.println("============================ 알림 호출 완료");
     }
 
     private String getFailTitle(String name) {
