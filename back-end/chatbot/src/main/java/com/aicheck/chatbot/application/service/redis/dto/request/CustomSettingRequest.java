@@ -31,14 +31,16 @@ public record CustomSettingRequest(
 
 		return CustomSettingRequest.builder()
 			.childId(promptInfo.childId())
-			.originalAllowance(scheduledAllowance.allowance())
+			.originalAllowance(scheduledAllowance == null ? null : scheduledAllowance.allowance())
 			.conversationStyle(promptInfo.content())
 			.age(promptInfo.age())
 			.gender(promptInfo.gender())
-			.averageScore(transactionInfoResponse.averageScore())
-			.interval(scheduledAllowance.interval())
+			.averageScore(
+				transactionInfoResponse == null ? null : transactionInfoResponse.averageScore())
+			.interval(scheduledAllowance == null ? null : scheduledAllowance.interval())
 			.categoryDifficulties(promptInfo.categoryDifficulties())
-			.transactionRecords(transactionInfoResponse.transactionRecords())
+			.transactionRecords(transactionInfoResponse == null ? null :
+				transactionInfoResponse.transactionRecords())
 			.build();
 	}
 }

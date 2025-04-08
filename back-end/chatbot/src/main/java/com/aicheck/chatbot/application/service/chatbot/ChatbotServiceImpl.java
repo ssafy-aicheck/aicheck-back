@@ -85,9 +85,20 @@ public class ChatbotServiceImpl implements ChatbotService {
 	@Override
 	public void startChat(Long childId, ChatType chatType) {
 		final PromptInfo promptInfo = promptService.getPrompt(childId);
-		final ScheduledAllowance scheduledAllowance = batchFeignClient.getScheduledAllowance(childId);
-		final TransactionInfoResponse transactionInfo = businessFeignClient
-			.getTransactionInfo(childId, scheduledAllowance.startDate(), scheduledAllowance.interval().name());
+		ScheduledAllowance scheduledAllowance = null;
+		TransactionInfoResponse transactionInfo = null;
+
+		try{
+			scheduledAllowance = batchFeignClient.getScheduledAllowance(childId);
+			transactionInfo = businessFeignClient.getTransactionInfo(
+				childId,
+				scheduledAllowance.startDate(),
+				scheduledAllowance.interval().name()
+			);
+		}catch (Exception e){
+			scheduledAllowance = null;
+			transactionInfo = null;
+		}
 
 		final CustomSetting setting = CustomSetting.from(
 			CustomSettingRequest.from(promptInfo, scheduledAllowance, transactionInfo)
