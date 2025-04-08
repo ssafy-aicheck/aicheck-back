@@ -2,9 +2,7 @@ package com.aicheck.business.domain.allowance.infrastructure;
 
 import static com.aicheck.business.domain.allowance.entity.QAllowanceIncreaseRequest.allowanceIncreaseRequest;
 import static com.aicheck.business.domain.allowance.entity.QAllowanceRequest.allowanceRequest;
-import static com.aicheck.business.domain.auth.domain.entity.QMember.member;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -16,7 +14,6 @@ import com.aicheck.business.domain.allowance.dto.AllowanceRequestDto;
 import com.aicheck.business.domain.allowance.dto.QAllowanceIncreaseRequestDto;
 import com.aicheck.business.domain.allowance.dto.QAllowanceRequestDto;
 import com.aicheck.business.domain.allowance.presentation.dto.response.AllowanceResponse;
-import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
@@ -29,16 +26,17 @@ public class AllowanceQueryDslRepository {
 	private final JPAQueryFactory queryFactory;
 
 	public List<AllowanceResponse> findAllByParent(Long parentId) {
-		return getResponses(parentIdEq(parentId));
+		return getResponsesByParent(parentId);
 	}
 
 	public List<AllowanceResponse> findAllByChild(Long childId) {
-		return getResponses(childIdEq(childId));
+		return getResponsesByChild(childId);
 	}
 
 	public Optional<AllowanceRequestDto> findById(Long id) {
-		return Optional.ofNullable(queryFactory.select(
-				new QAllowanceRequestDto(
+		return Optional.ofNullable(
+			queryFactory
+				.select(new QAllowanceRequestDto(
 					allowanceRequest.id,
 					allowanceRequest.parent.id,
 					allowanceRequest.child.id,
@@ -51,77 +49,73 @@ public class AllowanceQueryDslRepository {
 					allowanceRequest.description,
 					allowanceRequest.createdAt
 				))
-			.from(allowanceRequest)
-			.join(allowanceRequest.child, member).fetchJoin()
-			.where(IdEq(id), deletedIsNull())
-			.orderBy(createdAtDesc())
-			.fetchOne());
+				.from(allowanceRequest)
+				.where(allowanceRequest.id.eq(id), allowanceRequest.deletedAt.isNull())
+				.fetchOne()
+		);
 	}
 
-	private List<AllowanceResponse> getResponses(BooleanExpression condition) {
-		List<AllowanceRequestDto> allowanceList = queryFactory.select(
-				new QAllowanceRequestDto(
-					allowanceRequest.id,
-					allowanceRequest.parent.id,
-					allowanceRequest.child.id,
-					allowanceRequest.child.name,
-					allowanceRequest.child.profileUrl,
-					allowanceRequest.amount,
-					allowanceRequest.firstCategoryName,
-					allowanceRequest.secondCategoryName,
-					allowanceRequest.status,
-					allowanceRequest.description,
-					allowanceRequest.createdAt
-				))
+	private List<AllowanceResponse> getResponsesByParent(Long parentId) {
+		List<AllowanceRequestDto> requests = getAllowanceRequests(allowanceRequest.parent.id.eq(parentId));
+		List<AllowanceIncreaseRequestDto> increases = getAllowanceIncreases(allowanceIncreaseRequest.parent.id.eq(parentId));
+
+		return mergeResponses(requests, increases);
+	}
+
+	private List<AllowanceResponse> getResponsesByChild(Long childId) {
+		List<AllowanceRequestDto> requests = getAllowanceRequests(allowanceRequest.child.id.eq(childId));
+		List<AllowanceIncreaseRequestDto> increases = getAllowanceIncreases(allowanceIncreaseRequest.child.id.eq(childId));
+
+		return mergeResponses(requests, increases);
+	}
+
+	private List<AllowanceRequestDto> getAllowanceRequests(BooleanExpression condition) {
+		return queryFactory
+			.select(new QAllowanceRequestDto(
+				allowanceRequest.id,
+				allowanceRequest.parent.id,
+				allowanceRequest.child.id,
+				allowanceRequest.child.name,
+				allowanceRequest.child.profileUrl,
+				allowanceRequest.amount,
+				allowanceRequest.firstCategoryName,
+				allowanceRequest.secondCategoryName,
+				allowanceRequest.status,
+				allowanceRequest.description,
+				allowanceRequest.createdAt
+			))
 			.from(allowanceRequest)
-			.join(allowanceRequest.child, member).fetchJoin()
-			.where(condition, deletedIsNull())
+			.where(condition, allowanceRequest.deletedAt.isNull())
 			.fetch();
+	}
 
-		List<AllowanceIncreaseRequestDto> allowanceIncreaseList = queryFactory.select(
-				new QAllowanceIncreaseRequestDto(
-					allowanceIncreaseRequest.id,
-					allowanceIncreaseRequest.parent.id,
-					allowanceIncreaseRequest.child.id,
-					allowanceIncreaseRequest.child.name,
-					allowanceIncreaseRequest.child.profileUrl,
-					allowanceIncreaseRequest.beforeAmount,
-					allowanceIncreaseRequest.afterAmount,
-					allowanceIncreaseRequest.reportId,
-					allowanceIncreaseRequest.status,
-					allowanceIncreaseRequest.summary,
-					allowanceIncreaseRequest.description,
-					allowanceIncreaseRequest.createdAt
-				))
+	private List<AllowanceIncreaseRequestDto> getAllowanceIncreases(BooleanExpression condition) {
+		return queryFactory
+			.select(new QAllowanceIncreaseRequestDto(
+				allowanceIncreaseRequest.id,
+				allowanceIncreaseRequest.parent.id,
+				allowanceIncreaseRequest.child.id,
+				allowanceIncreaseRequest.child.name,
+				allowanceIncreaseRequest.child.profileUrl,
+				allowanceIncreaseRequest.beforeAmount,
+				allowanceIncreaseRequest.afterAmount,
+				allowanceIncreaseRequest.reportId,
+				allowanceIncreaseRequest.status,
+				allowanceIncreaseRequest.summary,
+				allowanceIncreaseRequest.description,
+				allowanceIncreaseRequest.createdAt
+			))
 			.from(allowanceIncreaseRequest)
-			.join(allowanceIncreaseRequest.child, member).fetchJoin()
-			.where(condition, deletedIsNull())
+			.where(condition, allowanceIncreaseRequest.deletedAt.isNull())
 			.fetch();
+	}
 
+	private List<AllowanceResponse> mergeResponses(List<AllowanceRequestDto> requests, List<AllowanceIncreaseRequestDto> increases) {
 		return Stream.concat(
-				allowanceList.stream().map(AllowanceResponse::from),
-				allowanceIncreaseList.stream().map(AllowanceResponse::from))
+				requests.stream().map(AllowanceResponse::from),
+				increases.stream().map(AllowanceResponse::from)
+			)
 			.sorted()
 			.toList();
-	}
-
-	private static BooleanExpression IdEq(Long id) {
-		return id != null ? allowanceRequest.id.eq(id) : null;
-	}
-
-	private static BooleanExpression parentIdEq(Long id) {
-		return id != null ? allowanceRequest.parent.id.eq(id) : null;
-	}
-
-	private static BooleanExpression childIdEq(Long id) {
-		return id != null ? allowanceRequest.child.id.eq(id) : null;
-	}
-
-	private static BooleanExpression deletedIsNull() {
-		return allowanceRequest.deletedAt.isNull();
-	}
-
-	private static OrderSpecifier<LocalDateTime> createdAtDesc() {
-		return allowanceRequest.createdAt.desc();
 	}
 }
