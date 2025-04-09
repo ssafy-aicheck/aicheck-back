@@ -10,4 +10,5 @@ import com.aicheck.alarm.domain.Alarm;
 public interface AlarmRepository extends JpaRepository<Alarm, Long> {
 	List<Alarm> findAllByMemberIdAndDeletedAtIsNullOrderByCreatedAtDesc(Long memberId);
 	Optional<Alarm> findByIdAndMemberIdAndDeletedAtIsNull(Long id, Long memberId);
+	Long countByMemberIdAndIsReadFalseAndDeletedAtIsNull(Long memberId);
 }

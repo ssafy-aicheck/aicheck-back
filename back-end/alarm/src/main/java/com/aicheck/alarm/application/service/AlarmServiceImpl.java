@@ -11,6 +11,7 @@ import com.aicheck.alarm.application.dto.AlarmEventMessage;
 import com.aicheck.alarm.common.exception.AlarmException;
 import com.aicheck.alarm.domain.Alarm;
 import com.aicheck.alarm.domain.repository.AlarmRepository;
+import com.aicheck.alarm.presentation.dto.response.AlarmCountResponse;
 import com.aicheck.alarm.presentation.dto.response.AlarmResponse;
 
 import lombok.RequiredArgsConstructor;
@@ -50,5 +51,10 @@ public class AlarmServiceImpl implements AlarmService {
 	@Override
 	public void saveAlarm(final AlarmEventMessage message) {
 		alarmRepository.save(message.toEntity());
+	}
+
+	@Override
+	public AlarmCountResponse getAlarmCounts(Long memberId) {
+		return AlarmCountResponse.of(alarmRepository.countByMemberIdAndIsReadFalseAndDeletedAtIsNull(memberId));
 	}
 }

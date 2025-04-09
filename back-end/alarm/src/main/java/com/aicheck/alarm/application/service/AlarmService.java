@@ -3,6 +3,7 @@ package com.aicheck.alarm.application.service;
 import java.util.List;
 
 import com.aicheck.alarm.application.dto.AlarmEventMessage;
+import com.aicheck.alarm.presentation.dto.response.AlarmCountResponse;
 import com.aicheck.alarm.presentation.dto.response.AlarmResponse;
 
 public interface AlarmService {
@@ -10,4 +11,5 @@ public interface AlarmService {
 	void readAlarm(Long alarmId, Long memberId);
 	void deleteAlarm(Long alarmId, Long memberId);
 	void saveAlarm(AlarmEventMessage message);
+	AlarmCountResponse getAlarmCounts(Long memberId);
 }
