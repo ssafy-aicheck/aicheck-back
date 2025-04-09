@@ -7,5 +7,8 @@ import lombok.Getter;
 @Getter
 @Builder
 public class CalendarRecordListResponse {
+    private Long expense;
+    private Long income;
+    private Long sum;
     private List<CalendarRecordItem> calendar;
 }

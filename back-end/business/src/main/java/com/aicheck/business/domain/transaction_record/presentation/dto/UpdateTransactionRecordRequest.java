@@ -9,7 +9,6 @@ public class UpdateTransactionRecordRequest {
     @NotNull
     private Long recordId;
 
-    @NotNull
     private Integer firstCategoryId;
 
     private Integer secondCategoryId;
