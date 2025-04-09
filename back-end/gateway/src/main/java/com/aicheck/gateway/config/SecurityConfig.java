@@ -131,6 +131,8 @@ public class SecurityConfig {
 				.pathMatchers(GET, "/aicheck/phishings").authenticated()
 				.pathMatchers(GET, "/aicheck/phishings/family").authenticated()
 
+				.pathMatchers(POST, "/aicheck/urls").authenticated()
+
 				// 알림
 				.pathMatchers(GET, "/alarm").authenticated()
 				.pathMatchers(PATCH, "/alarm").authenticated()
