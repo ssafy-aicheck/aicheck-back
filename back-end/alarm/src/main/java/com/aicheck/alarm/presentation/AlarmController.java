@@ -17,6 +17,7 @@ import com.aicheck.alarm.common.resolver.CurrentMemberId;
 import com.aicheck.alarm.presentation.dto.request.DeleteAlarmRequest;
 import com.aicheck.alarm.presentation.dto.request.ReadAlarmRequest;
 import com.aicheck.alarm.presentation.dto.request.SaveFCMTokenRequest;
+import com.aicheck.alarm.presentation.dto.response.AlarmCountResponse;
 import com.aicheck.alarm.presentation.dto.response.AlarmResponse;
 
 import jakarta.validation.Valid;
@@ -53,5 +54,10 @@ public class AlarmController {
 	public ResponseEntity<Void> saveFCMToken(@Valid @RequestBody final SaveFCMTokenRequest request){
 		fcmTokenService.saveFCMToken(request.memberId(), request.token());
 		return ResponseEntity.ok().build();
+	}
+
+	@GetMapping("/check")
+	public ResponseEntity<AlarmCountResponse> getAlarmCounts(@CurrentMemberId final Long memberId){
+		return ResponseEntity.ok(alarmService.getAlarmCounts(memberId));
 	}
 }

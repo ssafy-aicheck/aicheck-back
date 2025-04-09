@@ -135,6 +135,7 @@ public class SecurityConfig {
 				.pathMatchers(GET, "/alarm").authenticated()
 				.pathMatchers(PATCH, "/alarm").authenticated()
 				.pathMatchers(DELETE, "/alarm").authenticated()
+				.pathMatchers(GET, "/alarm/check").authenticated()
 
 				// 카테고리
 				.pathMatchers(GET, "/aicheck/category/**").authenticated()
