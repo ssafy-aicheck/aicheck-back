@@ -19,7 +19,7 @@ CREATE TABLE `accounts`
     `member_id`    INT UNSIGNED    NOT NULL,
     `account_no`   VARCHAR(20) NOT NULL,
     `account_name` VARCHAR(60) NOT NULL,
-    `password`     CHAR(60)    NOT NULL,
+    `password`     CHAR(4)    NOT NULL,
     `balance`      BIGINT UNSIGNED NOT NULL DEFAULT 0,
     `created_at`   DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `modified_at`  DATETIME NULL     DEFAULT NULL,

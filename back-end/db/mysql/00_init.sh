@@ -24,7 +24,10 @@ mysql -u root -p"${MYSQL_ROOT_PASSWORD}" -e "FLUSH PRIVILEGES;"
 for DB in "${DATABASES[@]}"; do
   for FILE in /docker-entrypoint-initdb.d/${DB}*.sql; do
     if [ -f "$FILE" ]; then
+      echo "▶ 실행 중: $FILE → $DB"
       mysql -u root -p"${MYSQL_ROOT_PASSWORD}" "$DB" < "$FILE"
+    else
+      echo "❌ 파일 없음: $FILE"
     fi
   done
 done

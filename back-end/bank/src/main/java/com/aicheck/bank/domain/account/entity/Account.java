@@ -42,7 +42,7 @@ public class Account {
     @Column(name = "account_no", nullable = false, unique = true, length = 20)
     private String accountNo;
 
-    @Column(name = "password", nullable = false, length = 60)
+    @Column(name = "password", nullable = false, length = 4)
     private String password;
 
     @Column(name = "balance", nullable = false)
