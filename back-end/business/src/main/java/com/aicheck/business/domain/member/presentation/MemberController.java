@@ -30,7 +30,7 @@ public class MemberController {
 
     @PatchMapping("/details")
     public ResponseEntity<Void> updateProfile(@CurrentMemberId Long memberId,
-                                              @RequestPart("image") MultipartFile image) {
+                                              @RequestPart(value = "image", required = false) MultipartFile image) {
         memberService.updateMemberInfo(memberId, image);
         return ResponseEntity.ok().build();
     }
