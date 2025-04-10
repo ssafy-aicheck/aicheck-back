@@ -35,6 +35,7 @@ public class SecurityConfig {
 		"/aicheck/auth/signin",
 		"/aicheck/auth/email",
 		"/aicheck/auth/email/check",
+		"/bank/signup",
 		"/swagger-ui/**",
 		"/swagger-ui.html",
 		"/aicheck/v3/api-docs",
@@ -137,6 +138,7 @@ public class SecurityConfig {
 				.pathMatchers(GET, "/alarm").authenticated()
 				.pathMatchers(PATCH, "/alarm").authenticated()
 				.pathMatchers(DELETE, "/alarm").authenticated()
+				.pathMatchers(DELETE, "/alarm/fcm").authenticated()
 				.pathMatchers(GET, "/alarm/check").authenticated()
 
 				// 카테고리

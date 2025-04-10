@@ -1,7 +1,5 @@
 package com.aicheck.alarm.domain;
 
-import com.aicheck.alarm.common.entity.BaseEntity;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -15,7 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "fcm_tokens")
 @Entity
-public class FCMToken extends BaseEntity {
+public class FCMToken {
 
 	@Id
 	@Column(name = "member_id")

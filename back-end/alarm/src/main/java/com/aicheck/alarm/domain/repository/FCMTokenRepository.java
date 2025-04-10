@@ -7,5 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.aicheck.alarm.domain.FCMToken;
 
 public interface FCMTokenRepository extends JpaRepository<FCMToken, Long> {
-	Optional<FCMToken> findByMemberIdAndDeletedAtIsNull(Long memberId);
+	Optional<FCMToken> findByMemberId(Long memberId);
+	void deleteByMemberId(Long memberId);
 }

@@ -5,6 +5,7 @@ import static com.aicheck.alarm.common.error.AlarmErrorCodes.NOT_FOUND_FCM_TOKEN
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.aicheck.alarm.common.entity.BaseEntity;
 import com.aicheck.alarm.common.exception.AlarmException;
 import com.aicheck.alarm.domain.FCMToken;
 import com.aicheck.alarm.domain.repository.FCMTokenRepository;
@@ -20,17 +21,23 @@ public class FCMTokenServiceImpl implements FCMTokenService {
 
 	@Override
 	public String getFCMToken(final Long memberId) {
-		return fcmTokenRepository.findByMemberIdAndDeletedAtIsNull(memberId)
+		return fcmTokenRepository.findByMemberId(memberId)
 			.orElseThrow(() -> new AlarmException(NOT_FOUND_FCM_TOKEN)).getToken();
 	}
 
 	@Transactional
 	@Override
 	public void saveFCMToken(final Long memberId, final String token) {
-		fcmTokenRepository.findByMemberIdAndDeletedAtIsNull(memberId)
+		fcmTokenRepository.findByMemberId(memberId)
 			.ifPresentOrElse(
 				fcm -> fcm.changeToken(token),
 				() -> fcmTokenRepository.save(FCMToken.builder().memberId(memberId).token(token).build())
 			);
+	}
+
+	@Transactional
+	@Override
+	public void deleteFCMToken(Long memberId) {
+		fcmTokenRepository.deleteByMemberId(memberId);
 	}
 }
