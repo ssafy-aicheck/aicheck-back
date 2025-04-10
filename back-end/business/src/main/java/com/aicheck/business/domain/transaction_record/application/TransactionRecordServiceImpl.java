@@ -178,21 +178,15 @@ public class TransactionRecordServiceImpl implements TransactionRecordService {
 	}
 
 	@Override
-	public List<MemberTransactionRecords> getTransactionRecords() {
+	public List<MemberTransactionRecords> getTransactionRecords(Integer year, Integer month) {
 		List<Member> children = memberRepository.findMembersByTypeAndDeletedAtIsNull(MemberType.CHILD);
-
-		LocalDate now = LocalDate.now();
-		YearMonth lastMonth = YearMonth.from(now.minusMonths(1));
-
-		int year = lastMonth.getYear();
-		int month = lastMonth.getMonthValue();
 
 		List<TransactionRecord> records = transactionRecordRepository.findByYearAndMonth(year, month);
 
 		List<MemberTransactionRecords> memberTransactionRecords = new ArrayList<>();
 		for (Member child : children) {
 			List<TransactionRecordDetailResponse> transactionDetails = new ArrayList<>();
-			records.stream().filter(record -> record.getMemberId() == child.getId())
+			records.stream().filter(record -> record.getMemberId().equals(child.getId()))
 				.forEach(record -> transactionDetails.add(TransactionRecordDetailResponse.from(record)));
 			memberTransactionRecords.add(MemberTransactionRecords.builder()
 				.memberId(child.getId())

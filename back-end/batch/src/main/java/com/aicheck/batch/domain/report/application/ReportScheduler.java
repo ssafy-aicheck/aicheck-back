@@ -23,7 +23,7 @@ public class ReportScheduler {
     public List<MemberTransactionRecords> collectMonthlyTransactionStatistics(Integer year, Integer month) {
         log.info("📊 월별 자녀 거래 내역 수집 시작");
 
-        List<MemberTransactionRecords> records = businessClient.getChildrenTransactions();
+        List<MemberTransactionRecords> records = businessClient.getChildrenTransactions(year, month);
 
         log.info("✅ 총 {}명의 자녀 거래 기록 수집 완료", records.size());
 

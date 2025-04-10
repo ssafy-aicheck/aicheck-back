@@ -8,6 +8,7 @@ import java.util.List;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @FeignClient(name = "business")
 public interface BusinessClient {
@@ -19,7 +20,7 @@ public interface BusinessClient {
     AccountNoResponse getAccountNumber(@PathVariable("memberId") Long memberId);
 
     @GetMapping("/transaction-records/statistics")
-    List<MemberTransactionRecords> getChildrenTransactions();
+    List<MemberTransactionRecords> getChildrenTransactions(@RequestParam Integer year, @RequestParam Integer month);
 
     @GetMapping("/members/internal/info/{memberId}")
     MemberInfoResponse getMemberInfo(@PathVariable("memberId") Long memberId);

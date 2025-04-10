@@ -81,8 +81,8 @@ public class TransactionRecordController {
     }
 
     @GetMapping("/statistics")
-    public ResponseEntity<List<MemberTransactionRecords>> getSatisfyingTransactionRecords() {
-        return ResponseEntity.ok(transactionRecordService.getTransactionRecords());
+    public ResponseEntity<List<MemberTransactionRecords>> getSatisfyingTransactionRecords(@RequestParam Integer year, @RequestParam Integer month) {
+        return ResponseEntity.ok(transactionRecordService.getTransactionRecords(year, month));
     }
 
 }
