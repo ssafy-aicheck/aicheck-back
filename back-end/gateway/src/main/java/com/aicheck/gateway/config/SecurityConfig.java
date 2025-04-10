@@ -36,6 +36,7 @@ public class SecurityConfig {
 		"/aicheck/auth/email",
 		"/aicheck/auth/email/check",
 		"/bank/signup",
+		"/bank/check",
 		"/swagger-ui/**",
 		"/swagger-ui.html",
 		"/aicheck/v3/api-docs",
