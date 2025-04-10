@@ -58,7 +58,10 @@ public class MemberServiceImpl implements MemberService {
     public void updateMemberInfo(Long memberId, MultipartFile image) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new BusinessException(BusinessErrorCodes.BUSINESS_MEMBER_NOT_FOUND));
-
+        if(image == null) {
+           member.updateProfileUrl(null);
+           return;
+        }
         String profileImageUrl;
         try {
             profileImageUrl = s3Service.uploadImageFile(image);
