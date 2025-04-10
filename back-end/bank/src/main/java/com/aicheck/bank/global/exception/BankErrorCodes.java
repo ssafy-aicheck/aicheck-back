@@ -15,6 +15,7 @@ public enum BankErrorCodes implements ErrorCode {
 
     NOT_YOUR_ACCOUNT(HttpStatus.FORBIDDEN, "BANK_NOT_YOUR_ACCOUNT_403", "본인 계좌만 등록 가능합니다"),
     INSUFFICIENT_BALANCE(HttpStatus.BAD_REQUEST, "BANK_INSUFFICIENT_BALANCE_400", "잔액이 부족합니다"),
+    DUPLICATED_ACCOUNT_NO(HttpStatus.BAD_REQUEST, "BANK_DUPLICATED_ACCOUNT_NO_400", "계좌번호가 중복됩니다.")
     ;
 
     private final HttpStatus httpStatus;
