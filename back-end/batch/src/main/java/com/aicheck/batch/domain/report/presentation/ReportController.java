@@ -25,16 +25,9 @@ public class ReportController {
 
     // 리포트 생성용 임시 컨트롤러
     @GetMapping("/test")
-    public String test() {
-        List<?> records = reportScheduler.collectMonthlyTransactionStatistics();
+    public String test(@RequestParam Integer year, @RequestParam Integer month) {
+        List<?> records = reportScheduler.collectMonthlyTransactionStatistics(year, month);
         return "@@@";
-    }
-
-    // 또래 리포트 생성용 임시 컨트롤러
-    @GetMapping("/test2")
-    public String test2() {
-
-        return "@@@@";
     }
 
     @GetMapping

@@ -20,16 +20,16 @@ public class ReportScheduler {
      * 매월 1일 00시 10분에 실행
      */
 //    @Scheduled(cron = "0 10 0 1 * *")
-    public List<MemberTransactionRecords> collectMonthlyTransactionStatistics() {
+    public List<MemberTransactionRecords> collectMonthlyTransactionStatistics(Integer year, Integer month) {
         log.info("📊 월별 자녀 거래 내역 수집 시작");
 
         List<MemberTransactionRecords> records = businessClient.getChildrenTransactions();
 
         log.info("✅ 총 {}명의 자녀 거래 기록 수집 완료", records.size());
 
-        YearMonth lastMonth = YearMonth.now().minusMonths(1);
-        int year = lastMonth.getYear();
-        int month = lastMonth.getMonthValue();
+//        YearMonth lastMonth = YearMonth.now().minusMonths(1);
+//        int year = lastMonth.getYear();
+//        int month = lastMonth.getMonthValue();
 
         transactionStatisticsService.saveMonthlyStatistics(records, year, month);
         transactionStatisticsService.saveMonthlyPeerStatistics(records, year, month);
