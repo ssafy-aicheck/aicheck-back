@@ -60,4 +60,10 @@ public class AlarmController {
 	public ResponseEntity<AlarmCountResponse> getAlarmCounts(@CurrentMemberId final Long memberId){
 		return ResponseEntity.ok(alarmService.getAlarmCounts(memberId));
 	}
+
+	@DeleteMapping("/fcm")
+	public ResponseEntity<Void> deleteFCMToken(@CurrentMemberId final Long memberId) {
+		fcmTokenService.deleteFCMToken(memberId);
+		return ResponseEntity.noContent().build();
+	}
 }

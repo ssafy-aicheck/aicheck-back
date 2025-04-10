@@ -3,10 +3,7 @@ USE alarm;
 CREATE TABLE `fcm_tokens`
 (
     `member_id`   INT UNSIGNED NOT NULL PRIMARY KEY,
-    `token`       VARCHAR(255) NOT NULL,
-    `created_at`  DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    `modified_at` DATETIME NULL DEFAULT NULL,
-    `deleted_at`  DATETIME NULL DEFAULT NULL
+    `token`       VARCHAR(255) NOT NULL
 );
 
 CREATE TABLE `alarms`
