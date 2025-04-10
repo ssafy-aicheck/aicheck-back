@@ -58,6 +58,6 @@ public class VoicePhishingService {
 	}
 
 	private String getBody(final String name, final String phoneNumber, final Float score) {
-		return String.format("%s님에게 %s 번호로 걸려온 전화가 보이스피싱 가능성이 %.1f점으로 감지되었습니다.", name, phoneNumber, score);
+		return String.format("%s님에게 %s 번호로 걸려온 전화가 보이스피싱 가능성이 %d점으로 감지되었습니다.", name, phoneNumber, Math.round(score * 100));
 	}
 }
