@@ -55,6 +55,6 @@ public class BadUrlService {
 	}
 
 	private String getBody(final String name, final String url, final Float score) {
-		return String.format("%s님이 수신한 문자에 포함된 URL [%s]이(가) 스미싱 위험 점수 %.1f로 감지되었습니다.", name, url, score);
+		return String.format("%s님이 수신한 문자에 포함된 URL [%s]이(가) 스미싱 위험 점수 %d점으로 감지되었습니다.", name, url, Math.round(score * 100));
 	}
 }
