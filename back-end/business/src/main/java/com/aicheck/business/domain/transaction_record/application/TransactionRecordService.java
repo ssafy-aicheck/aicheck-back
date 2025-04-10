@@ -28,7 +28,7 @@ public interface TransactionRecordService {
 
     void rateTransaction(RatingRequest request);
 
-    List<MemberTransactionRecords> getTransactionRecords();
+    List<MemberTransactionRecords> getTransactionRecords(Integer year, Integer month);
 
     TransactionInfoResponse getTransactionInfo(Long memberId, LocalDate startDate, Interval interval);
 
