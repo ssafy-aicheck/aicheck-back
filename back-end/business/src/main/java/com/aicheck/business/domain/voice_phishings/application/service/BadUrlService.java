@@ -43,7 +43,7 @@ public class BadUrlService {
 			AlarmEventMessage.of(
 				id,
 				getTitle(member.getName()),
-				getBody(member.getName(), request.url(), request.score()),
+				getBody(member.getName(), request.score()),
 				VOICE,
 				badUrl.getId()
 			)
@@ -54,7 +54,11 @@ public class BadUrlService {
 		return String.format("%s님에게 스미싱 위험이 감지됐습니다.", name);
 	}
 
-	private String getBody(final String name, final String url, final Float score) {
-		return String.format("%s님이 수신한 문자에 포함된 URL [%s]이(가) 스미싱 위험 점수 %d점으로 감지되었습니다.", name, url, Math.round(score * 100));
+	private String getBody(final String name, final Float score) {
+		return String.format("%s님이 수신한 문자에 포함된 URL이 스미싱 위험 점수 %d점으로 감지되었습니다.", name, Math.round(score * 100));
 	}
+
+	// private String getBody(final String name, final String url, final Float score) {
+	// 	return String.format("%s님이 수신한 문자에 포함된 URL [%s]이 스미싱 위험 점수 %d점으로 감지되었습니다.", name, url, Math.round(score * 100));
+	// }
 }
